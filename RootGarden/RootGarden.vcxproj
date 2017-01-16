@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{71401805-346C-4B14-BBAE-653EECFE6CCC}</ProjectGuid>
+    <RootNamespace>RootGarden</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Users\dkork_000\Documents\Visual Studio 2015\Projects\RootGarden\packages\Eigen.3.2.8\build\native\include\Eigen;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="basic.frag">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </None>
+    <None Include="basic.vert">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </None>
+    <None Include="packages.config" />
+    <None Include="param_alpha.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="AnimationList.cpp" />
+    <ClCompile Include="Animation_Aim.cpp" />
+    <ClCompile Include="Animation_AimOrbit.cpp" />
+    <ClCompile Include="Animation_Blank.cpp" />
+    <ClCompile Include="Animation_FrameTime.cpp" />
+    <ClCompile Include="Animation_Grow.cpp" />
+    <ClCompile Include="Animation_GrowTo.cpp" />
+    <ClCompile Include="Animation_Orbit.cpp" />
+    <ClCompile Include="Animation_Pulse.cpp" />
+    <ClCompile Include="Animation_Trigger.cpp" />
+    <ClCompile Include="CompGaugeVertical.cpp" />
+    <ClCompile Include="GameStats.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Matter.cpp" />
+    <ClCompile Include="MatterCircle.cpp" />
+    <ClCompile Include="MatterMeter.cpp" />
+    <ClCompile Include="MatterMeterHead.cpp" />
+    <ClCompile Include="MatterRectangle.cpp" />
+    <ClCompile Include="MatterRectangleGradient.cpp" />
+    <ClCompile Include="MatterRing.cpp" />
+    <ClCompile Include="MatterRootCluster.cpp" />
+    <ClCompile Include="MatterRootSegment.cpp" />
+    <ClCompile Include="MatterRootTendril.cpp" />
+    <ClCompile Include="MatterTileboard.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="MeshCircle.cpp" />
+    <ClCompile Include="MeshMeter.cpp" />
+    <ClCompile Include="MeshRectangle.cpp" />
+    <ClCompile Include="MeshRectangleGradient.cpp" />
+    <ClCompile Include="MeshRing.cpp" />
+    <ClCompile Include="MeshTrapezoid.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneComponent.cpp" />
+    <ClCompile Include="Scene_ColorCircles.cpp" />
+    <ClCompile Include="Scene_PrimeGarden.cpp" />
+    <ClCompile Include="Scene_RootGarden.cpp" />
+    <ClCompile Include="Scene_TimeGarden.cpp" />
+    <ClCompile Include="Scene_UnderGarden.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShaderManager.cpp" />
+    <ClCompile Include="ShaderProgram.cpp" />
+    <ClCompile Include="TransformInfo.cpp" />
+    <ClCompile Include="TTLMUniform.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Animation.h" />
+    <ClInclude Include="AnimationList.h" />
+    <ClInclude Include="Animation_Aim.h" />
+    <ClInclude Include="Animation_AimOrbit.h" />
+    <ClInclude Include="Animation_Blank.h" />
+    <ClInclude Include="Animation_FrameTime.h" />
+    <ClInclude Include="Animation_Grow.h" />
+    <ClInclude Include="Animation_GrowTo.h" />
+    <ClInclude Include="Animation_Orbit.h" />
+    <ClInclude Include="Animation_Pulse.h" />
+    <ClInclude Include="Animation_Trigger.h" />
+    <ClInclude Include="CompGaugeVertical.h" />
+    <ClInclude Include="GameStats.h" />
+    <ClInclude Include="glext.h" />
+    <ClInclude Include="GlobalState.h" />
+    <ClInclude Include="Main.h" />
+    <ClInclude Include="MatterMeterHead.h" />
+    <ClInclude Include="MatterRectangle.h" />
+    <ClInclude Include="MatterRectangleGradient.h" />
+    <ClInclude Include="MatterRootCluster.h" />
+    <ClInclude Include="MatterTileboard.h" />
+    <ClInclude Include="MeshMeter.h" />
+    <ClInclude Include="Matter.h" />
+    <ClInclude Include="MatterCircle.h" />
+    <ClInclude Include="MatterMeter.h" />
+    <ClInclude Include="MatterRing.h" />
+    <ClInclude Include="MatterRootSegment.h" />
+    <ClInclude Include="MatterRootTendril.h" />
+    <ClInclude Include="MatterTypes.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="MeshCircle.h" />
+    <ClInclude Include="MeshRectangle.h" />
+    <ClInclude Include="MeshRectangleGradient.h" />
+    <ClInclude Include="MeshRing.h" />
+    <ClInclude Include="MeshTrapezoid.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneComponent.h" />
+    <ClInclude Include="Scene_ColorCircles.h" />
+    <ClInclude Include="Scene_PrimeGarden.h" />
+    <ClInclude Include="Scene_RootGarden.h" />
+    <ClInclude Include="Scene_TimeGarden.h" />
+    <ClInclude Include="Scene_UnderGarden.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShaderManager.h" />
+    <ClInclude Include="ShaderProgram.h" />
+    <ClInclude Include="TransformInfo.h" />
+    <ClInclude Include="TTLMUniform.h" />
+    <ClInclude Include="wglext.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\nupengl.core.redist.0.1.0.1\build\native\nupengl.core.redist.targets" Condition="Exists('..\packages\nupengl.core.redist.0.1.0.1\build\native\nupengl.core.redist.targets')" />
+    <Import Project="..\packages\nupengl.core.0.1.0.1\build\native\nupengl.core.targets" Condition="Exists('..\packages\nupengl.core.0.1.0.1\build\native\nupengl.core.targets')" />
+    <Import Project="..\packages\Eigen.3.2.8\build\native\Eigen.targets" Condition="Exists('..\packages\Eigen.3.2.8\build\native\Eigen.targets')" />
+  </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\nupengl.core.redist.0.1.0.1\build\native\nupengl.core.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\nupengl.core.redist.0.1.0.1\build\native\nupengl.core.redist.targets'))" />
+    <Error Condition="!Exists('..\packages\nupengl.core.0.1.0.1\build\native\nupengl.core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\nupengl.core.0.1.0.1\build\native\nupengl.core.targets'))" />
+    <Error Condition="!Exists('..\packages\Eigen.3.2.8\build\native\Eigen.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Eigen.3.2.8\build\native\Eigen.targets'))" />
+  </Target>
+</Project>
