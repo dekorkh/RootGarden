@@ -1,0 +1,7 @@
+Debug
+Release
+x64
+RootGarden/Debug
+RootGarden/Release
+RootGarden/x64
+RootGarden.VC*
