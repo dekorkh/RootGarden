@@ -21,11 +21,23 @@ public:
 	TTLMUniform(string const UniformName, UniformType const Type);
 	~TTLMUniform();
 
-	bool SetUniform(const GLint ProgramAddress, GLfloat const * Data) const;
+	/* SetUniformValue
+	/	Set the value on the object.
+	*/
+	void SetUniformData(GLfloat const * Data);
+
+	/* SetUniform
+	/	Copy the uniform to the gpu.
+	*/
+	bool PushUniform(const GLint ProgramAddress);
 	
+	bool bDirty;
+
 private:
 	static bool RetrieveUniformLocation(GLint const ProgramAddress, const string& UniformName, GLint &OutLocation);
 
 	string UniformName;
+	GLint UniformLocation;
 	UniformType Type;
+	GLfloat const * pData;
 };

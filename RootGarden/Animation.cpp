@@ -18,7 +18,7 @@ bool Animation::Tick(const double DeltaSeconds)
 
 int Animation::RegisterOutput_Float(float &InProperty)
 {
-	const int Index = OutputMap.size() - 1;
+	const int Index = static_cast<int>(OutputMap.size()) - 1;
 	Output *NewOutput = new Output();
 	NewOutput->Type = EValueType::VALUE_FLOAT;
 	NewOutput->ValueFloat = &InProperty;
@@ -28,7 +28,7 @@ int Animation::RegisterOutput_Float(float &InProperty)
 
 int Animation::RegisterOutput_Vec3(Vector3f &InProperty)
 {
-	const int Index = OutputMap.size() - 1;
+	const int Index = static_cast<int>(OutputMap.size()) - 1;
 	Output *NewOutput = new Output();
 	NewOutput->Type = EValueType::VALUE_VEC3;
 	NewOutput->ValueVec3 = &InProperty;
@@ -38,7 +38,7 @@ int Animation::RegisterOutput_Vec3(Vector3f &InProperty)
 
 int Animation::RegisterOutput_Bool(bool &InProperty)
 {
-	const int Index = OutputMap.size() - 1;
+	const int Index = static_cast<int>(OutputMap.size()) - 1;
 	Output *NewOutput = new Output();
 	NewOutput->Type = EValueType::VALUE_BOOL;
 	NewOutput->ValueBool = &InProperty;

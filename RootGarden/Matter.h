@@ -33,7 +33,7 @@ public:
 	/* SceneComponent Interface END */
 
 	virtual void UpdateMesh(GenerateMeshResult *OutGenerateMeshResult);
-	virtual void Draw() const;
+	virtual void Draw();
 
 	/* IsMeshDirty 
 	/ Return true if any mesh data is dirty.  Helps cull meshes that don't need update from being dispatched to threads in main.
@@ -50,6 +50,16 @@ public:
 	*/
 	void UpdateModelMatrix();
 
+	/* IsUniformDataDirty
+	/	Return true if uniform data is dirty. Helps cull uniform updates.
+	*/
+	bool IsUniformDataDirty();
+
+	/* UpdateUniformData
+	/	Do update to uniform data.
+	*/
+	virtual void UpdateUniformData();
+
 	ShaderProgram *ShaderProgram;
 
 protected:
@@ -58,6 +68,6 @@ protected:
 	
 private:
 	void Initialize();
-	void SetUniforms() const;
 	bool bDirtyModelMatrix;
+	bool bDirtyUniformData;
 };

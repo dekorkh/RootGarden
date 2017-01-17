@@ -35,12 +35,14 @@ struct TInputEffects {
 		bVertPositions(false),
 		bVertColors(false),
 		bVertIndices(false),
-		bComponentParameters(false)
+		bComponentParameters(false),
+		bUniformData(false)
 	{};
 	bool bVertPositions;
 	bool bVertColors;
 	bool bVertIndices;
 	bool bComponentParameters;
+	bool bUniformData;
 };
 
 //-----------------------------------

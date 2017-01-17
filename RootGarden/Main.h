@@ -40,8 +40,6 @@ public:
 
 	Scene* ActiveScene;
 
-	GLfloat AspectRatio = 1.0;
-
 	double DeltaSeconds_Display;
 	clock_t ClockLastFrame;
 	clock_t ClockMinFrame;
@@ -57,4 +55,7 @@ private:
 	/ Traverse the primitives and generate any meshes as needed.
 	*/
 	void SetupPrimitives(vector<SceneComponent*> const &InPrims) const;
+
+	// Current aspect ratio
+	GLfloat AspectRatio;
 };

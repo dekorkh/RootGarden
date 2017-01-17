@@ -29,7 +29,8 @@ Game::Game() :
 	ClockLastFrame(CLOCKS_PER_SEC / 60),
 	ClockMinFrame(0),
 	ClockFrameLimiter(0),
-	FrameIndex(0)
+	FrameIndex(0),
+	AspectRatio(1.0f)
 {
 	pGameStats = GameStats::GetGameStats();
 	pGameStats->AddFrame();
@@ -41,6 +42,8 @@ Game::Game() :
 	pShaderManager->AddShaderProgram("basic_prog", "basic_vert", "basic_frag");
 	pShaderManager->AddShaderProgram("param_alpha_prog", "param_alpha_vert", "basic_frag");
 	pShaderManager->GetShaderProgramByName("param_alpha_prog")->AddUniform("ParamAlpha", UNIFORM_F1);
+
+	ShaderProgram::AddGlobalUniform("AspectRatio", UNIFORM_F1);
 
 	ActiveScene = new Scene_RootGarden();
 	Log_Frame = new ofstream("Log_Frame.txt");
@@ -80,7 +83,8 @@ Game::InitGraphics(Vector2i WindowSize)
 	glEnable(GL_MULTISAMPLE_ARB);
 	//Compute aspect ratio
 	AspectRatio = static_cast<float>(WindowSize(0)) / WindowSize(1);
-	
+	ShaderProgram::SetGlobalUniform("AspectRatio", &AspectRatio);
+	ShaderProgram::MarkGlobalUniformDirty("AspectRatio", true);
 	//Set-up random gen
 	srand(time(NULL));
 };
@@ -108,9 +112,7 @@ Game::Display(void)
 	vector<SceneComponent*>* AllPrims = SceneComponent::GetPrims();
 	SetupPrimitives(*AllPrims);
 
-
-	// Issue the drawcall
-	GLuint LastProgAddr = 0; // Used to prevent updating uniforms/state that doesn't change in one frame.
+	// Issue the drawcalls
 	for (vector<SceneComponent*>::iterator it = AllPrims->begin(); it != AllPrims->end(); ++it)
 	{
 		clock_t Clock_DynamicCastMatter = clock();
@@ -119,20 +121,11 @@ Game::Display(void)
 		
 		if (ActiveMatter != nullptr)
 		{	
-			if (ActiveMatter->ShaderProgram->ProgAddr != LastProgAddr)
-			{
-				LastProgAddr = ActiveMatter->ShaderProgram->ProgAddr;
-				
-				//Set the new shader program
-				ActiveMatter->ShaderProgram->Use();
-				
-				//Set any per-frame uniforms
-				ActiveMatter->ShaderProgram->SetUniform("AspectRatio", &AspectRatio);
-			}
 			//Issue the draw (stream the vert info if needed.)
 			ActiveMatter->Draw();
 		}
 	}
+	ShaderProgram::MarkGlobalUniformsClean();
 
 	glutSwapBuffers();	//run the program - ? vs swap **
 
@@ -168,13 +161,13 @@ void Game::SetupPrimitives(vector<SceneComponent*> const &InPrims) const
 		if (ActiveComponent->IsDirtyComponentParameters())
 			BuildParametersFutures.push_back(async(&SceneComponent::Build, ActiveComponent));
 	}
-	pThisFrame->Ms_BuildParameters->Set(TICKS_TO_MS(clock() - Clock_Ms_BuildParameters));
 	
 	//	Harvest BuildParameters - async
 	for (GLuint i = 0; i < BuildParametersFutures.size(); ++i)
 	{
 		BuildParametersFutures.at(i).get();
 	}
+	pThisFrame->Ms_BuildParameters->Set(TICKS_TO_MS(clock() - Clock_Ms_BuildParameters));
 
 	// Kick off generate meshes - async (compute model matrix is rolled in here as well.)
 	clock_t Clock_Ms_GenerateMesh = clock();
@@ -214,14 +207,12 @@ void Game::SetupPrimitives(vector<SceneComponent*> const &InPrims) const
  	double Pct_Positions = static_cast<double>(Clock_Total_Positions) / fmax(Clock_SumMeshThreads, 1);
 	double Pct_Colors = static_cast<double>(Clock_Total_Colors) / fmax(Clock_SumMeshThreads, 1);
 	double Pct_Indices = static_cast<double>(Clock_Total_Indices) / fmax(Clock_SumMeshThreads, 1);
-	double Pct_ModelMatrix = static_cast<double>(Clock_Total_ModelMatrix) / fmax(Clock_SumMeshThreads, 1);
 
 	float Ms_Total_Mesh = TICKS_TO_MS(clock() - Clock_Ms_GenerateMesh);
 	pThisFrame->Ms_GenerateMesh->Set(static_cast<float>(Clock_Ms_GenerateMesh));
 	pThisFrame->Ms_GenerateMesh_Positions->Set(static_cast<float>(Clock_Ms_GenerateMesh * Pct_Positions));
 	pThisFrame->Ms_GenerateMesh_Colors->Set(static_cast<float>(Clock_Ms_GenerateMesh * Pct_Colors));
 	pThisFrame->Ms_GenerateMesh_Indices->Set(static_cast<float>(Clock_Ms_GenerateMesh * Pct_Indices));
-	pThisFrame->Ms_ComputeModelMatrix->Set(static_cast<float>(Clock_Ms_GenerateMesh * Pct_ModelMatrix));
 
 	clock_t Clock_ComputeModelMatrix = clock();
 	// Harvest compute model matrix - async

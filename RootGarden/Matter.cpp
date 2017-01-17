@@ -13,6 +13,7 @@ Matter::~Matter()
 void Matter::Initialize()
 {
 	ShaderProgram = ShaderManager::GetShaderManager()->GetShaderProgramByName("basic_prog");
+	ShaderProgram->SetUniform("ModelMatrix", Transform.GetModelMatrixDataPtr());
 }
 
 void Matter::SetScale(const Vector3f& InScale)
@@ -51,16 +52,30 @@ void Matter::ProcessInputEffects(TInputEffects const *InputEffects)
 	Mesh->bDirty_Positions = InputEffects->bVertPositions ? true: Mesh->bDirty_Positions;
 	Mesh->bDirty_Colors = InputEffects->bVertColors ? true : Mesh->bDirty_Colors;
 	Mesh->bDirty_Indices = InputEffects->bVertIndices ? true : Mesh->bDirty_Indices;
+	bDirtyUniformData = InputEffects->bUniformData? true : bDirtyUniformData;
 }
 
-void Matter::SetUniforms() const
+void Matter::Draw()
 {
-	return Transform.SetUniform(ShaderProgram);
-}
+	clock_t Clock_SetUniforms = clock();
+	if (ShaderProgram->ProgAddr != ShaderProgram::LastProgAddr)
+	{
+		//Set the new shader program
+		ShaderProgram->Use();
+		// Push global uniforms only pushes the uniforms that were marked dirty.
+		ShaderProgram::PushGlobalUniforms(ShaderProgram->LastProgAddr);
+	}
 
-void Matter::Draw() const
-{	
-	SetUniforms();
+	if (bDirtyUniformData) 
+	{
+		UpdateUniformData();
+	}
+
+	// so I'll re-get the pointer but it'd be nice to know why.
+	ShaderProgram->SetUniform("ModelMatrix", Transform.GetModelMatrixDataPtr());
+	ShaderProgram->PushUniforms();
+
+	GameStats::GetGameStats()->pThisFrame->Ms_SetUniforms->Increment(TICKS_TO_MS(clock() - Clock_SetUniforms));
 
 	clock_t Clock_Draw = clock();
 	Mesh->Draw(*ShaderProgram);
@@ -69,7 +84,6 @@ void Matter::Draw() const
 
 void Matter::UpdateMesh(GenerateMeshResult *OutGenerateMeshResult)
 {
-	Transform.ComputeModelMatrix();
 	Mesh->GenerateMesh(OutGenerateMeshResult);	
 }
 
@@ -87,4 +101,14 @@ void Matter::UpdateModelMatrix()
 {
 	Transform.ComputeModelMatrix();
 	bDirtyModelMatrix = false;
+}
+
+bool Matter::IsUniformDataDirty()
+{
+	return bDirtyUniformData;
+}
+
+void Matter::UpdateUniformData()
+{
+
 }

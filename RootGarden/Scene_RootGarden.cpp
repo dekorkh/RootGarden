@@ -14,15 +14,16 @@ Scene_RootGarden::Scene_RootGarden()
 	MatterTileboard* tileBoard = new MatterTileboard();
 	AddChild(tileBoard);
 	
+	MatterRootTendril *tendril = new MatterRootTendril();
+	AddChild(tendril);
+	
 	MatterRectangle* Rectangle = new MatterRectangle();
 	Rectangle->SetLookAtTarget(Vector3f(0.5f, 0.5f, 0.0f));
 	Rectangle->SetPosition(Vector3f(-1.2f, -0.5f, 0.0f));
 	Rectangle->SetScale(Vector3f(0.2f, 0.2f, 1.0f));
 	AddChild(Rectangle);
 	
-	MatterRootTendril *tendril = new MatterRootTendril();
-	AddChild(tendril);
-	
+
 	MatterRootCluster *cluster = new MatterRootCluster();
 	AddChild(cluster);
 	
@@ -33,6 +34,7 @@ Scene_RootGarden::Scene_RootGarden()
 	GaugeV->SetScale(Vector3f(0.05f, 0.2f, 1.0f));
 	GaugeV->SetPosition(Vector3f(-1.2f, 0.5f, 1.0f));
 	AddChild(GaugeV);
+	
 	/*
 	MatterBasicText* BasicText = new MatterBasicText();
 	AddChild(BasicText);

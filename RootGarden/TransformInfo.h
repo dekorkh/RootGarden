@@ -1,11 +1,13 @@
 #pragma once
 
+#include "GL/glew.h"
 #include "Eigen\Dense"
 #include "math.h"
 #include "ShaderManager.h"
 
 using namespace std;
 using namespace Eigen;
+
 
 class TransformInfo
 {
@@ -22,7 +24,6 @@ public:
 	/ Model matrix is the objects translation, rotation, and scale.
 	*/
 	void ComputeModelMatrix();
-	void SetUniform(ShaderProgram const * InShaderProgram) const;
 
 	void SetScale(const Vector3f& Scale);
 	void SetPosition(const Vector3f& Position);
@@ -33,7 +34,11 @@ public:
 	
 	void AddRotation(const float Deg);
 
+	const GLfloat* GetModelMatrixDataPtr() const;
+
 private:
+	void SetUniform(ShaderProgram const * InShaderProgram);
+
 	Matrix4f ModelMatrix;
 
 	Vector3f Scale;

@@ -1,6 +1,12 @@
 #include "TTLMUniform.h"
+#include "GameStats.h"
+#include "Time.h"
 
-TTLMUniform::TTLMUniform(string const UniformName, UniformType const Type) : UniformName(UniformName), Type(Type)
+TTLMUniform::TTLMUniform(string const UniformName, UniformType const Type) : 
+	UniformName(UniformName), 
+	UniformLocation(-1),
+	Type(Type),
+	bDirty(true)
 {
 }
 
@@ -20,32 +26,41 @@ bool TTLMUniform::RetrieveUniformLocation(GLint const ProgramAddress, const stri
 	return Result;
 }
 
-bool TTLMUniform::SetUniform(const GLint ProgramAddress, GLfloat const * Data) const
+bool TTLMUniform::PushUniform(const GLint ProgramAddress)
 {
 	bool Result = true;
-	GLint UniformLocation;
-	Result = RetrieveUniformLocation(ProgramAddress, UniformName, UniformLocation);
-	if (Result)
+	if (bDirty)
 	{
-		switch (Type)
+		if (UniformLocation == -1)
+			Result = RetrieveUniformLocation(ProgramAddress, UniformName, UniformLocation);
+
+		if (Result)
 		{
-		case UNIFORM_F1:
-			glUniform1f(UniformLocation, *Data);
-			break;
-		case UNIFORM_F2:
-			glUniform2f(UniformLocation, Data[0], Data[1]);
-			break;
-		case UNIFORM_F3:
-			glUniform3f(UniformLocation, Data[0], Data[1], Data[2]);
-			break;
-		case UNIFORM_M4:
-			glUniformMatrix4fv(UniformLocation, 1, false, Data);
-			break;
-		default:
-			Result = false;
-			cerr << "Unexpected uniform type - " << Type << endl;
-			break;
+			switch (Type)
+			{
+			case UNIFORM_F1:
+				glUniform1f(UniformLocation, *pData);
+				break;
+			case UNIFORM_F2:
+				glUniform2f(UniformLocation, pData[0], pData[1]);
+				break;
+			case UNIFORM_F3:
+				glUniform3f(UniformLocation, pData[0], pData[1], pData[2]);
+				break;
+			case UNIFORM_M4:
+				glUniformMatrix4fv(UniformLocation, 1, false, pData);
+				break;
+			default:
+				Result = false;
+				cerr << "Unexpected uniform type - " << Type << endl;
+				break;
+			}
 		}
 	}
 	return Result;
+}
+
+void TTLMUniform::SetUniformData(GLfloat const * Data)
+{
+	pData = Data;
 }

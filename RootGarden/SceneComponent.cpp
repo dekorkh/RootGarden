@@ -71,7 +71,7 @@ void SceneComponent::SelectAnimation(int SequenceIndex)
 
 int SceneComponent::RegisterInput_Float(float &Attribute)
 {
-	const int InputIndex = InputMap.size();
+	const int InputIndex = static_cast<int>(InputMap.size());
 	Input *NewInput = new Input();
 	NewInput->Type = EValueType::VALUE_FLOAT;
 	NewInput->ValueFloat = &Attribute;
@@ -81,7 +81,7 @@ int SceneComponent::RegisterInput_Float(float &Attribute)
 
 int SceneComponent::RegisterInput_Vec3(Vector3f &Attribute)
 {
-	const int InputIndex = InputMap.size();
+	const int InputIndex = static_cast<int>(InputMap.size());
 	Input *NewInput = new Input();
 	NewInput->Type = EValueType::VALUE_VEC3;
 	NewInput->ValueVec3 = &Attribute;
@@ -91,7 +91,7 @@ int SceneComponent::RegisterInput_Vec3(Vector3f &Attribute)
 
 int SceneComponent::RegisterInput_Bool(bool &Attribute)
 {
-	const int InputIndex = InputMap.size();
+	const int InputIndex = static_cast<int>(InputMap.size());
 	Input *NewInput = new Input();
 	NewInput->Type = EValueType::VALUE_BOOL;
 	NewInput->ValueBool = &Attribute;

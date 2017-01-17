@@ -7,10 +7,16 @@ class MatterRectangleGradient : public Matter
 public:
 	MatterRectangleGradient();
 
+	/* Begin SceneComponent Interface */
 	void Build() override;
+	/* End SceneComponent Interface */
+
+	/* Begin Matter Interface */
+	void UpdateUniformData() override;
+	/* End Matter Interface */
 
 	void Pulse(bool bForce = true);
-	void Draw() const override;
+	
 
 	float Glow;
 	int InputIdx_Glow;	

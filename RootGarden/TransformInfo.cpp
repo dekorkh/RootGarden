@@ -33,11 +33,6 @@ void TransformInfo::ComputeModelMatrix()
 	ModelMatrix(11) = Position(2);
 }
 
-void TransformInfo::SetUniform(ShaderProgram const * InShaderProgram) const
-{
-	return InShaderProgram->SetUniform("ModelMatrix", ModelMatrix.data());
-}
-
 void TransformInfo::SetScale(const Vector3f& InScale)
 {
 	Scale = InScale;
@@ -85,4 +80,9 @@ Vector3f TransformInfo::GetLookAt() const
 Vector3f TransformInfo::GetPosition() const
 {
 	return Position;
+}
+
+const GLfloat* TransformInfo::GetModelMatrixDataPtr() const
+{
+	return ModelMatrix.data();
 }
