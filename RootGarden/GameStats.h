@@ -66,7 +66,6 @@ public:
 	GameStatsStat<float>* Ms_SetUniforms;
 	GameStatsStat<float>* Ms_Tick;
 	GameStatsStat<float>* Ms_TickAnimation;
-	GameStatsStat<float>* Ms_GatherPrimitives;
 	GameStatsStat<float>* Ms_DynamicCastMatter;
 	GameStatsStat<float>* Ms_BuildParameters;
 	GameStatsStat<float>* Ms_ComputeModelMatrix;

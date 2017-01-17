@@ -1,6 +1,8 @@
 #include "SceneComponent.h"
 #include "GlobalState.h"
 
+vector<SceneComponent*> SceneComponent::AllPrims;
+
 SceneComponent::SceneComponent() : bDirtyComponentParameters(true)
 {
 	Initialize();
@@ -20,6 +22,7 @@ SceneComponent::SceneComponent(const string& InName, const int InSerial) : bDirt
 
 void SceneComponent::Initialize()
 {
+	AllPrims.push_back(this);
 	pAnimationList = new AnimationList(*this);
 }
 
@@ -142,4 +145,9 @@ void SceneComponent::Build()
 bool SceneComponent::IsDirtyComponentParameters()
 {
 	return bDirtyComponentParameters;
+}
+
+vector<SceneComponent*>* SceneComponent::GetPrims()
+{
+	return &AllPrims;
 }

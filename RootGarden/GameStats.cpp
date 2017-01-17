@@ -50,7 +50,6 @@ void GameStats::WriteToFile(string FilePath)
 	Frames[0]->Ms_SetUniforms->WriteName(stream);
 	Frames[0]->Ms_Tick->WriteName(stream);
 	Frames[0]->Ms_TickAnimation->WriteName(stream);
-	Frames[0]->Ms_GatherPrimitives->WriteName(stream);
 	Frames[0]->Ms_DynamicCastMatter->WriteName(stream);
 	Frames[0]->Ms_BuildParameters->WriteName(stream);
 	Frames[0]->Ms_ComputeModelMatrix->WriteName(stream);
@@ -70,7 +69,6 @@ void GameStats::WriteToFile(string FilePath)
 		Frame->Ms_SetUniforms->WriteValue(stream);
 		Frame->Ms_Tick->WriteValue(stream);
 		Frame->Ms_TickAnimation->WriteValue(stream);
-		Frame->Ms_GatherPrimitives->WriteValue(stream);
 		Frame->Ms_DynamicCastMatter->WriteValue(stream);
 		Frame->Ms_BuildParameters->WriteValue(stream);
 		Frame->Ms_ComputeModelMatrix->WriteValue(stream);
@@ -95,7 +93,6 @@ GameStatsFrame::GameStatsFrame()
 	Ms_SetUniforms = new GameStatsStat<float>("Ms_SetUniforms", 0.0f);
 	Ms_Tick = new GameStatsStat<float>("Ms_Tick", 0.0f);
 	Ms_TickAnimation = new GameStatsStat<float>("Ms_TickAnimation", 0.0f);
-	Ms_GatherPrimitives = new GameStatsStat<float>("Ms_GatherPrimitives", 0.0f);
 	Ms_DynamicCastMatter = new GameStatsStat<float>("Ms_DynamicCastMatter", 0.0f);
 	Ms_BuildParameters = new GameStatsStat<float>("Ms_BuildParameters", 0.0f);
 	Ms_ComputeModelMatrix = new GameStatsStat<float>("Ms_ComputeModelMatrix", 0.0f);

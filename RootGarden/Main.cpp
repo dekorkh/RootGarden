@@ -105,11 +105,13 @@ Game::Display(void)
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	// Traverse all primitives, set-up, and do draw
-	GatherPrimitives(&Prims);
+	vector<SceneComponent*>* AllPrims = SceneComponent::GetPrims();
+	SetupPrimitives(*AllPrims);
+
 
 	// Issue the drawcall
 	GLuint LastProgAddr = 0; // Used to prevent updating uniforms/state that doesn't change in one frame.
-	for (vector<SceneComponent*>::iterator it = Prims.begin(); it != Prims.end(); ++it)
+	for (vector<SceneComponent*>::iterator it = AllPrims->begin(); it != AllPrims->end(); ++it)
 	{
 		clock_t Clock_DynamicCastMatter = clock();
 		Matter* ActiveMatter = dynamic_cast<Matter*>(*it);
@@ -142,31 +144,27 @@ Game::Display(void)
 	glutPostRedisplay(); //call redraw window
 }
 
-void Game::GatherPrimitives(vector<SceneComponent*>* OutPrims)
+void Game::SetupPrimitives(vector<SceneComponent*> const &InPrims) const
 {
-	clock_t Clock_GatherPrimitives = clock();
-	OutPrims->clear();
-	ActiveScene->GatherChildren(OutPrims);
-	GameStatsFrame* pThisFrame = GameStats::GetGameStats()->pThisFrame;
-	pThisFrame->Ms_GatherPrimitives->Set(TICKS_TO_MS(clock() - Clock_GatherPrimitives));
+	GameStatsFrame* pThisFrame = GameStats::GetGameStats()->pThisFrame;	
 
 	//  Futures are used to harvest the dispatched threads
 	vector<future<void>> BuildParametersFutures;
 	vector<future<void>> UpdateModelMatrixFutures;
 	vector<future<void>> GenerateMeshFutures;
 	
-	GenerateMeshFutures.reserve(OutPrims->size());	
-	UpdateModelMatrixFutures.reserve(OutPrims->size());	
-	BuildParametersFutures.reserve(OutPrims->size());
+	GenerateMeshFutures.reserve(InPrims.size());	
+	UpdateModelMatrixFutures.reserve(InPrims.size());	
+	BuildParametersFutures.reserve(InPrims.size());
 
 	//	Results are attached to each dispatched thread and are used to return information about the work done
 	vector<GenerateMeshResult> GenerateMeshResults;
-	GenerateMeshResults.resize(OutPrims->size());
+	GenerateMeshResults.resize(InPrims.size());
 	
 	clock_t Clock_Ms_BuildParameters = clock();
-	for (GLuint i = 0; i < OutPrims->size(); ++i)
+	for (GLuint i = 0; i < InPrims.size(); ++i)
 	{
-		SceneComponent* ActiveComponent = OutPrims->at(i);
+		SceneComponent* ActiveComponent = InPrims.at(i);
 		if (ActiveComponent->IsDirtyComponentParameters())
 			BuildParametersFutures.push_back(async(&SceneComponent::Build, ActiveComponent));
 	}
@@ -182,9 +180,9 @@ void Game::GatherPrimitives(vector<SceneComponent*>* OutPrims)
 	clock_t Clock_Ms_GenerateMesh = clock();
 
 	GLuint iMatter = 0;
-	for (GLuint i = 0; i < OutPrims->size(); ++i)
+	for (GLuint i = 0; i < InPrims.size(); ++i)
 	{
-		SceneComponent* ActiveComponent = OutPrims->at(i);
+		SceneComponent* ActiveComponent = InPrims.at(i);
 		Matter* ActiveMatter = dynamic_cast<Matter*>(ActiveComponent);
 		if (ActiveMatter != nullptr)
 		{

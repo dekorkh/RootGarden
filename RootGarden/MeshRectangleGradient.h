@@ -45,6 +45,6 @@ public:
 private:
 	vector<Vector4f, aligned_allocator<Vector4f>> LayerColors;
 	vector<float> LayerPositions;
-	int NumLayers;
-	int NumSides;
+	GLuint NumLayers;
+	GLuint NumSides;
 };

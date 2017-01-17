@@ -11,6 +11,7 @@
 #include "MatterRectangle.h"
 #include "MatterRectangleGradient.h"
 #include "MatterTileboard.h"
+#include "MatterBasicText.h"
 
 //Comps
 #include "CompGaugeVertical.h"

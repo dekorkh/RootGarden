@@ -141,9 +141,11 @@
     <ClCompile Include="Animation_Pulse.cpp" />
     <ClCompile Include="Animation_Trigger.cpp" />
     <ClCompile Include="CompGaugeVertical.cpp" />
+    <ClCompile Include="FontManager.cpp" />
     <ClCompile Include="GameStats.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Matter.cpp" />
+    <ClCompile Include="MatterBasicText.cpp" />
     <ClCompile Include="MatterCircle.cpp" />
     <ClCompile Include="MatterMeter.cpp" />
     <ClCompile Include="MatterMeterHead.cpp" />
@@ -187,10 +189,12 @@
     <ClInclude Include="Animation_Pulse.h" />
     <ClInclude Include="Animation_Trigger.h" />
     <ClInclude Include="CompGaugeVertical.h" />
+    <ClInclude Include="FontManager.h" />
     <ClInclude Include="GameStats.h" />
     <ClInclude Include="glext.h" />
     <ClInclude Include="GlobalState.h" />
     <ClInclude Include="Main.h" />
+    <ClInclude Include="MatterBasicText.h" />
     <ClInclude Include="MatterMeterHead.h" />
     <ClInclude Include="MatterRectangle.h" />
     <ClInclude Include="MatterRectangleGradient.h" />
@@ -229,6 +233,8 @@
     <Import Project="..\packages\nupengl.core.redist.0.1.0.1\build\native\nupengl.core.redist.targets" Condition="Exists('..\packages\nupengl.core.redist.0.1.0.1\build\native\nupengl.core.redist.targets')" />
     <Import Project="..\packages\nupengl.core.0.1.0.1\build\native\nupengl.core.targets" Condition="Exists('..\packages\nupengl.core.0.1.0.1\build\native\nupengl.core.targets')" />
     <Import Project="..\packages\Eigen.3.2.8\build\native\Eigen.targets" Condition="Exists('..\packages\Eigen.3.2.8\build\native\Eigen.targets')" />
+    <Import Project="..\packages\freetype.redist.2.7.1.1\build\native\freetype.redist.targets" Condition="Exists('..\packages\freetype.redist.2.7.1.1\build\native\freetype.redist.targets')" />
+    <Import Project="..\packages\freetype.2.7.1.1\build\native\freetype.targets" Condition="Exists('..\packages\freetype.2.7.1.1\build\native\freetype.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -237,5 +243,7 @@
     <Error Condition="!Exists('..\packages\nupengl.core.redist.0.1.0.1\build\native\nupengl.core.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\nupengl.core.redist.0.1.0.1\build\native\nupengl.core.redist.targets'))" />
     <Error Condition="!Exists('..\packages\nupengl.core.0.1.0.1\build\native\nupengl.core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\nupengl.core.0.1.0.1\build\native\nupengl.core.targets'))" />
     <Error Condition="!Exists('..\packages\Eigen.3.2.8\build\native\Eigen.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Eigen.3.2.8\build\native\Eigen.targets'))" />
+    <Error Condition="!Exists('..\packages\freetype.redist.2.7.1.1\build\native\freetype.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\freetype.redist.2.7.1.1\build\native\freetype.redist.targets'))" />
+    <Error Condition="!Exists('..\packages\freetype.2.7.1.1\build\native\freetype.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\freetype.2.7.1.1\build\native\freetype.targets'))" />
   </Target>
 </Project>

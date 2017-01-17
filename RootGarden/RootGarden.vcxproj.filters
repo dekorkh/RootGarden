@@ -195,6 +195,12 @@
     <ClCompile Include="MatterMeterHead.cpp">
       <Filter>Source Files\Matter</Filter>
     </ClCompile>
+    <ClCompile Include="MatterBasicText.cpp">
+      <Filter>Source Files\Matter</Filter>
+    </ClCompile>
+    <ClCompile Include="FontManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TransformInfo.h">
@@ -340,6 +346,12 @@
     </ClInclude>
     <ClInclude Include="MatterMeterHead.h">
       <Filter>Header Files\Matter</Filter>
+    </ClInclude>
+    <ClInclude Include="MatterBasicText.h">
+      <Filter>Header Files\Matter</Filter>
+    </ClInclude>
+    <ClInclude Include="FontManager.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

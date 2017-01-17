@@ -34,35 +34,26 @@ void Mesh::Draw(ShaderProgram& InShaderProgram)
 
 	glBindVertexArray(VAOs[Triangles]);	//vertex arrays are apparently unecessery but are useful bc they store all vertex pipeline states for a set of verts.
 
-	glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Buffers[IndexBuffer]);
-
 	// Recopy positions, colors, and index arrays to the GPU if necessary
 	if (bDirty_Positions)
 	{
+		glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
 		Draw_UpdatePositions();
 		bDirty_Positions = false;
 	}
 	if (bDirty_Colors)
 	{
+		glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
 		Draw_UpdateColors();
 		bDirty_Colors = false;
 	}
 	if (bDirty_Indices)
 	{
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Buffers[IndexBuffer]);
 		Draw_UpdateIndices();
 		bDirty_Indices = false;
 	}
-
-	// Get the location of vertex attributes in the program
-	GLint vpos = InShaderProgram.GetVertexAttribLocation("vPosition");
-	GLint vcol = InShaderProgram.GetVertexAttribLocation("vColor");
-
-	// Enable the program to fetch from vertex arrays
-	glEnableVertexAttribArray(vpos);
-	glEnableVertexAttribArray(vcol);
-
-	//glBindVertexArray(VAOs[Triangles]);
+	
 	//glDrawArrays(MatterType, 0, ActiveMatter->NumVertices);
 	glDrawElements(MatterType, NumVertIndices, GL_UNSIGNED_INT, NULL);
 }
@@ -139,10 +130,14 @@ void Mesh::InitializeVAO(ShaderProgram& InShaderProgram)
 	// Get the location of vertex attributes in the program
 	GLint vpos = InShaderProgram.GetVertexAttribLocation("vPosition");
 	GLint vcol = InShaderProgram.GetVertexAttribLocation("vColor");
-
+	
 	// Point the programs vertex attributes to their data in the vertex attribute array.
 	glVertexAttribPointer(vpos, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 	glVertexAttribPointer(vcol, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(SizeOfPositions()));
+
+	// Enable fetching from pos and col streams
+	glEnableVertexAttribArray(vpos);
+	glEnableVertexAttribArray(vcol);
 }
 
 void Mesh::DestroyVAO()

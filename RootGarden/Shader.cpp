@@ -14,7 +14,7 @@ Shader::Shader(char const * const InShaderPath, ESHADER_TYPE const InShaderType)
 Shader::~Shader()
 {
 	//Release memory
-	for (int line_idx = 0; line_idx < NumLines; line_idx++)
+	for (unsigned int line_idx = 0; line_idx < NumLines; line_idx++)
 	{
 		delete[] StreamData[line_idx]; //allocated to an array
 	}

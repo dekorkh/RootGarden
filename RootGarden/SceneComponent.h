@@ -131,6 +131,8 @@ public:
 
 	map<const int, Input*> InputMap;
 
+	static vector<SceneComponent*>* GetPrims();
+
 protected:
 	bool bDirtyComponentParameters;
 
@@ -138,4 +140,7 @@ private:
 	void Initialize();
 
 	AnimationList* pAnimationList;
+	
+	// All the scene components in existences.
+	static vector<SceneComponent*> AllPrims;
 };

@@ -53,9 +53,8 @@ private:
 	PFNWGLSWAPINTERVALEXTPROC glSwapInterval = NULL;
 	PFNWGLGETSWAPINTERVALEXTPROC glGetSwapInterval = NULL;
 
-	/* GatherPrimitives
+	/* SetupPrimitives
 	/ Traverse the primitives and generate any meshes as needed.
 	*/
-	void GatherPrimitives(vector<SceneComponent*>* OutPrims);
-	vector<SceneComponent*> Prims;
+	void SetupPrimitives(vector<SceneComponent*> const &InPrims) const;
 };

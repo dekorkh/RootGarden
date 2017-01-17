@@ -50,12 +50,12 @@ void MeshRectangleGradient::SetNumberOfLayers(int InNumLayers)
 	Vector4f DefaultColor;
 	DefaultColor << 1.0f, 1.0f, 1.0f, 1.0f;
 
-	for (GLint idxLayer = 0; idxLayer < NumLayers; idxLayer++)
+	for (GLuint idxLayer = 0; idxLayer < NumLayers; idxLayer++)
 	{
 		LayerColors.insert(LayerColors.end(), DefaultColor);
 	}
 
-	for (GLint idxLayer = 0; idxLayer < NumLayers; idxLayer++)
+	for (GLuint idxLayer = 0; idxLayer < NumLayers; idxLayer++)
 	{
 		LayerPositions.insert(LayerPositions.end(), static_cast<float>(idxLayer) / (NumLayers - 1));
 	}
@@ -113,7 +113,7 @@ void MeshRectangleGradient::GenerateMesh_Indices()
 	NumVertIndices = NumSides * 3 + (NumLayers - 2) * 6 * NumSides;
 
 	//  first ring - Indices
-	for (GLint i = 0; i < NumSides; i++)
+	for (GLuint i = 0; i < NumSides; i++)
 	{
 		IndexData.insert(IndexData.end(), 0);
 		IndexData.insert(IndexData.end(), 1 + i);
@@ -124,9 +124,9 @@ void MeshRectangleGradient::GenerateMesh_Indices()
 	}
 
 	// other rings - Indices
-	for (GLint idxLayer = 2; idxLayer < NumLayers; idxLayer++)
+	for (GLuint idxLayer = 2; idxLayer < NumLayers; idxLayer++)
 	{
-		for (GLint idxSide = 0; idxSide < NumSides; idxSide++)
+		for (GLuint idxSide = 0; idxSide < NumSides; idxSide++)
 		{
 			GLint idx0, idx1, idx2, idx3 = 0;
 
