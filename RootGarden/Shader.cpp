@@ -98,7 +98,7 @@ bool Shader::CreateAndCompileShader()
 			cout << "Shader Compile Log Error:\n" << shaderLog << endl;
 			delete[] shaderLog;
 			LastError = TG_ERROR_SHADERCOMPILE;
-			result = false;
+			throw;
 		}
 	}
 	else

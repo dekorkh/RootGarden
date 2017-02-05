@@ -1,7 +1,6 @@
 #include "Scene.h"
 #include "GlobalState.h"
 
-
 Scene::Scene() : BackgroundColor(Vector4f::Constant(0.5f)), ElapsedSeconds(0.0f)
 {
 }

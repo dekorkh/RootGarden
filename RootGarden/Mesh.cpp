@@ -4,7 +4,7 @@
 #include "GameStats.h"
 #include "time.h"
 
-Mesh::Mesh() : 
+Mesh::Mesh(GLuint InNumBuffers) : 
 	NumVertices(0), 
 	NumVertIndices(0),
 	MatterType(GL_POINTS),
@@ -13,8 +13,10 @@ Mesh::Mesh() :
 	bInitializedVAO(false),
 	bDirty_Positions(true),
 	bDirty_Colors(true),
-	bDirty_Indices(true)
+	bDirty_Indices(true),
+	NumBuffers(InNumBuffers)
 {
+	Buffers.assign(NumBuffers, 0); // Initial buffer addresses -1 address each.
 }
 
 
@@ -32,24 +34,24 @@ void Mesh::Draw(ShaderProgram& InShaderProgram)
 		bInitializedVAO = true;
 	}
 
-	glBindVertexArray(VAOs[Triangles]);	//vertex arrays are apparently unecessery but are useful bc they store all vertex pipeline states for a set of verts.
+	ShaderProgram::glBindVertexArray_checked(VAO);	//vertex arrays are apparently unecessery but are useful bc they store all vertex pipeline states for a set of verts.
 
 	// Recopy positions, colors, and index arrays to the GPU if necessary
 	if (bDirty_Positions)
 	{
-		glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
+		ShaderProgram::glBindBuffer_checked(GL_ARRAY_BUFFER, Buffers[0]);
 		Draw_UpdatePositions();
 		bDirty_Positions = false;
 	}
 	if (bDirty_Colors)
 	{
-		glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
+		ShaderProgram::glBindBuffer_checked(GL_ARRAY_BUFFER, Buffers[0]);
 		Draw_UpdateColors();
 		bDirty_Colors = false;
 	}
 	if (bDirty_Indices)
 	{
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Buffers[IndexBuffer]);
+		ShaderProgram::glBindBuffer_checked(GL_ELEMENT_ARRAY_BUFFER, Buffers[1]);
 		Draw_UpdateIndices();
 		bDirty_Indices = false;
 	}
@@ -113,37 +115,39 @@ void Mesh::BuildRectangle_Positions(vector<GLfloat> &PositionsData, Vector2f Upp
 void Mesh::InitializeVAO(ShaderProgram& InShaderProgram)
 {
 	// Initialize the VAO and its buffer
-	glGenVertexArrays(NumVAOs, VAOs);
-	glBindVertexArray(VAOs[Triangles]);	//vertex arrays are apparently unecessery but are useful bc they store all vertex pipeline states for a set of verts.
+	ShaderProgram::glGenVertexArrays_checked(1, &VAO);
+	ShaderProgram::glBindVertexArray_checked(VAO);	//vertex arrays are apparently unecessery but are useful bc they store all vertex pipeline states for a set of verts.
 
 	// Generate and initialize a vertex attribute and an index buffer.
-	glGenBuffers(NumBuffers, Buffers);
+	ShaderProgram::glGenBuffers_checked(NumBuffers, Buffers.data());
 
 	// Bind to both buffers and initialize to their size
 	// Do their binding here get memorized and recalled by binding the VAO?
-	glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
-	glBufferData(GL_ARRAY_BUFFER, SizeOfPositions() + SizeOfColors(), NULL, GL_STATIC_DRAW);
+	ShaderProgram::glBindBuffer_checked(GL_ARRAY_BUFFER, Buffers[0]);
+	ShaderProgram::ShaderProgram::glBufferData_checked(GL_ARRAY_BUFFER, SizeOfPositions() + SizeOfColors(), NULL, GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Buffers[IndexBuffer]);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, SizeOfIndices(), NULL, GL_STATIC_DRAW);
+	ShaderProgram::glBindBuffer_checked(GL_ELEMENT_ARRAY_BUFFER, Buffers[1]);
+	ShaderProgram::glBufferData_checked(GL_ELEMENT_ARRAY_BUFFER, SizeOfIndices(), NULL, GL_STATIC_DRAW);
 
 	// Get the location of vertex attributes in the program
-	GLint vpos = InShaderProgram.GetVertexAttribLocation("vPosition");
-	GLint vcol = InShaderProgram.GetVertexAttribLocation("vColor");
+	GLint vpos = ShaderProgram::glGetAttribLocation_checked(InShaderProgram.ProgAddr, ("vPosition"));
+	GLint vcol = ShaderProgram::glGetAttribLocation_checked(InShaderProgram.ProgAddr, ("vColor"));
 	
 	// Point the programs vertex attributes to their data in the vertex attribute array.
-	glVertexAttribPointer(vpos, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
-	glVertexAttribPointer(vcol, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(SizeOfPositions()));
+	ShaderProgram::glVertexAttribPointer_checked(vpos, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
+	ShaderProgram::glVertexAttribPointer_checked(vcol, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(SizeOfPositions()));
 
 	// Enable fetching from pos and col streams
-	glEnableVertexAttribArray(vpos);
-	glEnableVertexAttribArray(vcol);
+	ShaderProgram::glEnableVertexAttribArray_checked(vpos);
+	ShaderProgram::glEnableVertexAttribArray_checked(vcol);
+
+
 }
 
 void Mesh::DestroyVAO()
 {
-	glDeleteBuffers(NumBuffers, Buffers);
-	glDeleteVertexArrays(NumVAOs, VAOs);
+	glDeleteBuffers(NumBuffers, Buffers.data());
+	glDeleteVertexArrays(1, &VAO);
 }
 
 void Mesh::GenerateMesh_Positions()
@@ -160,15 +164,15 @@ void Mesh::GenerateMesh_Indices()
 
 void Mesh::Draw_UpdatePositions()
 {	
-	glBufferSubData(GL_ARRAY_BUFFER, 0, SizeOfPositions(), PositionsData.data());	//Starting at begining of active buffer put data from vertices array
+	ShaderProgram::glBufferSubData_checked(GL_ARRAY_BUFFER, 0, SizeOfPositions(), PositionsData.data());	//Starting at begining of active buffer put data from vertices array
 }
 
 void Mesh::Draw_UpdateColors()
 {
-	glBufferSubData(GL_ARRAY_BUFFER, SizeOfPositions(), SizeOfColors(), ColorsData.data());		//Starting at end of vertices array of active buffer put data from color array
+	ShaderProgram::glBufferSubData_checked(GL_ARRAY_BUFFER, SizeOfPositions(), SizeOfColors(), ColorsData.data());		//Starting at end of vertices array of active buffer put data from color array
 }
 
 void Mesh::Draw_UpdateIndices()
 {
-	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, SizeOfIndices(), IndexData.data());
+	ShaderProgram::glBufferSubData_checked(GL_ELEMENT_ARRAY_BUFFER, 0, SizeOfIndices(), IndexData.data());
 }

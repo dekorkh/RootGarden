@@ -73,7 +73,9 @@ public:
 	GameStatsStat<float>* Ms_GenerateMesh_Positions;
 	GameStatsStat<float>* Ms_GenerateMesh_Colors;
 	GameStatsStat<float>* Ms_GenerateMesh_Indices;
+	GameStatsStat<float>* Ms_Swap;
 	GameStatsStat<float>* Ms_Test; //For quick any testing
+	GameStatsStat<float>* Ms_Test2; //For quick any testing
 };
 
 class GameStats

@@ -4,7 +4,6 @@
 #include "Eigen/StdVector"
 #include "Eigen/Dense"
 #include "TransformInfo.h"
-#include "Mesh.h"
 #include "SceneComponent.h"
 #include "ShaderManager.h"
 
@@ -16,9 +15,14 @@
 using namespace std;
 using namespace Eigen;
 
+class Mesh;
+struct GenerateMeshResult;
+
 class Matter: public SceneComponent
 {
 public:
+	friend class Mesh_Instanced;
+
 	Matter(const string& InName, const int InSerial);
 	~Matter() override;
 
@@ -50,16 +54,6 @@ public:
 	*/
 	void UpdateModelMatrix();
 
-	/* IsUniformDataDirty
-	/	Return true if uniform data is dirty. Helps cull uniform updates.
-	*/
-	bool IsUniformDataDirty();
-
-	/* UpdateUniformData
-	/	Do update to uniform data.
-	*/
-	virtual void UpdateUniformData();
-
 	ShaderProgram *ShaderProgram;
 
 protected:
@@ -69,5 +63,4 @@ protected:
 private:
 	void Initialize();
 	bool bDirtyModelMatrix;
-	bool bDirtyUniformData;
 };

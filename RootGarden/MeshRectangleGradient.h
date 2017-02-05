@@ -8,7 +8,7 @@ class MeshRectangleGradient : public Mesh
 public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 		MeshRectangleGradient();
-	~MeshRectangleGradient();
+	~MeshRectangleGradient() override;
 
 	/*  SetLayerColor:
 	/	Set the color of a gradient layer using an index.
@@ -32,6 +32,11 @@ public:
 	/		NumLayers	-	Number of layers.
 	*/
 	void SetNumberOfLayers(int NumLayers);
+
+	/* SetNumberOfSide
+	/	Set the number of sides.
+	*/
+	void SetNumberOfSides(int InNumSides);
 
 	/*	GenerateMesh_Positions()
 	/	Regenerate (if dirty) the positions, color, and indices

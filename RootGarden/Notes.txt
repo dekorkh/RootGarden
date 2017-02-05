@@ -1,0 +1,30 @@
+"Adding instanced mesh"
+
+>>1.	Duplicate Mesh class as Mesh_Instanced
+>>2.	Duplicate any existing Mesh type and change it to use Mesh_Instanced as a parent class.
+>>3.	Create a new matter type and assign it the instanced mesh.
+>>4.	Spawn several of the matter in a scene.
+--Now you have a baseline.
+
+-- Bottling the Draw() into one static call.
+1. The instanced mesh draw call would be just one per Class of instanced mesh so the draw should be moved
+into the static method and which should only do draw once per frame, simply returning for the rest of the calls.
+
+2. To keep things working, since the static draw still needs to call draw on each individual instance
+we can store them in a static list, most likely this will be a good idea anyways
+	2a. During construction, add self to a static list
+	2b. Have draw call static version of draw
+	2d. Increment number of times draw is called.
+	2e. When number of times draw is called is == numInstances, set it to 0, mark dirty.
+	2e. When dirty, call to static draw should draw all instances, and mark clean.
+
+-- With the call to draw now all in one place, we have all we need to turn it into
+an instanced call which will also require a new shader type.
+	*	Create a new shader - define modelmatrix as a vertex attriute in the VS
+	*	Make sure it's created during Game::Game() construction
+	*	Make sure the matter using instanced attribute is using it.
+	*	Create a new buffer on the Mesh_Instanced class to keep all instance's uniform buffers.
+
+-- Address the issue of potentially different shader programs on the Matter class side.
+
+4 Make sure to properly time performance

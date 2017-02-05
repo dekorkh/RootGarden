@@ -10,11 +10,6 @@ MatterRootCluster::MatterRootCluster() :
 		SpawnTendril();
 }
 
-void MatterRootCluster::Tick(double DeltaSeconds)
-{
-	SceneComponent::Tick(DeltaSeconds); //Ticks children	
-}
-
 void MatterRootCluster::SpawnTendril()
 {
 	NumTendrils++;

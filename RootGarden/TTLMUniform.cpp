@@ -1,3 +1,4 @@
+#include "ShaderProgram.h"
 #include "TTLMUniform.h"
 #include "GameStats.h"
 #include "Time.h"
@@ -17,10 +18,15 @@ TTLMUniform::~TTLMUniform()
 bool TTLMUniform::RetrieveUniformLocation(GLint const ProgramAddress, const string& UniformName, GLint &OutLocation)
 {
 	bool Result = true;
-	OutLocation = glGetUniformLocation(ProgramAddress, UniformName.c_str());
+	OutLocation = ShaderProgram::glGetUniformLocation_checked(ProgramAddress, UniformName.c_str());
 	if (OutLocation < 0)
 	{
-		cout << "Failed to locate active uniform buffer - " << UniformName << endl;
+		GLint CurrentProgAddr = -1;
+		glGetIntegerv(GL_CURRENT_PROGRAM, &CurrentProgAddr);
+		cout << "Failed to locate active uniform buffer - " << UniformName << " - progaddr: " << CurrentProgAddr << endl;
+		cout << "If the uniform buffer decl. in the shader appears valid, and program is linked succ.";
+		cout << "and the active program is the program in question... Check that the shader uses the ";
+		cout << "uniform as it may be optimized out.";
 		Result = false;
 	}
 	return Result;
@@ -39,16 +45,16 @@ bool TTLMUniform::PushUniform(const GLint ProgramAddress)
 			switch (Type)
 			{
 			case UNIFORM_F1:
-				glUniform1f(UniformLocation, *pData);
+				ShaderProgram::glUniform1f_checked(UniformLocation, *pData);
 				break;
 			case UNIFORM_F2:
-				glUniform2f(UniformLocation, pData[0], pData[1]);
+				ShaderProgram::glUniform2f_checked(UniformLocation, pData[0], pData[1]);
 				break;
 			case UNIFORM_F3:
-				glUniform3f(UniformLocation, pData[0], pData[1], pData[2]);
+				ShaderProgram::glUniform3f_checked(UniformLocation, pData[0], pData[1], pData[2]);
 				break;
 			case UNIFORM_M4:
-				glUniformMatrix4fv(UniformLocation, 1, false, pData);
+				ShaderProgram::glUniformMatrix4fv_checked(UniformLocation, 1, false, pData);
 				break;
 			default:
 				Result = false;
@@ -63,4 +69,9 @@ bool TTLMUniform::PushUniform(const GLint ProgramAddress)
 void TTLMUniform::SetUniformData(GLfloat const * Data)
 {
 	pData = Data;
+}
+
+void TTLMUniform::SetUniformDirty(bool Value)
+{
+	bDirty = Value;
 }

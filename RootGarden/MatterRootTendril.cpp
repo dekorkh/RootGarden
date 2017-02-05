@@ -54,7 +54,10 @@ void MatterRootTendril::Tick(double DeltaSeconds)
 			if (NumSegments <= MaxSegments)
 				bSpawnRoot = true;
 			else
+			{
 				bGrown = true;
+				bTickEnabled = false;
+			}
 		}
 	}
 

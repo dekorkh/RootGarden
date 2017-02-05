@@ -11,10 +11,6 @@ public:
 	void Build() override;
 	/* End SceneComponent Interface */
 
-	/* Begin Matter Interface */
-	void UpdateUniformData() override;
-	/* End Matter Interface */
-
 	void Pulse(bool bForce = true);
 	
 

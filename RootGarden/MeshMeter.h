@@ -7,7 +7,7 @@ class MeshMeter : public Mesh
 public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 	MeshMeter();
-	~MeshMeter();
+	~MeshMeter() override;
 
 	void SetColor(const Vector4f& Color);
 

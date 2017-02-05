@@ -7,7 +7,7 @@ class MeshCircle : public Mesh
 public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 	MeshCircle();
-	~MeshCircle();
+	~MeshCircle() override;
 
 	void SetNumSides(GLint InNumSides);
 	void SetColors(const Vector4f& InColorOuter, const Vector4f& InColorInner);

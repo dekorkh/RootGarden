@@ -157,3 +157,8 @@ void MeshRectangleGradient::GenerateMesh_Indices()
 		}
 	}
 }
+
+void MeshRectangleGradient::SetNumberOfSides(int InNumSides)
+{
+	NumSides = InNumSides;
+}

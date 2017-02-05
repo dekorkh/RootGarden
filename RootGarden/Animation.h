@@ -87,9 +87,9 @@ public:
 	*/
 	void UpdateOutputs(SceneComponent& InSceneComponent) const;
 
-	/* ResetTime 
+	/* Reset
 	Sets the ElapsedSeconds to 0 - if the animation uses time this rewindes it. */
-	void Reset();
+	virtual void Reset();
 
 
 protected:

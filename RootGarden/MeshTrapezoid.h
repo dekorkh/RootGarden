@@ -10,7 +10,7 @@ public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
 	MeshTrapezoid();
-	~MeshTrapezoid();
+	~MeshTrapezoid() override;
 
 	void SetBaseWidth(float w);
 	void SetTipWidth(float w);

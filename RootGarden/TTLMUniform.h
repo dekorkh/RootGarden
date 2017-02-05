@@ -31,7 +31,10 @@ public:
 	*/
 	bool PushUniform(const GLint ProgramAddress);
 	
-	bool bDirty;
+	/* SetUniformDirty
+	* Will set this uniform's bDirty to Value.
+	*/
+	void SetUniformDirty(bool Value);
 
 private:
 	static bool RetrieveUniformLocation(GLint const ProgramAddress, const string& UniformName, GLint &OutLocation);
@@ -40,4 +43,5 @@ private:
 	GLint UniformLocation;
 	UniformType Type;
 	GLfloat const * pData;
+	bool bDirty;
 };

@@ -7,8 +7,6 @@ class MatterRootCluster : public SceneComponent
 public:
 	MatterRootCluster();
 
-	void Tick(double DeltaSeconds) override;
-
 private:
 	void SpawnTendril();
 

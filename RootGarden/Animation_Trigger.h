@@ -13,10 +13,13 @@ public:
 
 	bool Finished() const override;
 
+	void Reset() override;
+
 	bool Out;
 	int OutputIdx_Out;
 
 private:
 	bool bLastState;
+	bool bInitState;
 };
 

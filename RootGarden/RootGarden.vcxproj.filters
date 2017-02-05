@@ -61,6 +61,9 @@
     <None Include="param_alpha.vert">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="basic_instanced.vert">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -200,6 +203,27 @@
     </ClCompile>
     <ClCompile Include="FontManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_BeanGarden.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CompWater.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="MatterDrop.cpp">
+      <Filter>Source Files\Matter</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation_LerpVec3.cpp">
+      <Filter>Source Files\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh_Instanced.cpp">
+      <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshRectangle_Instanced.cpp">
+      <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="MatterRectangle_Instanced.cpp">
+      <Filter>Source Files\Matter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -353,5 +377,34 @@
     <ClInclude Include="FontManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Scene_BeanGarden.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CompWater.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="MatterDrop.h">
+      <Filter>Header Files\Matter</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation_LerpVec3.h">
+      <Filter>Header Files\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh_Instanced.h">
+      <Filter>Header Files\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshRectangle_Instanced.h">
+      <Filter>Header Files\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="MatterRectangle_Instanced.h">
+      <Filter>Header Files\Matter</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="DebugSteps.txt">
+      <Filter>Header Files</Filter>
+    </Text>
+    <Text Include="Notes.txt">
+      <Filter>Header Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

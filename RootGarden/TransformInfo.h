@@ -8,6 +8,7 @@
 using namespace std;
 using namespace Eigen;
 
+#define SIZE_OF_MAT4 sizeof(float) * 16
 
 class TransformInfo
 {

@@ -22,6 +22,7 @@ SceneComponent::SceneComponent(const string& InName, const int InSerial) : bDirt
 
 void SceneComponent::Initialize()
 {
+	bTickEnabled = true;
 	AllPrims.push_back(this);
 	pAnimationList = new AnimationList(*this);
 }
@@ -51,10 +52,13 @@ void SceneComponent::GatherChildren(vector<SceneComponent*>* OutChildren)
 
 void SceneComponent::Tick(double DeltaSeconds)
 {
-	pAnimationList->Tick(DeltaSeconds);
-	for (SceneComponent* Child : Children)
+	if (bTickEnabled)
 	{
-		Child->Tick(DeltaSeconds);
+		pAnimationList->Tick(DeltaSeconds);
+		for (SceneComponent* Child : Children)
+		{
+			Child->Tick(DeltaSeconds);
+		}
 	}
 }
 

@@ -13,6 +13,25 @@ class ShaderManager;
 class ShaderProgram
 {
 public:
+	/* GL methods wrapped with the best error checking, other error checking is the worst
+	*/
+	static void glBufferSubData_checked(GLenum target, GLintptr offset, GLsizeiptr dataSize, GLvoid const *data);
+	static GLint glGetAttribLocation_checked(GLint ProgAddr, string const AttribName);
+	static void glBindBuffer_checked(GLenum Target, GLint Buffer);
+	static void glBufferData_checked(GLenum Target, GLsizeiptr Size, GLvoid *Data, GLenum Usage);
+	static void glEnableVertexAttribArray_checked(GLuint Loc);
+	static void glVertexAttribDivisor_checked(GLuint Loc, GLuint Divisor);
+	static void glVertexAttribPointer_checked(GLuint Index, GLint Size, GLenum Type, GLboolean Normalize, GLsizei Stride, const GLvoid *Offset);
+	static void glDrawElementsInstanced_checked(GLenum Mode, GLsizei Count, GLenum Type, GLvoid *Indices, GLsizei PrimCount);
+	static void glGenVertexArrays_checked(GLsizei Count, GLuint* Arrays);
+	static void glBindVertexArray_checked(GLuint Array);
+	static void glGenBuffers_checked(GLsizei Count, GLuint *Buffers);
+	static void glUniform1f_checked(GLuint Loc, GLfloat Value);
+	static void glUniform2f_checked(GLuint Loc, GLfloat Value1, GLfloat Value2);
+	static void glUniform3f_checked(GLuint Loc, GLfloat Value1, GLfloat Value2, GLfloat Value3);
+	static void glUniformMatrix4fv_checked(GLuint Loc, GLsizei Count, GLboolean Transpose, GLfloat const *ValueArray);
+	static GLint ShaderProgram::glGetUniformLocation_checked(GLuint ProgramAddress, const GLchar *UniformName);
+
 	ShaderProgram(Shader *InVertexShader, Shader *InFragmentShader);
 	~ShaderProgram();
 
@@ -44,13 +63,11 @@ public:
 
 	void AddUniform(string const UniformName, UniformType Type);
 	void SetUniform(string const UniformName, GLfloat const * pData) const;
-	void MarkUniformDirty(string const UniformName, bool const Value);
+	void SetProgramUniformDirty(string const UniformName, bool const Value);
 
 	static void AddGlobalUniform(string const UniformName, UniformType Type);
 	static void SetGlobalUniform(string const UniformName, GLfloat const * pData);
 	static void MarkGlobalUniformDirty(string const UniformName, bool const Value);
-	
-	GLint GetVertexAttribLocation(string AttribName);
 
 	GLint ProgAddr;
 	static GLint LastProgAddr;

@@ -6,7 +6,10 @@
 using namespace Eigen;
 
 Animation_Trigger::Animation_Trigger(bool bStartState)
-	: Out(0.0f), bLastState(bStartState)
+	: 
+	Out(0.0f), 
+	bLastState(bStartState), 
+	bInitState(bStartState)
 {
 	OutputIdx_Out = RegisterOutput_Bool(Out);
 }
@@ -28,4 +31,10 @@ bool Animation_Trigger::Tick(const double DeltaSeconds)
 bool Animation_Trigger::Finished() const
 {
 	return true;
+}
+
+void Animation_Trigger::Reset()
+{
+	Animation::Reset();
+	bLastState = bInitState;
 }

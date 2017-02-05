@@ -3,7 +3,6 @@
 #include "Eigen/StdVector"
 #include <map>
 #include "Eigen/Dense"
-#include "Animation.h"
 #include "AnimationList.h"
 
 using namespace std;
@@ -35,14 +34,12 @@ struct TInputEffects {
 		bVertPositions(false),
 		bVertColors(false),
 		bVertIndices(false),
-		bComponentParameters(false),
-		bUniformData(false)
+		bComponentParameters(false)
 	{};
 	bool bVertPositions;
 	bool bVertColors;
 	bool bVertIndices;
 	bool bComponentParameters;
-	bool bUniformData;
 };
 
 //-----------------------------------
@@ -134,6 +131,8 @@ public:
 	map<const int, Input*> InputMap;
 
 	static vector<SceneComponent*>* GetPrims();
+
+	bool bTickEnabled;
 
 protected:
 	bool bDirtyComponentParameters;

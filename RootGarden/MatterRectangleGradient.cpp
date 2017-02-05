@@ -9,7 +9,6 @@ MatterRectangleGradient::MatterRectangleGradient() :
 {	
 	Mesh = new MeshRectangleGradient();
 	InputIdx_Glow = RegisterInput_Float(Glow);
-	InputMap[InputIdx_Glow]->InputEffects.bUniformData = true;
 	InputIdx_bPulsing = RegisterInput_Bool(bPulsing);
 	
 	Animation_Pulse *AnimPulse = new Animation_Pulse(1.0f);
@@ -58,9 +57,4 @@ void MatterRectangleGradient::Pulse(bool bForce)
 {
 	if (bForce || !bPulsing)
 		SelectAnimation(0);
-}
-
-void MatterRectangleGradient::UpdateUniformData()
-{
-	ShaderProgram->MarkUniformDirty("ParamAlpha", true);
 }

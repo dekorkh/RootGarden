@@ -1,4 +1,4 @@
-#include "Scene_RootGarden.h"
+#include "Scene_BeanGarden.h"
 #include "Animation_Orbit.h"
 #include "Animation_AimOrbit.h"
 #include "Animation_Aim.h"
@@ -9,52 +9,26 @@
 #define _USE_MATH_DEFINES
 #include "math.h"
 
-Scene_RootGarden::Scene_RootGarden()
+Scene_BeanGarden::Scene_BeanGarden()
 {
-	MatterTileboard* tileBoard = new MatterTileboard();
-	AddChild(tileBoard);
-	
-	MatterRootTendril *tendril = new MatterRootTendril();
-	AddChild(tendril);
-	
-	MatterRectangle* Rectangle = new MatterRectangle();
-	Rectangle->SetLookAtTarget(Vector3f(0.5f, 0.5f, 0.0f));
-	Rectangle->SetPosition(Vector3f(-1.2f, -0.5f, 0.0f));
-	Rectangle->SetScale(Vector3f(0.2f, 0.2f, 1.0f));
-	AddChild(Rectangle);
-	
-
-	MatterRootCluster *cluster = new MatterRootCluster();
-	AddChild(cluster);
-	
-	MatterRing *Ring = new MatterRing();
-	AddChild(Ring);
-
-	CompGaugeVertical *GaugeV = new CompGaugeVertical();
-	GaugeV->SetScale(Vector3f(0.05f, 0.2f, 1.0f));
-	GaugeV->SetPosition(Vector3f(-1.2f, 0.5f, 1.0f));
-	AddChild(GaugeV);
-	
 	/*
+	MatterRectangle* Rectangle = new MatterRectangle();
+	AddChild(Rectangle);
+	*/
+
 	CompWater* pWater = new CompWater();
 	pWater->SetMaxDrops(1000);
 	pWater->SetSpawnRate(30.0f);
 	pWater->SetBounds(1.6f, 1.0f);
 	AddChild(pWater);
-	*/
-
-	/*
-	MatterBasicText* BasicText = new MatterBasicText();
-	AddChild(BasicText);
-	*/
 }
 
 
-Scene_RootGarden::~Scene_RootGarden()
+Scene_BeanGarden::~Scene_BeanGarden()
 {
 }
 
-void Scene_RootGarden::HandleInput(int Key, int x, int y, bool down)
+void Scene_BeanGarden::HandleInput(int Key, int x, int y, bool down)
 {
 	switch (Key)
 	{

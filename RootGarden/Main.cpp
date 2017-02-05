@@ -33,19 +33,20 @@ Game::Game() :
 	AspectRatio(1.0f)
 {
 	pGameStats = GameStats::GetGameStats();
-	pGameStats->AddFrame();
 
 	ShaderManager* pShaderManager = ShaderManager::GetShaderManager();
 	pShaderManager->AddShader("basic_vert", "basic.vert", ESHADER_TYPE::SHADER_TYPE_VERTEX);
 	pShaderManager->AddShader("param_alpha_vert", "param_alpha.vert", ESHADER_TYPE::SHADER_TYPE_VERTEX);
+	pShaderManager->AddShader("basic_instanced_vert", "basic_instanced.vert", ESHADER_TYPE::SHADER_TYPE_VERTEX);
 	pShaderManager->AddShader("basic_frag", "basic.frag", ESHADER_TYPE::SHADER_TYPE_FRAGMENT);
 	pShaderManager->AddShaderProgram("basic_prog", "basic_vert", "basic_frag");
 	pShaderManager->AddShaderProgram("param_alpha_prog", "param_alpha_vert", "basic_frag");
+	pShaderManager->AddShaderProgram("basic_instanced_prog", "basic_instanced_vert", "basic_frag");
 	pShaderManager->GetShaderProgramByName("param_alpha_prog")->AddUniform("ParamAlpha", UNIFORM_F1);
 
 	ShaderProgram::AddGlobalUniform("AspectRatio", UNIFORM_F1);
 
-	ActiveScene = new Scene_RootGarden();
+	ActiveScene = new Scene_BeanGarden();
 	Log_Frame = new ofstream("Log_Frame.txt");
 	*Log_Frame << "CLOCKS_PER_SEC: " << CLOCKS_PER_SEC << endl;
 	*Log_Frame << "CLOCKS_MIN_FRAME: " << ClockMinFrame << endl;
@@ -74,7 +75,7 @@ Game::InitGraphics(Vector2i WindowSize)
 	{
 		glSwapInterval = (PFNWGLSWAPINTERVALEXTPROC) wglGetProcAddress("wglSwapIntervalEXT");
 		glGetSwapInterval = (PFNWGLGETSWAPINTERVALEXTPROC) wglGetProcAddress("wglGetSwapIntervalEXT");
-		glSwapInterval(1);
+		glSwapInterval(0); //VSYNC
 	}
 
 
@@ -87,6 +88,13 @@ Game::InitGraphics(Vector2i WindowSize)
 	ShaderProgram::MarkGlobalUniformDirty("AspectRatio", true);
 	//Set-up random gen
 	srand(time(NULL));
+
+	GLenum err;
+	while ((err = glGetError()) != GL_NO_ERROR)
+	{
+		cout << "Error after InitGraphics(): " << err;
+		throw err;
+	}
 };
 
 //--------------------------------------------------------------
@@ -96,6 +104,15 @@ Game::InitGraphics(Vector2i WindowSize)
 void
 Game::Display(void)
 {	
+	GLenum err;
+	while ((err = glGetError()) != GL_NO_ERROR)
+	{
+		cout << "Error at enter Display(), frame : ";
+		cout << pGameStats->pThisFrame->Index << " ";
+		cout << "error :" << err << "\n";
+		throw err;
+	}
+
 	DeltaSeconds_Display = static_cast<double>(clock() - ClockLastFrame) / CLOCKS_PER_SEC;
 	ClockLastFrame = clock();
 	pGameStats->AddFrame();
@@ -104,8 +121,8 @@ Game::Display(void)
 	clock_t Clock_Tick = clock();
 	ActiveScene->Tick(DeltaSeconds_Display);
 	pGameStats->pThisFrame->Ms_Tick->Increment(TICKS_TO_MS(clock() - Clock_Tick));
-
-	glClearColor(0.02f, 0.02f, 0.06f, 1.0f);
+	
+	glClearColor(0.28f, 0.25f, 0.2f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	// Traverse all primitives, set-up, and do draw
@@ -125,15 +142,29 @@ Game::Display(void)
 			ActiveMatter->Draw();
 		}
 	}
-	ShaderProgram::MarkGlobalUniformsClean();
 
-	glutSwapBuffers();	//run the program - ? vs swap **
+	// Set LastProg address to -1 to go through prog switch codepath and cause 
+	// global state changes to refresh between frames.  Their update is bundled 
+	// with program switching.
+	ShaderProgram::LastProgAddr = -1;
+
+
+	clock_t Clock_Swap = clock();
+	glutSwapBuffers();	// swap buffers
+	GameStats::GetGameStats()->pThisFrame->Ms_Swap->Set(TICKS_TO_MS(clock() - Clock_Swap));
 
 	while ((clock() - ClockLastFrame) < ClockMinFrame)
 		1;
 	
 	pGameStats->pThisFrame->Ms_Total->Set(TICKS_TO_MS(clock() - ClockLastFrame));
 
+	while ((err = glGetError()) != GL_NO_ERROR)
+	{
+		cout << "Error at exit Display(), frame : ";
+		cout << pGameStats->pThisFrame->Index << " ";
+		cout << "error :" << err << "\n";
+		throw err;
+	}
 	glutPostRedisplay(); //call redraw window
 }
 
@@ -255,33 +286,35 @@ main(int argc, char** argv)
 {
 	glutInit(&argc, argv);				//? ***
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_MULTISAMPLE);		//? ** these appear to be render buffer properties
-	glutInitWindowSize(512, 512);		
+	glutInitWindowSize(819, 512);
 	glutInitWindowPosition(0, 0);		
 	glutInitContextVersion(4, 3);
 	glutInitContextProfile(GLUT_CORE_PROFILE);	//OpenGL has different profiles and extensions since 3.2 that allow different, sometime esoteric compatibility.
 	glutCreateWindow(argv[0]);
+	GLenum err;
 	glutFullScreen();
 
-	glewExperimental = GL_TRUE;	// -_-
+	glewExperimental = GL_TRUE;	// -_- (https://www.khronos.org/opengl/wiki/OpenGL_Loading_Library)
 	if (glewInit()) {
 		cerr << "Unable to initialize GLEW ... exiting" << endl;
 		exit(EXIT_FAILURE);
 	}
+	while ((err = glGetError()) != GL_NO_ERROR)
+		cout << "Error glewInit() : possibly due to https://www.khronos.org/opengl/wiki/OpenGL_Loading_Library and safe to ignore.";
 
 	//Pass window size into init, obviously important drawing to screen
 	Vector2i WindowSize = Vector2i(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 	
 	GameInstancePtr = new Game();
 	GameInstancePtr->InitGraphics(WindowSize);
-
+	
 	//Register window's update loop function, runs indefinitely once glut main loop is called.  There's an Idle function as well for capping framerate
 	glutDisplayFunc(Display);
-
 	//Register keyboard input callback
 	glutKeyboardFunc(Keyboard);		// alpha numeric keys
 	glutSpecialFunc(Keyboard2_down); // special keys such arrow keys (callback for on down)
 	glutSpecialUpFunc(Keyboard2_up); // special keys such arrow keys (callback for on up)
-
+	
 	glutMainLoop();
 	
 	// Cleanup

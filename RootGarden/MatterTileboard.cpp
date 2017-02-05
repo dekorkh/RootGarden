@@ -39,11 +39,6 @@ MatterTileboard::~MatterTileboard()
 {
 }
 
-void MatterTileboard::Build()
-{
-	SceneComponent::Build();
-}
-
 MatterRectangleGradient* MatterTileboard::MakeTile()
 {
 	MatterRectangleGradient *RectangleGradient = new MatterRectangleGradient();

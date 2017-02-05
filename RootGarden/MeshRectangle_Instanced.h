@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Mesh.h"
+#include "Mesh_Instanced.h"
 
-class MeshRectangle : public Mesh
+class MeshRectangle_Instanced : public Mesh_Instanced
 {
 public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-	MeshRectangle();
-	~MeshRectangle() override;
+	MeshRectangle_Instanced(Matter const &InParentMatter);
+	~MeshRectangle_Instanced() override;
 
 	void SetColor(const Vector4f& Color);
 

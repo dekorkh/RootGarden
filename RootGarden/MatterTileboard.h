@@ -20,8 +20,6 @@ public:
 	float ActivePointX;
 	float ActivePointY;
 
-	void Build() override;
-
 private:
 	MatterRectangleGradient* MakeTile();
 };

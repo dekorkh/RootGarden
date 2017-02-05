@@ -57,7 +57,9 @@ void GameStats::WriteToFile(string FilePath)
 	Frames[0]->Ms_GenerateMesh_Positions->WriteName(stream);
 	Frames[0]->Ms_GenerateMesh_Colors->WriteName(stream);
 	Frames[0]->Ms_GenerateMesh_Indices->WriteName(stream);
+	Frames[0]->Ms_Swap->WriteName(stream);
 	Frames[0]->Ms_Test->WriteName(stream);
+	Frames[0]->Ms_Test2->WriteName(stream);
 	
 	*stream << "\n";
 
@@ -76,7 +78,9 @@ void GameStats::WriteToFile(string FilePath)
 		Frame->Ms_GenerateMesh_Positions->WriteValue(stream);
 		Frame->Ms_GenerateMesh_Colors->WriteValue(stream);
 		Frame->Ms_GenerateMesh_Indices->WriteValue(stream);
+		Frame->Ms_Swap->WriteValue(stream);
 		Frame->Ms_Test->WriteValue(stream);
+		Frame->Ms_Test2->WriteValue(stream);
 		*stream << "\n";
 	}
 	
@@ -100,7 +104,10 @@ GameStatsFrame::GameStatsFrame()
 	Ms_GenerateMesh_Positions = new GameStatsStat<float>("Ms_GenerateMesh_Positions", 0.0f);
 	Ms_GenerateMesh_Colors = new GameStatsStat<float>("Ms_GenerateMesh_Colors", 0.0f);
 	Ms_GenerateMesh_Indices = new GameStatsStat<float>("Ms_GenerateMesh_Indices", 0.0f);
+	Ms_GenerateMesh_Indices = new GameStatsStat<float>("Ms_Swap", 0.0f);
+	Ms_Swap = new GameStatsStat<float>("Ms_Swap", 0.0f);
 	Ms_Test = new GameStatsStat<float>("Ms_Test", 0.0f);
+	Ms_Test2 = new GameStatsStat<float>("Ms_Test2", 0.0f);
 }
 
 GameStatsFrame::~GameStatsFrame()
