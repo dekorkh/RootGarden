@@ -29,7 +29,7 @@ public:
 	/* SetUniform
 	/	Copy the uniform to the gpu.
 	*/
-	bool PushUniform(const GLint ProgramAddress);
+	bool PushUniform(class ShaderProgram const * InShaderProgram);
 	
 	/* SetUniformDirty
 	* Will set this uniform's bDirty to Value.

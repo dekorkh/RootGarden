@@ -225,6 +225,21 @@
     <ClCompile Include="MatterRectangle_Instanced.cpp">
       <Filter>Source Files\Matter</Filter>
     </ClCompile>
+    <ClCompile Include="MeshWireCube.cpp">
+      <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="MatterWireCube.cpp">
+      <Filter>Source Files\Matter</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshSolidCube.cpp">
+      <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="MatterSolidCube.cpp">
+      <Filter>Source Files\Matter</Filter>
+    </ClCompile>
+    <ClCompile Include="CompOutlineCube.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TransformInfo.h">
@@ -397,6 +412,21 @@
     </ClInclude>
     <ClInclude Include="MatterRectangle_Instanced.h">
       <Filter>Header Files\Matter</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshWireCube.h">
+      <Filter>Header Files\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="MatterWireCube.h">
+      <Filter>Header Files\Matter</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshSolidCube.h">
+      <Filter>Header Files\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="MatterSolidCube.h">
+      <Filter>Header Files\Matter</Filter>
+    </ClInclude>
+    <ClInclude Include="CompOutlineCube.h">
+      <Filter>Header Files\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

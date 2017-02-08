@@ -22,7 +22,16 @@ void AnimationList::Tick(double DeltaSeconds)
 		bool result = SequenceList.at(SequenceIndex)->Tick(DeltaSeconds);
 		SequenceList.at(SequenceIndex)->UpdateOutputs(rSceneComponent);
 		if (!result)
-			SequenceIndex++;
+		{ // ENTER ANIMATION FINISHED
+			if (SequenceList.at(SequenceIndex)->bLoop)
+			{ // IF LOOP, PLAY AGAIN
+				ResetAnimation(SequenceIndex);
+			}
+			else
+			{ // MOVE ON TO NEXT ANIM
+				SequenceIndex++;
+			}
+		} // EXIT ANIMATION FINISHED
 	}
 	GameStats::GetGameStats()->pThisFrame->Ms_TickAnimation->Increment(TICKS_TO_MS(clock() - Clock_Animation));
 }

@@ -24,6 +24,14 @@ enum ESHADER_TYPE {
 	SHADER_TYPE_FRAGMENT
 };
 
+enum EUNIFORM_TYPE
+{
+	UNIFORM_TYPE_FLOAT,
+	UNIFORM_TYPE_MAT4,
+	UNIFORM_TYPE_UNKNOWN,
+	UNIFORM_TYPE_NOTFOUND
+};
+
 class Shader
 {
 public:
@@ -44,6 +52,11 @@ public:
 	/ Attaches the shader to the program.
 	*/
 	void AttachShader(GLuint ProgAddr);
+
+	/* GetUniformType
+	/ Return the type of uniform as it's declared in the shader source.
+	*/
+	EUNIFORM_TYPE GetUniformType(string const UniformName) const;
 
 private:
 	/*	readInTextFile: Attempts to read in a file from pathName, set it to a shader address

@@ -143,6 +143,7 @@
     <ClCompile Include="Animation_Pulse.cpp" />
     <ClCompile Include="Animation_Trigger.cpp" />
     <ClCompile Include="CompGaugeVertical.cpp" />
+    <ClCompile Include="CompOutlineCube.cpp" />
     <ClCompile Include="CompWater.cpp" />
     <ClCompile Include="FontManager.cpp" />
     <ClCompile Include="GameStats.cpp" />
@@ -160,7 +161,9 @@
     <ClCompile Include="MatterRootCluster.cpp" />
     <ClCompile Include="MatterRootSegment.cpp" />
     <ClCompile Include="MatterRootTendril.cpp" />
+    <ClCompile Include="MatterSolidCube.cpp" />
     <ClCompile Include="MatterTileboard.cpp" />
+    <ClCompile Include="MatterWireCube.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshCircle.cpp" />
     <ClCompile Include="MeshMeter.cpp" />
@@ -168,7 +171,9 @@
     <ClCompile Include="MeshRectangleGradient.cpp" />
     <ClCompile Include="MeshRectangle_Instanced.cpp" />
     <ClCompile Include="MeshRing.cpp" />
+    <ClCompile Include="MeshSolidCube.cpp" />
     <ClCompile Include="MeshTrapezoid.cpp" />
+    <ClCompile Include="MeshWireCube.cpp" />
     <ClCompile Include="Mesh_Instanced.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneComponent.cpp" />
@@ -198,6 +203,7 @@
     <ClInclude Include="Animation_Pulse.h" />
     <ClInclude Include="Animation_Trigger.h" />
     <ClInclude Include="CompGaugeVertical.h" />
+    <ClInclude Include="CompOutlineCube.h" />
     <ClInclude Include="CompWater.h" />
     <ClInclude Include="FontManager.h" />
     <ClInclude Include="GameStats.h" />
@@ -211,7 +217,9 @@
     <ClInclude Include="MatterRectangleGradient.h" />
     <ClInclude Include="MatterRectangle_Instanced.h" />
     <ClInclude Include="MatterRootCluster.h" />
+    <ClInclude Include="MatterSolidCube.h" />
     <ClInclude Include="MatterTileboard.h" />
+    <ClInclude Include="MatterWireCube.h" />
     <ClInclude Include="MeshMeter.h" />
     <ClInclude Include="Matter.h" />
     <ClInclude Include="MatterCircle.h" />
@@ -226,7 +234,9 @@
     <ClInclude Include="MeshRectangleGradient.h" />
     <ClInclude Include="MeshRectangle_Instanced.h" />
     <ClInclude Include="MeshRing.h" />
+    <ClInclude Include="MeshSolidCube.h" />
     <ClInclude Include="MeshTrapezoid.h" />
+    <ClInclude Include="MeshWireCube.h" />
     <ClInclude Include="Mesh_Instanced.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneComponent.h" />

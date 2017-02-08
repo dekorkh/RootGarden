@@ -56,6 +56,9 @@ public:
 
 	ShaderProgram *ShaderProgram;
 
+	// Whether this geometry is used only for rendering the stencil
+	bool bIsStencil;
+
 protected:
 	TransformInfo Transform;
 	Mesh* Mesh;

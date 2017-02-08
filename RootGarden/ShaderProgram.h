@@ -26,11 +26,13 @@ public:
 	static void glGenVertexArrays_checked(GLsizei Count, GLuint* Arrays);
 	static void glBindVertexArray_checked(GLuint Array);
 	static void glGenBuffers_checked(GLsizei Count, GLuint *Buffers);
-	static void glUniform1f_checked(GLuint Loc, GLfloat Value);
-	static void glUniform2f_checked(GLuint Loc, GLfloat Value1, GLfloat Value2);
-	static void glUniform3f_checked(GLuint Loc, GLfloat Value1, GLfloat Value2, GLfloat Value3);
-	static void glUniformMatrix4fv_checked(GLuint Loc, GLsizei Count, GLboolean Transpose, GLfloat const *ValueArray);
+	static void glUniform1f_checked(ShaderProgram const &InShaderProgram, string const &UniformName, GLuint Loc, GLfloat Value);
+	static void glUniform2f_checked(ShaderProgram const &InShaderProgram, string const &UniformName, GLuint Loc, GLfloat Value1, GLfloat Value2);
+	static void glUniform3f_checked(ShaderProgram const &InShaderProgram, string const &UniformName, GLuint Loc, GLfloat Value1, GLfloat Value2, GLfloat Value3);
+	static void glUniformMatrix4fv_checked(ShaderProgram const &InShaderProgram, string const &UniformName, GLuint Loc, GLsizei Count, GLboolean Transpose, GLfloat const *ValueArray);
 	static GLint ShaderProgram::glGetUniformLocation_checked(GLuint ProgramAddress, const GLchar *UniformName);
+	static void glGetActiveUniform_checked(GLuint ProgramAddress, GLint Loc, GLsizei MaxNameLength, GLsizei *ActualNameLength, GLint *Size, GLenum *Type, GLchar *Name);
+	static void glUseProgram_checked(GLuint ProgramAddress);
 
 	ShaderProgram(Shader *InVertexShader, Shader *InFragmentShader);
 	~ShaderProgram();
@@ -45,7 +47,7 @@ public:
 	*/
 	void Free();
 
-	/* PushUniforms
+	/*  PushUniforms
 	/ Push the uniform data to buffers for the mesh and mark clean.
 	*/
 	void PushUniforms();
@@ -54,7 +56,7 @@ public:
 	/ Push the uniform data to buffers for the frame. 
 	/ Call a separate command to mark them clean at end of frame.
 	*/
-	void static PushGlobalUniforms(GLint ProgAddr);
+	void PushGlobalUniforms();
 
 	/* MarkGlobalUniformsClean
 	/ Mark global uniforms as clean.
@@ -65,12 +67,15 @@ public:
 	void SetUniform(string const UniformName, GLfloat const * pData) const;
 	void SetProgramUniformDirty(string const UniformName, bool const Value);
 
+	EUNIFORM_TYPE GetUniformType(string const UniformName) const;
+
 	static void AddGlobalUniform(string const UniformName, UniformType Type);
 	static void SetGlobalUniform(string const UniformName, GLfloat const * pData);
 	static void MarkGlobalUniformDirty(string const UniformName, bool const Value);
 
 	GLint ProgAddr;
 	static GLint LastProgAddr;
+	static ShaderProgram *LastProgPtr;
 
 private:
 	Shader *VertexShader;

@@ -38,8 +38,6 @@ public:
 	const GLfloat* GetModelMatrixDataPtr() const;
 
 private:
-	void SetUniform(ShaderProgram const * InShaderProgram);
-
 	Matrix4f ModelMatrix;
 
 	Vector3f Scale;

@@ -32,29 +32,28 @@ bool TTLMUniform::RetrieveUniformLocation(GLint const ProgramAddress, const stri
 	return Result;
 }
 
-bool TTLMUniform::PushUniform(const GLint ProgramAddress)
+bool TTLMUniform::PushUniform(ShaderProgram const * InShaderProgram)
 {
 	bool Result = true;
 	if (bDirty)
 	{
-		if (UniformLocation == -1)
-			Result = RetrieveUniformLocation(ProgramAddress, UniformName, UniformLocation);
+		Result = RetrieveUniformLocation(InShaderProgram->ProgAddr, UniformName, UniformLocation);
 
 		if (Result)
 		{
 			switch (Type)
 			{
 			case UNIFORM_F1:
-				ShaderProgram::glUniform1f_checked(UniformLocation, *pData);
+				ShaderProgram::glUniform1f_checked(*InShaderProgram, UniformName, UniformLocation, *pData);
 				break;
 			case UNIFORM_F2:
-				ShaderProgram::glUniform2f_checked(UniformLocation, pData[0], pData[1]);
+				ShaderProgram::glUniform2f_checked(*InShaderProgram, UniformName, UniformLocation, pData[0], pData[1]);
 				break;
 			case UNIFORM_F3:
-				ShaderProgram::glUniform3f_checked(UniformLocation, pData[0], pData[1], pData[2]);
+				ShaderProgram::glUniform3f_checked(*InShaderProgram, UniformName, UniformLocation, pData[0], pData[1], pData[2]);
 				break;
 			case UNIFORM_M4:
-				ShaderProgram::glUniformMatrix4fv_checked(UniformLocation, 1, false, pData);
+				ShaderProgram::glUniformMatrix4fv_checked(*InShaderProgram, UniformName, UniformLocation, 1, false, pData);
 				break;
 			default:
 				Result = false;

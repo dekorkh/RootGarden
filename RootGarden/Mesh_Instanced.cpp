@@ -106,8 +106,6 @@ void Mesh_Instanced::Draw_Instanced(ShaderProgram& InShaderProgram)
 		Mesh_Instanced *thismesh = InstanceList.at(0);
 		enum VAO_IDs { Triangles, NumVAOs };
 
-		GLuint VAOs[NumVAOs];
-
 		GLint prog_addr;
 		glGetIntegerv(GL_CURRENT_PROGRAM, &prog_addr);
 
@@ -168,8 +166,6 @@ void Mesh_Instanced::Draw_Instanced(ShaderProgram& InShaderProgram)
 
 void Mesh_Instanced::Draw_UpdateModelMatrices(ShaderProgram& InShaderProgram)
 {
-	GLenum err;
-
 	GLint vModelMatrix = ShaderProgram::glGetAttribLocation_checked(InShaderProgram.ProgAddr, "vModelMatrix");
 	GLint vInstanceColor = ShaderProgram::glGetAttribLocation_checked(InShaderProgram.ProgAddr, "vInstanceColor");
 

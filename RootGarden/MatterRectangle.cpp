@@ -10,3 +10,8 @@ MatterRectangle::MatterRectangle() :
 	Rectangle->SetColor(RectangleColor);
 	Mesh = Rectangle;
 }
+
+MatterRectangle::~MatterRectangle()
+{
+	delete Mesh;
+}

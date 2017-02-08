@@ -3,6 +3,7 @@
 #include "ShaderManager.h"
 
 GLint ShaderProgram::LastProgAddr = -1;
+ShaderProgram * ShaderProgram::LastProgPtr = nullptr;
 map<string, TTLMUniform*> ShaderProgram::GlobalUniformMap;
 
 ShaderProgram::ShaderProgram(Shader *InVertexShader, Shader *InFragmentShader) :
@@ -47,7 +48,8 @@ bool ShaderProgram::Compile()
 void ShaderProgram::Use()
 {
 	LastProgAddr = ProgAddr;
-	glUseProgram(ProgAddr);
+	LastProgPtr = this;
+	ShaderProgram::glUseProgram_checked(ProgAddr);
 }
 
 void ShaderProgram::Free()
@@ -91,15 +93,15 @@ void ShaderProgram::PushUniforms()
 {
 	for (auto& it : UniformMap)
 	{
-		it.second->PushUniform(ProgAddr);
+		it.second->PushUniform(this);
 	}
 }
 
-void ShaderProgram::PushGlobalUniforms(GLint ProgAddr)
+void ShaderProgram::PushGlobalUniforms()
 {
 	for (auto& it : GlobalUniformMap)
 	{
-		it.second->PushUniform(ProgAddr);
+		it.second->PushUniform(this);
 	}
 }
 
@@ -252,7 +254,28 @@ void ShaderProgram::glGenBuffers_checked(GLsizei Count, GLuint *Buffers)
 	}
 }
 
-void ShaderProgram::glUniform1f_checked(GLuint Loc, GLfloat Value)
+void ShaderProgram::glGetActiveUniform_checked(GLuint ProgramAddress, GLint Loc, GLsizei MaxNameLength, GLsizei *ActualNameLength, GLint *Size, GLenum *Type, GLchar *Name)
+{
+	GLenum err;
+	glGetActiveUniform(ProgramAddress, Loc, MaxNameLength, ActualNameLength, Size, Type, Name);
+	while ((err = glGetError()) != GL_NO_ERROR)
+	{
+		cout << "Error at glGetActiveUniform(): " << err << "\n";
+		if (err == 1281)
+		{
+			GLint NumActiveUniforms = 0;
+			glGetProgramiv(ProgramAddress, GL_ACTIVE_UNIFORMS, &NumActiveUniforms);
+			if (NumActiveUniforms < Loc)
+			{
+				cout << "Program has " << NumActiveUniforms << " active uniforms, requested index: " << Loc << "\n";
+				throw;
+			}
+		}
+		throw;
+	}
+}
+
+void ShaderProgram::glUniform1f_checked(ShaderProgram const &InShaderProgram, string const &UniformName, GLuint Loc, GLfloat Value)
 {
 	GLenum err;
 	glUniform1f(Loc, Value);
@@ -264,13 +287,28 @@ void ShaderProgram::glUniform1f_checked(GLuint Loc, GLfloat Value)
 			GLint prog_addr;
 			glGetIntegerv(GL_CURRENT_PROGRAM, &prog_addr);
 			if (prog_addr == 0)
-				cout << "\tNo active program object." << err;
+				cout << "\tNo active program object.\n";
+			if (InShaderProgram.GetUniformType(UniformName) != EUNIFORM_TYPE::UNIFORM_TYPE_FLOAT)
+				cout << "\tUniform declared in shader is not float type.\n";
+
+			GLsizei ActualUniformNameLength = 0;
+			GLint UniformSize = 0;
+			GLenum UniformType;
+			GLchar ActualUniformName[128];
+			ShaderProgram::glGetActiveUniform_checked(prog_addr, 
+				Loc, 
+				UniformName.size(), 
+				&ActualUniformNameLength,
+				&UniformSize,
+				&UniformType,
+				ActualUniformName);
+			cout << "";
 		}
 		throw err;
 	}
 }
 
-void ShaderProgram::glUniform2f_checked(GLuint Loc, GLfloat Value1, GLfloat Value2)
+void ShaderProgram::glUniform2f_checked(ShaderProgram const &InShaderProgram, string const &UniformName, GLuint Loc, GLfloat Value1, GLfloat Value2)
 {
 	GLenum err;
 	glUniform2f(Loc, Value1, Value2);
@@ -281,7 +319,7 @@ void ShaderProgram::glUniform2f_checked(GLuint Loc, GLfloat Value1, GLfloat Valu
 	}
 }
 
-void ShaderProgram::glUniform3f_checked(GLuint Loc, GLfloat Value1, GLfloat Value2, GLfloat Value3)
+void ShaderProgram::glUniform3f_checked(ShaderProgram const &InShaderProgram, string const &UniformName, GLuint Loc, GLfloat Value1, GLfloat Value2, GLfloat Value3)
 {
 	GLenum err;
 	glUniform3f(Loc, Value1, Value2, Value3);
@@ -292,7 +330,7 @@ void ShaderProgram::glUniform3f_checked(GLuint Loc, GLfloat Value1, GLfloat Valu
 	}
 }
 
-void ShaderProgram::glUniformMatrix4fv_checked(GLuint Loc, GLsizei Count, GLboolean Transpose, GLfloat const *ValueArray)
+void ShaderProgram::glUniformMatrix4fv_checked(ShaderProgram const &InShaderProgram, string const &UniformName, GLuint Loc, GLsizei Count, GLboolean Transpose, GLfloat const *ValueArray)
 {
 	GLenum err;
 	glUniformMatrix4fv(Loc, Count, Transpose, ValueArray);
@@ -314,4 +352,20 @@ GLint ShaderProgram::glGetUniformLocation_checked(GLuint ProgramAddress, const G
 		throw err;
 	}
 	return OutLocation;
+}
+
+EUNIFORM_TYPE ShaderProgram::GetUniformType(string const UniformName) const
+{
+	return VertexShader->GetUniformType(UniformName);
+}
+
+void ShaderProgram::glUseProgram_checked(GLuint ProgramAddress)
+{
+	GLenum err;
+	glUseProgram(ProgramAddress);
+	while ((err = glGetError()) != GL_NO_ERROR)
+	{
+		cout << "Error at glUseProgram(): " << err;
+		throw err;
+	}
 }

@@ -2,7 +2,7 @@
 #include "Mesh.h"
 #include "GameStats.h"
 
-Matter::Matter(const string& InName, const int InSerial) : SceneComponent(InName, InSerial)
+Matter::Matter(const string& InName, const int InSerial) : SceneComponent(InName, InSerial), bIsStencil(false)
 {
 	Initialize();
 }
@@ -58,19 +58,8 @@ void Matter::ProcessInputEffects(TInputEffects const *InputEffects)
 void Matter::Draw()
 {
 	// so I'll re-get the pointer but it'd be nice to know why the pData is null in the uniform at this point.
-	GLenum err;
-	while ((err = glGetError()) != GL_NO_ERROR)
-	{
-		cout << "Error before glGetAttribLocation(): " << err;
-		throw err;
-	}
 	ShaderProgram->SetUniform("ModelMatrix", Transform.GetModelMatrixDataPtr());
 	
-	while ((err = glGetError()) != GL_NO_ERROR)
-	{
-		cout << "Error before glGetAttribLocation(): " << err;
-		throw err;
-	}
 	clock_t Clock_SetUniforms = clock();
 	if (ShaderProgram->ProgAddr != ShaderProgram::LastProgAddr)
 	{
@@ -79,7 +68,7 @@ void Matter::Draw()
 		ShaderProgram->Use();
 		
 		// Set global uniforms
-		ShaderProgram::PushGlobalUniforms(ShaderProgram::LastProgAddr);
+		ShaderProgram->PushGlobalUniforms();
 
 		// Push global uniforms only pushes the uniforms that were marked dirty.
 		Clock_SetUniforms = clock();

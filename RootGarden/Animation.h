@@ -91,6 +91,9 @@ public:
 	Sets the ElapsedSeconds to 0 - if the animation uses time this rewindes it. */
 	virtual void Reset();
 
+	/* Animation list will call reset on this animation play it again.
+	*/
+	bool bLoop;
 
 protected:
 	double ElapsedSeconds;

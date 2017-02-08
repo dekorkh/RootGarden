@@ -11,16 +11,27 @@
 
 Scene_BeanGarden::Scene_BeanGarden()
 {
-	/*
+	
+	int numCubes = rand() % 50;
+	for (int i = 0; i < numCubes; i++)
+	{
+		CompOutlineCube* Cube = new CompOutlineCube();
+		AddChild(Cube);
+	}
+	
 	MatterRectangle* Rectangle = new MatterRectangle();
+	Rectangle->SetScale(Vector3f::Constant(0.1f));
+	Rectangle->bIsStencil = true;
 	AddChild(Rectangle);
-	*/
-
+	
+	/*
 	CompWater* pWater = new CompWater();
 	pWater->SetMaxDrops(1000);
 	pWater->SetSpawnRate(30.0f);
 	pWater->SetBounds(1.6f, 1.0f);
 	AddChild(pWater);
+	*/
+	
 }
 
 

@@ -14,6 +14,5 @@ void
 main()
 {	
 	gl_Position = vPosition * vModelMatrix * vec4((1.0 / AspectRatio), 1.0, 1.0, 1.0);
-	fragColor = vColor * vModelMatrix * vPosition * AspectRatio * vInstanceColor * 0.000001 + vInstanceColor;
-	//fragColor = vColor * vModelMatrix * vPosition * AspectRatio * 0.000001 + vec4(1.0, 1.0, 0.0, 1.0);
+	fragColor = vColor * ModelMatrix * vModelMatrix * vPosition * AspectRatio * vInstanceColor * 0.000001 + vInstanceColor;
 }

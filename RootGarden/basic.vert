@@ -13,7 +13,7 @@ main()
 {	
 	vec3 preAspect = (vPosition * ModelMatrix).xyz * vec3(1.0 / AspectRatio, 1.0, 1.0);
 	gl_Position =  vec4(preAspect, 1.0);
-	//gl_Position = vPosition;
-	
-	fragColor = vColor * vColor;
+
+	float depth = clamp((1.0 - preAspect[2] / 0.2f), 0.0f, 1.0f);
+	fragColor = vColor * vColor * vec4(depth, depth, depth, 1.0f);
 }

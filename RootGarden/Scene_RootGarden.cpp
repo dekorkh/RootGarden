@@ -22,7 +22,6 @@ Scene_RootGarden::Scene_RootGarden()
 	Rectangle->SetPosition(Vector3f(-1.2f, -0.5f, 0.0f));
 	Rectangle->SetScale(Vector3f(0.2f, 0.2f, 1.0f));
 	AddChild(Rectangle);
-	
 
 	MatterRootCluster *cluster = new MatterRootCluster();
 	AddChild(cluster);
@@ -35,14 +34,12 @@ Scene_RootGarden::Scene_RootGarden()
 	GaugeV->SetPosition(Vector3f(-1.2f, 0.5f, 1.0f));
 	AddChild(GaugeV);
 	
-	/*
 	CompWater* pWater = new CompWater();
 	pWater->SetMaxDrops(1000);
 	pWater->SetSpawnRate(30.0f);
 	pWater->SetBounds(1.6f, 1.0f);
 	AddChild(pWater);
-	*/
-
+	
 	/*
 	MatterBasicText* BasicText = new MatterBasicText();
 	AddChild(BasicText);

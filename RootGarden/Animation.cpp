@@ -2,7 +2,8 @@
 
 #include "SceneComponent.h"
 
-Animation::Animation()
+Animation::Animation() :
+	bLoop(false)
 {
 }
 

@@ -1,6 +1,9 @@
 #include "Shader.h"
 #include <iostream>
 #include <fstream>
+#include <sstream>
+
+using namespace std;
 
 Shader::Shader(char const * const InShaderPath, ESHADER_TYPE const InShaderType) :
 	LastError(TG_ERROR_NONE), 
@@ -117,4 +120,36 @@ void Shader::FreeShader()
 void Shader::AttachShader(GLuint ProgAddr)
 {
 	glAttachShader(ProgAddr, ShaderAddr);
+}
+
+EUNIFORM_TYPE Shader::GetUniformType(string const UniformName) const
+{
+	for (int lineIdx = 0; StreamData[lineIdx] != '\0'; lineIdx++)
+	{
+
+		istringstream line(StreamData[lineIdx]);
+		string prevToken;
+		string prevPrevToken;
+		for (string token; getline(line, token, ' '); )
+		{
+			// Strip token of ;
+			istringstream streamtoken(token);
+			string stripped_token;
+			getline(streamtoken, token, ';');
+
+			if (token == UniformName)
+			{
+				if (prevToken == "float" && prevPrevToken == "uniform")
+					return EUNIFORM_TYPE::UNIFORM_TYPE_FLOAT;
+				else if (prevToken == "mat4" && prevPrevToken == "uniform")
+					return EUNIFORM_TYPE::UNIFORM_TYPE_MAT4;
+				else
+					throw; //Uknown uniform type - add a new type.
+			}
+			prevPrevToken = prevToken;
+			prevToken = token;
+		}
+	}
+	throw; // Uniform not found
+	return EUNIFORM_TYPE::UNIFORM_TYPE_NOTFOUND;
 }

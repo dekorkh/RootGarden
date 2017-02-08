@@ -50,7 +50,6 @@ void CompWater::Tick(double DeltaSeconds)
 	{
 		NumDrops++;
 
-		srand(NumDrops * 1000);
 		float x = static_cast<float>(rand() % 1000) / 1000 * 2 * BoundsWidth - BoundsWidth;
 		float y = static_cast<float>(rand() % 1000) / 1000 * 2 * BoundsHeight - BoundsHeight;
 

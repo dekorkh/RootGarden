@@ -13,7 +13,10 @@
 #include "MatterTileboard.h"
 #include "MatterBasicText.h"
 #include "MatterDrop.h"
+#include "MatterWireCube.h"
+
 
 //Comps
 #include "CompGaugeVertical.h"
 #include "CompWater.h"
+#include "CompOutlineCube.h"

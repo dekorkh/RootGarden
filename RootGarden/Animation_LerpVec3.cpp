@@ -22,7 +22,7 @@ bool Animation_LerpVec3::Tick(const double DeltaSeconds)
 {
 	Animation::Tick(DeltaSeconds);
 
-	Alpha += AlphaPerSecond * DeltaSeconds;
+	Alpha += static_cast<float>(AlphaPerSecond * DeltaSeconds);
 	Alpha = Alpha > 1.0f ? 1.0f : Alpha;
 
 	Output_XYZ = VecStart * (1.0f - Alpha) + VecEnd * Alpha;
