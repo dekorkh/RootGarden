@@ -18,4 +18,5 @@ public:
 	MatterSolidCube *SolidCube;
 
 	Vector3f Input_LookAt;
+	Vector3f Input_Position;
 };

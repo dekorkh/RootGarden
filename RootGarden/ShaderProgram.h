@@ -13,6 +13,7 @@ class ShaderManager;
 class ShaderProgram
 {
 public:
+	static map<GLenum, string> GLErrorMap;
 	/* GL methods wrapped with the best error checking, other error checking is the worst
 	*/
 	static void glBufferSubData_checked(GLenum target, GLintptr offset, GLsizeiptr dataSize, GLvoid const *data);
@@ -33,6 +34,12 @@ public:
 	static GLint ShaderProgram::glGetUniformLocation_checked(GLuint ProgramAddress, const GLchar *UniformName);
 	static void glGetActiveUniform_checked(GLuint ProgramAddress, GLint Loc, GLsizei MaxNameLength, GLsizei *ActualNameLength, GLint *Size, GLenum *Type, GLchar *Name);
 	static void glUseProgram_checked(GLuint ProgramAddress);
+	static void glGenQueries_checked(GLsizei n, GLuint *ids);
+	static void glBeginQuery_checked(GLenum target, GLuint id);
+	static void glEndQuery_checked(GLenum target);
+	static void glGetQueryObjectiv_checked(GLenum id, GLenum pname, GLint *params);
+	static void glGetQueryObjectuiv_checked(GLenum id, GLenum pname, GLuint *params);
+	static GLboolean glIsQuery_checked(GLenum id);
 
 	ShaderProgram(Shader *InVertexShader, Shader *InFragmentShader);
 	~ShaderProgram();

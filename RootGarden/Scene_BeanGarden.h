@@ -2,6 +2,8 @@
 
 #include "Scene.h"
 
+class CompSelector;
+
 class Scene_BeanGarden : public Scene
 {
 public:
@@ -12,6 +14,16 @@ public:
 
 	bool RKeyDown = false;
 	bool LKeyDown = false;
+	bool UKeyDown = false;
+	bool DKeyDown = false;
 	bool EscDown = false;
+
+	CompSelector *Selector;
+	MatterCircle* pRoot;
+
+	Vector3f IncrementVelocityUp;
+	Vector3f IncrementVelocityDown;
+	Vector3f IncrementVelocityLeft;
+	Vector3f IncrementVelocityRight;
 };
 

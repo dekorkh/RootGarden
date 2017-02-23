@@ -26,6 +26,12 @@
 using namespace std;
 using namespace Eigen;
 
+enum EViewMode
+{
+	E_MODE_FINAL = 0,
+	E_MODE_OCCLUSION_DEPTH
+};
+
 class Game
 {
 public:
@@ -59,4 +65,7 @@ private:
 
 	// Current aspect ratio
 	GLfloat AspectRatio;
+
+	// ViewMode - allows for previewing different buffers and such.
+	EViewMode ViewMode;
 };

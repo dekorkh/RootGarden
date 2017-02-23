@@ -74,6 +74,11 @@ public:
 	GameStatsStat<float>* Ms_GenerateMesh_Colors;
 	GameStatsStat<float>* Ms_GenerateMesh_Indices;
 	GameStatsStat<float>* Ms_Swap;
+
+	GameStatsStat<int>* OcclusionQueries_Tested;
+	GameStatsStat<int>* OcclusionQueries_Collected;
+	GameStatsStat<int>* OcclusionSamples_Passed;
+
 	GameStatsStat<float>* Ms_Test; //For quick any testing
 	GameStatsStat<float>* Ms_Test2; //For quick any testing
 };

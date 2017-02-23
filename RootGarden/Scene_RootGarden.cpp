@@ -34,7 +34,7 @@ Scene_RootGarden::Scene_RootGarden()
 	GaugeV->SetPosition(Vector3f(-1.2f, 0.5f, 1.0f));
 	AddChild(GaugeV);
 	
-	CompWater* pWater = new CompWater();
+	CompWater* pWater = new CompWater(*Ring);
 	pWater->SetMaxDrops(1000);
 	pWater->SetSpawnRate(30.0f);
 	pWater->SetBounds(1.6f, 1.0f);

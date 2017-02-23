@@ -11,7 +11,7 @@ MatterSolidCube::MatterSolidCube() :
 	float r = static_cast<float>(rand() % 1000) / 1000.0f;
 	float g = static_cast<float>(rand() % 1000) / 1000.0f;
 	float b = static_cast<float>(rand() % 1000) / 1000.0f;
-	CubeColor << r, g, b, 0.6f;
+	CubeColor << r, g, b, 1.0f;
 	Cube->SetColor(CubeColor);
 	Mesh = Cube;
 }

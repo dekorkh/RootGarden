@@ -59,9 +59,12 @@ public:
 	// Whether this geometry is used only for rendering the stencil
 	bool bIsStencil;
 
-protected:
-	TransformInfo Transform;
+	// Whether this geometry is used only for occlusion querry
+	bool bIsOcclusion;
+
 	Mesh* Mesh;
+
+	TransformInfo Transform;
 	
 private:
 	void Initialize();

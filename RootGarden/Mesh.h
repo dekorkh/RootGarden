@@ -53,6 +53,8 @@ public:
 	bool bDirty_Colors;
 	bool bDirty_Indices;
 
+	GLenum MatterType;
+
 protected:
 	size_t SizeOfPositions();
 	size_t SizeOfColors();
@@ -74,23 +76,17 @@ protected:
 	static void BuildRectangle_Positions(vector<GLfloat> &PositionsData, Vector2f UpperLeft, Vector2f LowerRight);
 	static void BuildRectangle_Indices(vector<GLuint> &IndexData, GLuint StartIndex);
 
-	vector<Vector3f, aligned_allocator<Vector3f>> Positions;
 	vector<GLfloat> PositionsData; // Positions formatted into a contiguous array for GPU
-	vector<Vector4f, aligned_allocator<Vector4f>> Colors;
 	vector<GLfloat> ColorsData; // Colors formatted into a contigous array for GPU
-
 	vector<GLuint> IndexData;
 
 	GLuint NumVertices;
 	GLuint NumVertIndices;
 
-	GLenum MatterType;
-
 	virtual void GenerateMesh_Positions();
 	virtual void GenerateMesh_Colors();
 	virtual void GenerateMesh_Indices();
 
-protected:
 	GLuint NumBuffers;
 	vector<GLuint> Buffers;
 	GLuint VAO;

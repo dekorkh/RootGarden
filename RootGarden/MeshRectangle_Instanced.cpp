@@ -11,6 +11,10 @@ MeshRectangle_Instanced::MeshRectangle_Instanced(Matter const &InParentMatter) :
 	Red << 1.0f, 0.0f, 0.0f, 1.0f;
 	SetColor(Red);
 	MatterType = GL_TRIANGLES;
+	
+	//bUseDebugData = true;
+	//bUseDebugModelMatrix = true;
+	//bUseDebugColors = true;
 }
 
 

@@ -1,25 +1,28 @@
-#include "MeshCircle.h"
+#include "MeshCircle_Instanced.h"
 
 #define _USE_MATH_DEFINES
 #include "math.h"
 
-MeshCircle::MeshCircle() : ColorOuter(Vector4f::Constant(1.0f)), ColorInner(Vector4f::Constant(1.0f))
+MeshCircle_Instanced::MeshCircle_Instanced(Matter const &InMatter) : 
+	ColorOuter(Vector4f::Constant(1.0f)), 
+	ColorInner(Vector4f::Constant(1.0f)), 
+	Mesh_Instanced(InMatter)
 {
-	Vector4f Red;
-	Red << 1.0f, 0.0f, 0.0f, 0.0f;
-	Vector4f Yellow;
-	Yellow << 1.0f, 1.0f, 0.0f, 1.0f;
-	SetColors(Yellow, Red);
-	SetNumSides(128);
+
+	SetNumSides(5);
 	MatterType = GL_TRIANGLES;
+
+	//bUseDebugData = true;
+	//bUseDebugModelMatrix = true;
+	//bUseDebugColors = true;
 }
 
 
-MeshCircle::~MeshCircle()
+MeshCircle_Instanced::~MeshCircle_Instanced()
 {
 }
 
-void MeshCircle::SetNumSides(GLint InNumSides)
+void MeshCircle_Instanced::SetNumSides(GLint InNumSides)
 {
 	NumSides = InNumSides;
 	bDirty_Indices = true;
@@ -27,16 +30,18 @@ void MeshCircle::SetNumSides(GLint InNumSides)
 	bDirty_Colors = true;
 }
 
-void MeshCircle::SetColors(const Vector4f& InColorInner, const Vector4f& InColorOuter)
+void MeshCircle_Instanced::SetColors(const Vector4f& InColorInner, const Vector4f& InColorOuter)
 {
-	ColorOuter = InColorOuter;
 	ColorInner = InColorInner;
+	ColorOuter = InColorOuter;
 	bDirty_Colors = true;
 }
 
 
-void MeshCircle::GenerateMesh_Indices()
+void MeshCircle_Instanced::GenerateMesh_Indices()
 {
+	IndexData.clear();
+
 	NumVertices = NumSides + 1;
 	NumVertIndices = NumSides * 3;
 
@@ -51,7 +56,7 @@ void MeshCircle::GenerateMesh_Indices()
 	}
 }
 
-void MeshCircle::GenerateMesh_Colors()
+void MeshCircle_Instanced::GenerateMesh_Colors()
 {
 	ColorsData.clear();
 
@@ -63,12 +68,12 @@ void MeshCircle::GenerateMesh_Colors()
 	}
 }
 
-void MeshCircle::GenerateMesh_Positions()
+void MeshCircle_Instanced::GenerateMesh_Positions()
 {
 	PositionsData.clear();
 
 	// Center position
-	PositionsData.insert(PositionsData.end(), { 0.0f, 0.0f, 0.0f });
+	PositionsData.insert(PositionsData.end(), {0.0f, 0.0f, 0.0f});
 
 	for (GLint i = 0; i < NumSides; i++)
 	{
@@ -76,6 +81,6 @@ void MeshCircle::GenerateMesh_Positions()
 		float radians = pctCircle * 2 * static_cast<float>(M_PI);
 		float x = sin(radians);
 		float y = cos(radians);
-		PositionsData.insert(PositionsData.end(), { x, y, 0.0f });
+		PositionsData.insert(PositionsData.end(), {x, y, 0.0f});
 	}
 }

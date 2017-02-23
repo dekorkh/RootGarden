@@ -4,14 +4,19 @@
 MatterRectangle::MatterRectangle() :
 	Matter("MatterRectangle", Counter<MatterRectangle>::Count())
 {
-	MeshRectangle* Rectangle = new MeshRectangle();
+	Rect = new MeshRectangle();
 	Vector4f RectangleColor;
 	RectangleColor << 0.0f, 1.0f, 0.0f, 1.0f;
-	Rectangle->SetColor(RectangleColor);
-	Mesh = Rectangle;
+	Rect->SetColor(RectangleColor);
+	Mesh = Rect;
 }
 
 MatterRectangle::~MatterRectangle()
 {
 	delete Mesh;
+}
+
+void MatterRectangle::SetColor(Vector4f const &InColor)
+{
+	Rect->SetColor(InColor);
 }

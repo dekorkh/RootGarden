@@ -2,7 +2,11 @@
 #include "Mesh.h"
 #include "GameStats.h"
 
-Matter::Matter(const string& InName, const int InSerial) : SceneComponent(InName, InSerial), bIsStencil(false)
+Matter::Matter(const string& InName, const int InSerial) 
+	: 
+	SceneComponent(InName, InSerial),
+	bIsStencil(false),
+	bIsOcclusion(false)
 {
 	Initialize();
 }

@@ -2,6 +2,7 @@
 #include "GlobalState.h"
 
 vector<SceneComponent*> SceneComponent::AllPrims;
+vector<GLuint> SceneComponent::OcclusionQueries;
 
 SceneComponent::SceneComponent() : bDirtyComponentParameters(true)
 {
@@ -23,7 +24,7 @@ SceneComponent::SceneComponent(const string& InName, const int InSerial) : bDirt
 void SceneComponent::Initialize()
 {
 	bTickEnabled = true;
-	AllPrims.push_back(this);
+	AllPrims.push_back(this); // Add self to all prims
 	pAnimationList = new AnimationList(*this);
 }
 
@@ -154,4 +155,9 @@ bool SceneComponent::IsDirtyComponentParameters()
 vector<SceneComponent*>* SceneComponent::GetPrims()
 {
 	return &AllPrims;
+}
+
+vector<GLuint>* SceneComponent::GetOcclusionQueries()
+{
+	return &OcclusionQueries;
 }

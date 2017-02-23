@@ -67,8 +67,9 @@ private:
 	/		outData - pointer-to-pointer of characters that will be filled with file data
 	/		numLines - The maximum number of lines to read in.
 	/		OutResult - Whether the read was successfull as an ERROR_TYPE.
+	/		bPrintLines - Whether to print each line read to cout.
 	*/
-	static int ReadInTextFile(char const * const filePath, GLchar const ** outData, int const numLines, ERROR_TYPE &OutResult);
+	static int ReadInTextFile(char const * const filePath, GLchar const ** outData, int const numLines, ERROR_TYPE &OutResult, bool bPrintLines = false);
 
 	ERROR_TYPE LastError;
 	ESHADER_TYPE ShaderType;

@@ -2,8 +2,9 @@
 #include "MatterDrop.h"
 #include "Animation_Trigger.h"
 #include "Animation_LerpVec3.h"
+#include "QTree.h"
 
-CompWater::CompWater()
+CompWater::CompWater(Matter &Root)
 	:
 	MaxDrops(0),
 	NumDrops(0),
@@ -19,6 +20,14 @@ CompWater::CompWater()
 	int InputIdx_bDoSpawn = RegisterInput_Bool(bDoSpawn);
 	pAnimTrigger->LinkOutput(pAnimTrigger->OutputIdx_Out, InputIdx_bDoSpawn, EOperationType::ACCUMULATE);
 	AddAnimation(pAnimTrigger);
+
+	Tree = new QTree(0.0f, 0.0f, 3.2f, nullptr, this);
+	Tree->Add(Root);
+}
+
+CompWater::~CompWater()
+{
+	delete Tree;
 }
 
 void CompWater::Build()
@@ -64,5 +73,7 @@ void CompWater::Tick(double DeltaSeconds)
 		pAnimTrigger->Reset();
 		pAnimLerp->Reset();
 		SelectAnimation(0);
+
+		Tree->Add(*pDrop);
 	}
 }

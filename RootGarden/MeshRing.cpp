@@ -3,13 +3,13 @@
 #define _USE_MATH_DEFINES
 #include "math.h"
 
-MeshRing::MeshRing() : Color(Vector4f::Constant(1.0f)), Thickness(0.02f)
+MeshRing::MeshRing() : Color(Vector4f::Constant(1.0f)), Thickness(0.1f)
 {
 	Vector4f Red;
 	Red << 1.0f, 0.0f, 0.0f, 1.0f;
 	SetColor(Red);
 	SetNumSegments(30);
-	MatterType = GL_TRIANGLES;
+	MatterType = GL_POINTS;
 }
 
 

@@ -2,9 +2,17 @@
 #include "time.h"
 #include "ShaderManager.h"
 
+#define MAP_ERROR(x) {x, #x}
+
 GLint ShaderProgram::LastProgAddr = -1;
 ShaderProgram * ShaderProgram::LastProgPtr = nullptr;
 map<string, TTLMUniform*> ShaderProgram::GlobalUniformMap;
+map<GLenum, string> ShaderProgram::GLErrorMap = {
+	MAP_ERROR(GL_INVALID_ENUM),
+	MAP_ERROR(GL_INVALID_VALUE),
+	MAP_ERROR(GL_INVALID_OPERATION)
+};
+
 
 ShaderProgram::ShaderProgram(Shader *InVertexShader, Shader *InFragmentShader) :
 	VertexShader(InVertexShader),
@@ -133,7 +141,7 @@ void ShaderProgram::glBufferSubData_checked(GLenum target, GLintptr offset, GLsi
 	}
 	while ((err = glGetError()) != GL_NO_ERROR)
 	{
-		cout << "Error glBufferSubData(): " << err;
+		cout << "Error glBufferSubData(): " << GLErrorMap[err];
 		throw err;
 	}
 }
@@ -144,7 +152,7 @@ GLint ShaderProgram::glGetAttribLocation_checked(GLint ProgAddr, string const At
 	GLint loc = glGetAttribLocation(ProgAddr, AttribName.data());
 	while ((err = glGetError()) != GL_NO_ERROR)
 	{
-		cout << "Error at glGetAttribLocation(): " << err;
+		cout << "Error at glGetAttribLocation(): " << GLErrorMap[err];
 		throw err;
 	}
 	if (loc == -1)
@@ -161,7 +169,7 @@ void ShaderProgram::glBindBuffer_checked(GLenum Target, GLint Buffer)
 	glBindBuffer(Target, Buffer);
 	while ((err = glGetError()) != GL_NO_ERROR)
 	{
-		cout << "Error after glBinddBuffer(): " << err;
+		cout << "Error after glBinddBuffer(): " << GLErrorMap[err];
 		throw err;
 	}
 }
@@ -172,7 +180,7 @@ void ShaderProgram::glBufferData_checked(GLenum Target, GLsizeiptr Size, GLvoid 
 	glBufferData(Target, Size, Data, Usage);
 	while ((err = glGetError()) != GL_NO_ERROR)
 	{
-		cout << "Error at glBufferData(): " << err;
+		cout << "Error at glBufferData(): " << GLErrorMap[err];
 		throw err;
 	}
 }
@@ -183,7 +191,7 @@ void ShaderProgram::glEnableVertexAttribArray_checked(GLuint Loc)
 	glEnableVertexAttribArray(Loc); // Enable fetching from this matrix column
 	while ((err = glGetError()) != GL_NO_ERROR)
 	{
-		cout << "Error at glEnableVertexAttribArray(): " << err;
+		cout << "Error at glEnableVertexAttribArray(): " << GLErrorMap[err];
 		throw err;
 	}
 }
@@ -194,7 +202,7 @@ void ShaderProgram::glVertexAttribDivisor_checked(GLuint Loc, GLuint Divisor)
 	glVertexAttribDivisor(Loc, Divisor);
 	while ((err = glGetError()) != GL_NO_ERROR)
 	{
-		cout << "Error at glVertexAttribDivisor(): " << err;
+		cout << "Error at glVertexAttribDivisor(): " << GLErrorMap[err];
 		throw err;
 	}
 }
@@ -205,7 +213,7 @@ void ShaderProgram::glVertexAttribPointer_checked(GLuint Index, GLint Size, GLen
 	glVertexAttribPointer(Index, Size, Type, Normalize, Stride, Offset);
 	while ((err = glGetError()) != GL_NO_ERROR)
 	{
-		cout << "Error at glVertexAttribPointer(): " << err;
+		cout << "Error at glVertexAttribPointer(): " << GLErrorMap[err];
 		throw err;
 	}
 }
@@ -216,7 +224,7 @@ void ShaderProgram::glDrawElementsInstanced_checked(GLenum Mode, GLsizei Count, 
 	glDrawElementsInstanced(Mode, Count, Type, Indices, PrimCount);
 	while ((err = glGetError()) != GL_NO_ERROR)
 	{
-		cout << "Error at glDrawElementsInstanced(): " << err;
+		cout << "Error at glDrawElementsInstanced(): " << GLErrorMap[err];
 		throw err;
 	}
 }
@@ -227,7 +235,7 @@ void ShaderProgram::glGenVertexArrays_checked(GLsizei Count, GLuint* Arrays)
 	glGenVertexArrays(Count, Arrays);
 	while ((err = glGetError()) != GL_NO_ERROR)
 	{
-		cout << "Error at glGenVertexArrays(): " << err;
+		cout << "Error at glGenVertexArrays(): " << GLErrorMap[err];
 		throw err;
 	}
 }
@@ -238,7 +246,7 @@ void ShaderProgram::glBindVertexArray_checked(GLuint Array)
 	glBindVertexArray(Array);
 	while ((err = glGetError()) != GL_NO_ERROR)
 	{
-		cout << "Error at glBindVertexArray(): " << err;
+		cout << "Error at glBindVertexArray(): " << GLErrorMap[err];
 		throw err;
 	}
 }
@@ -249,7 +257,7 @@ void ShaderProgram::glGenBuffers_checked(GLsizei Count, GLuint *Buffers)
 	glGenBuffers(Count, Buffers);
 	while ((err = glGetError()) != GL_NO_ERROR)
 	{
-		cout << "Error at glGenBuffers(): " << err;
+		cout << "Error at glGenBuffers(): " << GLErrorMap[err];
 		throw err;
 	}
 }
@@ -314,7 +322,7 @@ void ShaderProgram::glUniform2f_checked(ShaderProgram const &InShaderProgram, st
 	glUniform2f(Loc, Value1, Value2);
 	while ((err = glGetError()) != GL_NO_ERROR)
 	{
-		cout << "Error at glUniform2f(): " << err;
+		cout << "Error at glUniform2f(): " << GLErrorMap[err];
 		throw err;
 	}
 }
@@ -325,7 +333,7 @@ void ShaderProgram::glUniform3f_checked(ShaderProgram const &InShaderProgram, st
 	glUniform3f(Loc, Value1, Value2, Value3);
 	while ((err = glGetError()) != GL_NO_ERROR)
 	{
-		cout << "Error at glUniform3f(): " << err;
+		cout << "Error at glUniform3f(): " << GLErrorMap[err];
 		throw err;
 	}
 }
@@ -336,7 +344,7 @@ void ShaderProgram::glUniformMatrix4fv_checked(ShaderProgram const &InShaderProg
 	glUniformMatrix4fv(Loc, Count, Transpose, ValueArray);
 	while ((err = glGetError()) != GL_NO_ERROR)
 	{
-		cout << "Error at glUniformMatrix4fv(): " << err;
+		cout << "Error at glUniformMatrix4fv(): " << GLErrorMap[err];
 		throw err;
 	}
 }
@@ -348,7 +356,7 @@ GLint ShaderProgram::glGetUniformLocation_checked(GLuint ProgramAddress, const G
 	OutLocation = glGetUniformLocation(ProgramAddress, UniformName);
 	while ((err = glGetError()) != GL_NO_ERROR)
 	{
-		cout << "Error at glGetUniformLocation(): " << err;
+		cout << "Error at glGetUniformLocation(): " << GLErrorMap[err];
 		throw err;
 	}
 	return OutLocation;
@@ -365,7 +373,81 @@ void ShaderProgram::glUseProgram_checked(GLuint ProgramAddress)
 	glUseProgram(ProgramAddress);
 	while ((err = glGetError()) != GL_NO_ERROR)
 	{
-		cout << "Error at glUseProgram(): " << err;
+		cout << "Error at glUseProgram(): " << GLErrorMap[err];
+		throw err;
+	}
+}
+
+void ShaderProgram::glGenQueries_checked(GLsizei n, GLuint *ids)
+{
+	GLenum err;
+	glGenQueries(n, ids);
+	while ((err = glGetError()) != GL_NO_ERROR)
+	{
+		cout << "Error at glGenQueries(): " << GLErrorMap[err];
+		throw err;
+	}
+}
+
+void ShaderProgram::glBeginQuery_checked(GLenum target, GLuint id)
+{
+	GLenum err;
+	glBeginQuery(target, id);
+	while ((err = glGetError()) != GL_NO_ERROR)
+	{
+		cout << "Error at glBeginQuery(): " << GLErrorMap[err];
+		throw err;
+	}
+}
+
+void ShaderProgram::glEndQuery_checked(GLenum target)
+{
+	GLenum err;
+	glEndQuery(target);
+	while ((err = glGetError()) != GL_NO_ERROR)
+	{
+		cout << "Error at glEndQuery(): " << GLErrorMap[err];
+		throw err;
+	}
+}
+
+void ShaderProgram::glGetQueryObjectiv_checked(GLenum id, GLenum pname, GLint *params)
+{
+	GLenum err;
+	glGetQueryObjectiv(id, pname, params);
+	while ((err = glGetError()) != GL_NO_ERROR)
+	{
+		cout << "Error at glGetQueryObjectiv(): " << GLErrorMap[err] << "\n";
+		if (err == GL_INVALID_OPERATION)
+		{
+			if (glIsQuery_checked(id) == GL_FALSE)
+			{
+				cout << "\tid is not a valid query object." << "\n";
+				throw err;
+			}
+		}
+		throw err;
+	}
+}
+
+void ShaderProgram::glGetQueryObjectuiv_checked(GLenum id, GLenum pname, GLuint *params)
+{
+	GLenum err;
+	glGetQueryObjectuiv(id, pname, params);
+	while ((err = glGetError()) != GL_NO_ERROR)
+	{
+		cout << "Error at glGetQueryObjectuiv(): " << GLErrorMap[err];
+		throw err;
+	}
+}
+
+GLboolean ShaderProgram::glIsQuery_checked(GLenum id)
+{
+	GLenum err;
+	return glIsQuery(id);
+	while ((err = glGetError()) != GL_NO_ERROR)
+	{
+		cout << "Error at glIsQuery(): " << GLErrorMap[err];
 		throw err;
 	}
 }

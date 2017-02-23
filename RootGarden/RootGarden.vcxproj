@@ -126,24 +126,30 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
     </None>
     <None Include="basic_instanced.vert" />
+    <None Include="msaa.frag" />
     <None Include="packages.config" />
     <None Include="param_alpha.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="AnimationList.cpp" />
+    <ClCompile Include="Animation_AccumulateVec3.cpp" />
     <ClCompile Include="Animation_Aim.cpp" />
     <ClCompile Include="Animation_AimOrbit.cpp" />
     <ClCompile Include="Animation_Blank.cpp" />
+    <ClCompile Include="Animation_EaseInVec3.cpp" />
     <ClCompile Include="Animation_FrameTime.cpp" />
     <ClCompile Include="Animation_Grow.cpp" />
     <ClCompile Include="Animation_GrowTo.cpp" />
+    <ClCompile Include="Animation_Lerp2Vec3.cpp" />
     <ClCompile Include="Animation_LerpVec3.cpp" />
     <ClCompile Include="Animation_Orbit.cpp" />
     <ClCompile Include="Animation_Pulse.cpp" />
     <ClCompile Include="Animation_Trigger.cpp" />
     <ClCompile Include="CompGaugeVertical.cpp" />
     <ClCompile Include="CompOutlineCube.cpp" />
+    <ClCompile Include="CompSelector.cpp" />
+    <ClCompile Include="CompTravelCube.cpp" />
     <ClCompile Include="CompWater.cpp" />
     <ClCompile Include="FontManager.cpp" />
     <ClCompile Include="GameStats.cpp" />
@@ -166,6 +172,7 @@
     <ClCompile Include="MatterWireCube.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshCircle.cpp" />
+    <ClCompile Include="MeshCircle_Instanced.cpp" />
     <ClCompile Include="MeshMeter.cpp" />
     <ClCompile Include="MeshRectangle.cpp" />
     <ClCompile Include="MeshRectangleGradient.cpp" />
@@ -175,6 +182,7 @@
     <ClCompile Include="MeshTrapezoid.cpp" />
     <ClCompile Include="MeshWireCube.cpp" />
     <ClCompile Include="Mesh_Instanced.cpp" />
+    <ClCompile Include="QTree.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneComponent.cpp" />
     <ClCompile Include="Scene_BeanGarden.cpp" />
@@ -192,18 +200,23 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="AnimationList.h" />
+    <ClInclude Include="Animation_AccumulateVec3.h" />
     <ClInclude Include="Animation_Aim.h" />
     <ClInclude Include="Animation_AimOrbit.h" />
     <ClInclude Include="Animation_Blank.h" />
+    <ClInclude Include="Animation_EaseInVec3.h" />
     <ClInclude Include="Animation_FrameTime.h" />
     <ClInclude Include="Animation_Grow.h" />
     <ClInclude Include="Animation_GrowTo.h" />
+    <ClInclude Include="Animation_Lerp2Vec3.h" />
     <ClInclude Include="Animation_LerpVec3.h" />
     <ClInclude Include="Animation_Orbit.h" />
     <ClInclude Include="Animation_Pulse.h" />
     <ClInclude Include="Animation_Trigger.h" />
     <ClInclude Include="CompGaugeVertical.h" />
     <ClInclude Include="CompOutlineCube.h" />
+    <ClInclude Include="CompSelector.h" />
+    <ClInclude Include="CompTravelCube.h" />
     <ClInclude Include="CompWater.h" />
     <ClInclude Include="FontManager.h" />
     <ClInclude Include="GameStats.h" />
@@ -220,6 +233,7 @@
     <ClInclude Include="MatterSolidCube.h" />
     <ClInclude Include="MatterTileboard.h" />
     <ClInclude Include="MatterWireCube.h" />
+    <ClInclude Include="MeshCircle_Instanced.h" />
     <ClInclude Include="MeshMeter.h" />
     <ClInclude Include="Matter.h" />
     <ClInclude Include="MatterCircle.h" />
@@ -238,6 +252,7 @@
     <ClInclude Include="MeshTrapezoid.h" />
     <ClInclude Include="MeshWireCube.h" />
     <ClInclude Include="Mesh_Instanced.h" />
+    <ClInclude Include="QTree.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneComponent.h" />
     <ClInclude Include="Scene_BeanGarden.h" />

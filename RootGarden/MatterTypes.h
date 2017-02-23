@@ -20,3 +20,5 @@
 #include "CompGaugeVertical.h"
 #include "CompWater.h"
 #include "CompOutlineCube.h"
+#include "CompTravelCube.h"
+#include "CompSelector.h"

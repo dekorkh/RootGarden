@@ -18,7 +18,6 @@ MeshTrapezoid::~MeshTrapezoid()
 
 void MeshTrapezoid::GenerateMesh_Positions()
 {
-	Positions.clear();
 	PositionsData.clear();
 
 	PositionsData.resize(4 * 3);
@@ -36,7 +35,6 @@ void MeshTrapezoid::GenerateMesh_Positions()
 
 void MeshTrapezoid::GenerateMesh_Colors()
 {
-	Colors.clear();
 	ColorsData.clear();
 	for (GLuint i = 0; i < NumVertices; i++)
 	{

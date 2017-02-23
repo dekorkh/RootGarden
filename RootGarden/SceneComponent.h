@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GL/glew.h"
 #include "Eigen/StdVector"
 #include <map>
 #include "Eigen/Dense"
@@ -131,6 +132,7 @@ public:
 	map<const int, Input*> InputMap;
 
 	static vector<SceneComponent*>* GetPrims();
+	static vector<GLuint>* GetOcclusionQueries();
 
 	bool bTickEnabled;
 
@@ -144,4 +146,6 @@ private:
 	
 	// All the scene components in existences.
 	static vector<SceneComponent*> AllPrims;
+
+	static vector<GLuint> OcclusionQueries;
 };

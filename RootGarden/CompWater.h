@@ -3,14 +3,17 @@
 #include "SceneComponent.h"
 #include <deque>
 
+class Matter;
 class MatterDrop;
 class Animation_Trigger;
 class Animation_LerpVec3;
+class QTree;
 
 class CompWater : public SceneComponent
 {
 public:
-	CompWater();
+	CompWater(Matter &Root);
+	~CompWater() override;
 
 	void Build() override;
 
@@ -35,6 +38,8 @@ public:
 
 private:
 	vector<MatterDrop*> WaterDrops;
+	
+	QTree *Tree;
 	
 	float SpawnPerSecond;
 	int NumDrops;

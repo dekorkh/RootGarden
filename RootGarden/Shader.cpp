@@ -11,7 +11,7 @@ Shader::Shader(char const * const InShaderPath, ESHADER_TYPE const InShaderType)
 	ShaderType(InShaderType)
 {
 	StreamData = new GLchar const *[MAX_LINE_COUNT];
-	NumLines = ReadInTextFile(ShaderPath, StreamData, MAX_LINE_COUNT, LastError);
+	NumLines = ReadInTextFile(ShaderPath, StreamData, MAX_LINE_COUNT, LastError, false);
 }
 
 Shader::~Shader()
@@ -28,7 +28,8 @@ int Shader::ReadInTextFile(
 	char const * const filePath,
 	GLchar const ** outData,
 	int const numLines,
-	ERROR_TYPE &OutResult
+	ERROR_TYPE &OutResult,
+	bool bPrintLines
 )
 {
 	ifstream inStream = ifstream();
@@ -62,7 +63,10 @@ int Shader::ReadInTextFile(
 		if (!inStream.fail())
 		{
 			char smart_endl = (line_in[charsRead - 1] == '\n') ? ' ' : '\n'; //todo: try null instead of space
-			cout << line_in << smart_endl;
+			if (bPrintLines)
+			{
+				cout << line_in << smart_endl;
+			}
 			outData[line_idx] = line_in;
 		}
 		else {

@@ -1,39 +1,27 @@
 #include "MatterDrop.h"
 #include "MeshRectangle_Instanced.h"
+#include "MeshCircle.h"
+#include "math.h"
+
+using namespace std;
 
 MatterDrop::MatterDrop()
 	:
 	Matter("MatterDrop", Counter<MatterDrop>::Count())
 {
-	Matter const &Ref = *this;
-	MeshRectangle_Instanced* Rectangle= new MeshRectangle_Instanced(Ref);
-	/*
-	Rectangle->SetNumberOfSides(12);
-	Rectangle->SetNumberOfLayers(4);
-	Vector4f Color_A;
-	Color_A << 0.0f, 0.0f, 0.0f, 0.4f;
-	Vector4f Color_B;
-	Color_B << 0.6f, 0.67f, 1.0f, 1.0f;
-	Vector4f Color_C;
-	Color_C << 0.6f, 0.67f, 1.0f, 1.0f;
-	Vector4f Color_D;
-	Color_D << 0.6f, 0.67f, 1.0f, 0.0f;
+	MeshCircle* NewMesh = new MeshCircle();
+	
+	Vector4f NewColorInner;
+	NewColorInner << 0.0f, 0.0f, 0.0f, 0.2f;
+	Vector4f NewColorOuter;
+	NewColorOuter << 0.7f, 0.8f, 1.0f, 1.0f;
+	NewMesh->SetColors(NewColorInner, NewColorOuter);
+	
+	NewMesh->SetNumSides(20);
+	SetScale(Vector3f::Constant(0.01f));
+	ShaderProgram = ShaderManager::GetShaderManager()->GetShaderProgramByName("basic_prog");
 
-	Rectangle->SetLayerColor(0, Color_A);
-	Rectangle->SetLayerColor(1, Color_B);
-	Rectangle->SetLayerColor(2, Color_C);
-	Rectangle->SetLayerColor(3, Color_D);
-
-	Rectangle->SetLayerPosition(1, 0.6f);
-	Rectangle->SetLayerPosition(2, 0.7f);
-	*/
-	SetScale(Vector3f::Constant(0.02f));
-	Vector4f col;
-	col << 0.3f, 1.0f, 0.4f, 0.5f;
-	Rectangle->SetColor(col);
-	ShaderProgram = ShaderManager::GetShaderManager()->GetShaderProgramByName("basic_instanced_prog");
-
-	Mesh = Rectangle;
+	Mesh = NewMesh;
 }
 
 MatterDrop::~MatterDrop()
