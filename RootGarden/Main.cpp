@@ -40,15 +40,20 @@ Game::Game() :
 	pShaderManager->AddShader("basic_instanced_vert", "basic_instanced.vert", ESHADER_TYPE::SHADER_TYPE_VERTEX);
 	pShaderManager->AddShader("basic_frag", "basic.frag", ESHADER_TYPE::SHADER_TYPE_FRAGMENT);
 	pShaderManager->AddShader("msaa_frag", "msaa.frag", ESHADER_TYPE::SHADER_TYPE_FRAGMENT);
+	
+	pShaderManager->AddShader("textureColor_vert", "textureColor.vert", ESHADER_TYPE::SHADER_TYPE_VERTEX);
+	pShaderManager->AddShader("textureColor_frag", "textureColor.frag", ESHADER_TYPE::SHADER_TYPE_FRAGMENT);
+
 	pShaderManager->AddShaderProgram("basic_prog", "basic_vert", "basic_frag");
 	pShaderManager->AddShaderProgram("param_alpha_prog", "param_alpha_vert", "basic_frag");
 	pShaderManager->AddShaderProgram("basic_instanced_prog", "basic_instanced_vert", "basic_frag");
 	pShaderManager->AddShaderProgram("msaa_instanced_prog", "basic_instanced_vert", "msaa_frag");
+	pShaderManager->AddShaderProgram("textureColor_prog", "textureColor_vert", "textureColor_frag");
 	pShaderManager->GetShaderProgramByName("param_alpha_prog")->AddUniform("ParamAlpha", UNIFORM_F1);
 
 	ShaderProgram::AddGlobalUniform("AspectRatio", UNIFORM_F1);
 
-	ActiveScene = new Scene_BeanGarden();
+	ActiveScene = new Scene_RootGarden();
 
 	ViewMode = EViewMode::E_MODE_OCCLUSION_DEPTH;
 
@@ -92,11 +97,7 @@ Game::InitGraphics(Vector2i WindowSize)
 	GLint MSAASamples;
 	glGetIntegerv(GL_SAMPLES, &MSAASamples); // Check the number of MSAA samples per pixel.
 	cout << "MSAA Samples: " << MSAASamples << "\n";
-
 	
-	
-
-
 	switch (0)
 	{
 	case 0: // Normal
@@ -123,7 +124,7 @@ Game::InitGraphics(Vector2i WindowSize)
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_FRONT);
 
-	// Final fragment operation using incoming values and those which already exist in the buffer
+	//	Final fragment operation using incoming values and those which already exist in the buffer
 	switch (0)
 	{
 	case 0:
@@ -134,7 +135,7 @@ Game::InitGraphics(Vector2i WindowSize)
 		break;
 	}
 
-	//Compute aspect ratio
+	//	Compute aspect ratio
 	AspectRatio = static_cast<float>(WindowSize(0)) / WindowSize(1);
 	ShaderProgram::SetGlobalUniform("AspectRatio", &AspectRatio);
 	ShaderProgram::MarkGlobalUniformDirty("AspectRatio", true);

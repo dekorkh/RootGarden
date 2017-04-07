@@ -36,10 +36,13 @@ public:
 
 	bool bDoSpawn;
 
+	/*
+	/	The quadtree for children of this component.
+	*/
+	QTree *Tree;
+
 private:
 	vector<MatterDrop*> WaterDrops;
-	
-	QTree *Tree;
 	
 	float SpawnPerSecond;
 	int NumDrops;

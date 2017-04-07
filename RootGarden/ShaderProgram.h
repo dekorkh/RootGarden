@@ -27,6 +27,14 @@ public:
 	static void glGenVertexArrays_checked(GLsizei Count, GLuint* Arrays);
 	static void glBindVertexArray_checked(GLuint Array);
 	static void glGenBuffers_checked(GLsizei Count, GLuint *Buffers);
+	static void glGenTextures_checked(GLsizei Count, GLuint *Textures);
+	static void glBindTexture_checked(GLenum Target, GLuint Texture);
+	static void glActiveTexture_checked(GLenum Texture);
+	static void glTexStorage2D_checked(GLenum Target, GLsizei Levels, GLenum InternalFormat, GLsizei Width, GLsizei Height);
+	static void glTexSubImage2D_checked(GLenum Target, GLint Level, GLint XOffset, GLint YOffset, GLsizei Width, GLsizei Height, GLenum Format, GLenum Type, const GLvoid* Data);
+	static void glGenSamplers_checked(GLsizei Count, GLuint *Samplers);
+	static void glBindSampler_checked(GLuint Unit, GLuint Sampler);
+	static void glUniform1i_checked(ShaderProgram const &InShaderProgram, string const &UniformName, GLint Loc, GLint Value);
 	static void glUniform1f_checked(ShaderProgram const &InShaderProgram, string const &UniformName, GLuint Loc, GLfloat Value);
 	static void glUniform2f_checked(ShaderProgram const &InShaderProgram, string const &UniformName, GLuint Loc, GLfloat Value1, GLfloat Value2);
 	static void glUniform3f_checked(ShaderProgram const &InShaderProgram, string const &UniformName, GLuint Loc, GLfloat Value1, GLfloat Value2, GLfloat Value3);
@@ -72,6 +80,7 @@ public:
 
 	void AddUniform(string const UniformName, UniformType Type);
 	void SetUniform(string const UniformName, GLfloat const * pData) const;
+	void SetUniform(string const UniformName, GLint const * pData) const;
 	void SetProgramUniformDirty(string const UniformName, bool const Value);
 
 	EUNIFORM_TYPE GetUniformType(string const UniformName) const;

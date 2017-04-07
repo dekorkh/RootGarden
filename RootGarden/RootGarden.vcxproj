@@ -129,6 +129,8 @@
     <None Include="msaa.frag" />
     <None Include="packages.config" />
     <None Include="param_alpha.vert" />
+    <None Include="textureColor.frag" />
+    <None Include="textureColor.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
@@ -187,6 +189,7 @@
     <ClCompile Include="SceneComponent.cpp" />
     <ClCompile Include="Scene_BeanGarden.cpp" />
     <ClCompile Include="Scene_ColorCircles.cpp" />
+    <ClCompile Include="Scene_Fabric.cpp" />
     <ClCompile Include="Scene_PrimeGarden.cpp" />
     <ClCompile Include="Scene_RootGarden.cpp" />
     <ClCompile Include="Scene_TimeGarden.cpp" />
@@ -194,6 +197,7 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
+    <ClCompile Include="TextureInfo.cpp" />
     <ClCompile Include="TransformInfo.cpp" />
     <ClCompile Include="TTLMUniform.cpp" />
   </ItemGroup>
@@ -257,6 +261,7 @@
     <ClInclude Include="SceneComponent.h" />
     <ClInclude Include="Scene_BeanGarden.h" />
     <ClInclude Include="Scene_ColorCircles.h" />
+    <ClInclude Include="Scene_Fabric.h" />
     <ClInclude Include="Scene_PrimeGarden.h" />
     <ClInclude Include="Scene_RootGarden.h" />
     <ClInclude Include="Scene_TimeGarden.h" />
@@ -264,6 +269,7 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="ShaderProgram.h" />
+    <ClInclude Include="TextureInfo.h" />
     <ClInclude Include="TransformInfo.h" />
     <ClInclude Include="TTLMUniform.h" />
     <ClInclude Include="wglext.h" />

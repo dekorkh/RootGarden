@@ -14,6 +14,7 @@ public:
 protected:
 	void GenerateMesh_Positions() override;
 	void GenerateMesh_Colors() override;
+	void GenerateMesh_TexCoords() override;
 	void GenerateMesh_Indices() override;
 
 private:

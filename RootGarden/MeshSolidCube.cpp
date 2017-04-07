@@ -3,7 +3,8 @@
 #define _USE_MATH_DEFINES
 #include "math.h"
 
-MeshSolidCube::MeshSolidCube() : Color(Vector4f::Constant(1.0f))
+MeshSolidCube::MeshSolidCube() : 
+	Color(Vector4f::Constant(1.0f))
 {
 	Vector4f NewColor;
 	NewColor << 1.0f, 0.0f, 0.0f, 1.0f;

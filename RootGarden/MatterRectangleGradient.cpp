@@ -25,8 +25,9 @@ MatterRectangleGradient::MatterRectangleGradient() :
 	
 	SelectAnimation(3);
 
-	ShaderProgram = ShaderManager::GetShaderManager()->GetShaderProgramByName("param_alpha_prog");
-	ShaderProgram->SetUniform("ParamAlpha", &Glow);
+	pShaderProgram = ShaderManager::GetShaderManager()->GetShaderProgramByName("param_alpha_prog");
+	pShaderProgram->SetUniform("ParamAlpha", &Glow);
+
 }
 
 void MatterRectangleGradient::Build()

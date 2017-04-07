@@ -7,6 +7,9 @@ MatterMeterHead::MatterMeterHead() :
 	HeadThickness(0.02f)
 {
 	Mesh = new MeshRectangle();
+	pShaderProgram = ShaderManager::GetShaderManager()->GetShaderProgramByName("textureColor_prog");
+	pShaderProgram->AddUniform("sampler_Color", UNIFORM_I1);
+	pShaderProgram->SetUniform("sampler_Color", &TextureUnit_Color);
 }
 
 MatterMeterHead::~MatterMeterHead()

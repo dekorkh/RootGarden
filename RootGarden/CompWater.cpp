@@ -76,4 +76,8 @@ void CompWater::Tick(double DeltaSeconds)
 
 		Tree->Add(*pDrop);
 	}
+	else if (NumDrops >= MaxDrops)
+	{
+		
+	}
 }

@@ -19,7 +19,7 @@ MatterDrop::MatterDrop()
 	
 	NewMesh->SetNumSides(20);
 	SetScale(Vector3f::Constant(0.01f));
-	ShaderProgram = ShaderManager::GetShaderManager()->GetShaderProgramByName("basic_prog");
+	pShaderProgram = ShaderManager::GetShaderManager()->GetShaderProgramByName("basic_prog");
 
 	Mesh = NewMesh;
 }
@@ -27,4 +27,13 @@ MatterDrop::MatterDrop()
 MatterDrop::~MatterDrop()
 {
 	delete Mesh;
+}
+
+void MatterDrop::SetColor(Vector4f InColor)
+{
+	MeshCircle* circle = dynamic_cast<MeshCircle*>(Mesh);
+	Vector4f NewColorInner;
+	NewColorInner << 0.0f, 0.0f, 0.0f, 0.2f;
+	circle->SetColors(NewColorInner, InColor);
+	circle->bDirty_Colors = true;
 }

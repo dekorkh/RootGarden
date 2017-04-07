@@ -52,19 +52,27 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="msaa.frag">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
     <None Include="basic.frag">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Shaders</Filter>
     </None>
     <None Include="basic.vert">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="param_alpha.vert">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Shaders</Filter>
     </None>
     <None Include="basic_instanced.vert">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Shaders</Filter>
     </None>
-    <None Include="msaa.frag" />
+    <None Include="param_alpha.vert">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="textureColor.vert">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="textureColor.frag">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -260,6 +268,12 @@
       <Filter>Source Files\Animation</Filter>
     </ClCompile>
     <ClCompile Include="QTree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Fabric.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -469,6 +483,12 @@
       <Filter>Header Files\Animation</Filter>
     </ClInclude>
     <ClInclude Include="QTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Fabric.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

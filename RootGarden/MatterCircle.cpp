@@ -7,7 +7,7 @@ MatterCircle::MatterCircle() :
 {
 	Name = "MatterCircle";
 	Mesh = new MeshCircle();
-	ShaderProgram = ShaderManager::GetShaderManager()->GetShaderProgramByName("basic_prog");
+	pShaderProgram = ShaderManager::GetShaderManager()->GetShaderProgramByName("basic_prog");
 }
 
 MatterCircle::~MatterCircle()

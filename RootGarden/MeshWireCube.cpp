@@ -3,7 +3,8 @@
 #define _USE_MATH_DEFINES
 #include "math.h"
 
-MeshWireCube::MeshWireCube() : Color(Vector4f::Constant(1.0f))
+MeshWireCube::MeshWireCube() : 
+	Color(Vector4f::Constant(1.0f))
 {
 	Vector4f NewColor;
 	NewColor << 0.4f, 0.5f, 0.8f, 1.0f;

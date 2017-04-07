@@ -50,7 +50,7 @@ CompOutlineCube::CompOutlineCube()
 		PositionEnd(1) = (static_cast<float>(rand() % 1000) / 1000.0f * 2 - 1) * 1.6f;
 		PositionEnd(2) = static_cast<float>(rand() % 1000) / 1000.0f * 2 - 1;
 		
-		float speed = static_cast<float>(rand() % 1000) / 1000.0f * 0.3;
+		float speed = static_cast<float>(rand() % 1000) / 1000.0f * 0.3f;
 
 		Animation_Lerp2Vec3 *animA = new Animation_Lerp2Vec3(LookAtStart, LookAtEnd, speed, PositionStart, PositionEnd, speed);
 		

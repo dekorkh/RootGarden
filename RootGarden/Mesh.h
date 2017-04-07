@@ -16,10 +16,27 @@ using namespace Eigen;
 #define SHADER_ATTR_POSITION	"vPosition"
 #define SHADER_ATTR_COLOR		"vColor"
 
+class TextureInfo;
+
+enum ETEXTURE
+{
+	ETEXTURE_COLOR = 0,
+	NUM_ETEXTURES
+};
+
+enum EBUFFER
+{
+	EBUFFER_ARRAY = 0,
+	EBUFFER_ELEMENT,
+	EBUFFER_PIXEL,
+	NUM_EBUFFERS
+};
+
 struct GenerateMeshResult
 {
 	clock_t Clock_GenerateMesh;
 	clock_t Clock_GenerateMesh_Positions;
+	clock_t Clock_GenerateMesh_TexCoords;
 	clock_t Clock_GenerateMesh_Colors;
 	clock_t Clock_GenerateMesh_Indices;
 };
@@ -29,7 +46,7 @@ class Mesh
 public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-	Mesh(GLuint InNumBuffers = 2);
+	Mesh(GLuint InNumBuffers = NUM_EBUFFERS, GLuint InNumTextures = 0);
 	virtual ~Mesh();
 
 	/* Draw
@@ -50,6 +67,7 @@ public:
 	void GenerateMesh(GenerateMeshResult *OutGenerateMeshResult);
 
 	bool bDirty_Positions;
+	bool bDirty_TexCoords;
 	bool bDirty_Colors;
 	bool bDirty_Indices;
 
@@ -58,7 +76,9 @@ public:
 protected:
 	size_t SizeOfPositions();
 	size_t SizeOfColors();
+	size_t SizeOfTexCoords();
 	size_t SizeOfIndices();
+	GLsizeiptr SizeOfTextureData();
 
 	/* InitializeVAO
 	/	Generate the Vertex Array Object.
@@ -76,9 +96,11 @@ protected:
 	static void BuildRectangle_Positions(vector<GLfloat> &PositionsData, Vector2f UpperLeft, Vector2f LowerRight);
 	static void BuildRectangle_Indices(vector<GLuint> &IndexData, GLuint StartIndex);
 
-	vector<GLfloat> PositionsData; // Positions formatted into a contiguous array for GPU
-	vector<GLfloat> ColorsData; // Colors formatted into a contigous array for GPU
+	vector<GLfloat> PositionsData;	// Positions formatted into a contiguous array for GPU
+	vector<GLfloat> ColorsData;		// Colors formatted into a contigous array for GPU
+	vector<GLfloat> TexCoordsData;	// Texture coordinates
 	vector<GLuint> IndexData;
+	
 
 	GLuint NumVertices;
 	GLuint NumVertIndices;
@@ -86,13 +108,20 @@ protected:
 	virtual void GenerateMesh_Positions();
 	virtual void GenerateMesh_Colors();
 	virtual void GenerateMesh_Indices();
+	virtual void GenerateMesh_TexCoords();
+	virtual void Generate_TextureInfos();
 
 	GLuint NumBuffers;
 	vector<GLuint> Buffers;
+	GLuint NumTextures;
+	vector<GLuint> Textures;
+	vector<TextureInfo*> TextureInfos;
+	vector<GLuint> Samplers;
 	GLuint VAO;
 
 	void Draw_UpdateColors();
 	void Draw_UpdatePositions();
+	void Draw_UpdateTexCoords();
 	void Draw_UpdateIndices();
 
 	bool bInitializedVAO;	//Graphics eng. inits after scene&meshes are created so meshes init once during first draw using this check.
@@ -101,5 +130,6 @@ private:
 
 	size_t const NumComponentsVertPosition;
 	size_t const NumComponentsVertColor;
+	size_t const NumComponentsVertTexCoords;
 };
 

@@ -54,7 +54,7 @@ public:
 	*/
 	void UpdateModelMatrix();
 
-	ShaderProgram *ShaderProgram;
+	ShaderProgram *pShaderProgram;
 
 	// Whether this geometry is used only for rendering the stencil
 	bool bIsStencil;
@@ -65,6 +65,8 @@ public:
 	Mesh* Mesh;
 
 	TransformInfo Transform;
+	
+	GLint TextureUnit_Color;
 	
 private:
 	void Initialize();

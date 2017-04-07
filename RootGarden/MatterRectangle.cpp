@@ -6,9 +6,12 @@ MatterRectangle::MatterRectangle() :
 {
 	Rect = new MeshRectangle();
 	Vector4f RectangleColor;
-	RectangleColor << 0.0f, 1.0f, 0.0f, 1.0f;
+	RectangleColor << 1.0f, 1.0f, 1.0f, 1.0f;
 	Rect->SetColor(RectangleColor);
 	Mesh = Rect;
+	pShaderProgram = ShaderManager::GetShaderManager()->GetShaderProgramByName("textureColor_prog");
+	pShaderProgram->AddUniform("sampler_Color", UNIFORM_I1);
+	pShaderProgram->SetUniform("sampler_Color", &TextureUnit_Color);
 }
 
 MatterRectangle::~MatterRectangle()

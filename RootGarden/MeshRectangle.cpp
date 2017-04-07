@@ -3,7 +3,9 @@
 #define _USE_MATH_DEFINES
 #include "math.h"
 
-MeshRectangle::MeshRectangle() : Color(Vector4f::Constant(1.0f))
+MeshRectangle::MeshRectangle() : 
+	Mesh(NUM_EBUFFERS, 1),
+	Color(Vector4f::Constant(1.0f))
 {
 	Vector4f Red;
 	Red << 1.0f, 0.0f, 0.0f, 1.0f;
@@ -53,4 +55,14 @@ void MeshRectangle::GenerateMesh_Positions()
 	PositionsData.insert(PositionsData.end(), { 1.0f, 1.0f, 0.0f });
 	PositionsData.insert(PositionsData.end(), { 1.0f, -1.0f, 0.0f });
 	PositionsData.insert(PositionsData.end(), { -1.0f, -1.0f, 0.0f });
+}
+
+void MeshRectangle::GenerateMesh_TexCoords()
+{
+	TexCoordsData.clear();
+
+	TexCoordsData.insert(TexCoordsData.end(), { 0.0f, 1.0f });
+	TexCoordsData.insert(TexCoordsData.end(), { 1.0f, 1.0f });
+	TexCoordsData.insert(TexCoordsData.end(), { 1.0f, 0.0f });
+	TexCoordsData.insert(TexCoordsData.end(), { 0.0f, 0.0f });
 }

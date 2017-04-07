@@ -5,6 +5,8 @@
 #include "Animation_Blank.h"
 #include "Animation_Grow.h"
 #include "Animation_Pulse.h"
+#include "Animation_FrameTime.h"
+#include "QTree.h"
 
 #define _USE_MATH_DEFINES
 #include "math.h"
@@ -34,7 +36,6 @@ Scene_BeanGarden::Scene_BeanGarden()
 	Selector->Select(*pRoot);
 	AddChild(Selector);
 	
-
 	/*
 	MatterRectangle* Rectangle = new MatterRectangle();
 	Rectangle->SetScale(Vector3f::Constant(0.1f));
@@ -42,16 +43,54 @@ Scene_BeanGarden::Scene_BeanGarden()
 	AddChild(Rectangle);
 	*/
 
-	CompWater* pWater = new CompWater(*pRoot);
-	pWater->SetMaxDrops(128);
-	pWater->SetSpawnRate(100.0f);
+	pWater = new CompWater(*pRoot);
+	pWater->SetMaxDrops(40);
+	pWater->SetSpawnRate(500.0f);
 	pWater->SetBounds(1.6f, 1.0f);
-	AddChild(pWater);	
+	AddChild(pWater);
+
+	Animation_FrameTime* pAnim = new Animation_FrameTime(32.0);
+	GLint FrameTime_InputIdx = RegisterInput_Float(FrameTime);
+	pAnim->LinkOutput(pAnim->OutputIdx_Out, FrameTime_InputIdx, EOperationType::ACCUMULATE);
+	InputMap[FrameTime_InputIdx]->InputEffects.bComponentParameters = true;
+	AddAnimation(pAnim);
 }
 
 
 Scene_BeanGarden::~Scene_BeanGarden()
 {
+}
+
+void Scene_BeanGarden::Build()
+{
+	vector<Matter*> FoundMatter;
+	
+	if (!pWater->Tree->isLeaf)
+	{
+		pWater->Tree->SearchRegion(Selector->Input_Position, 0.3f, FoundMatter);
+	}
+
+	for (auto &Matter : pWater->Children)
+	{
+		MatterDrop* Drop = dynamic_cast<MatterDrop*>(Matter);
+		if (Drop != nullptr)
+		{
+			Vector4f HLColor;
+			HLColor << 0.0f, 0.0f, 0.0f, 1.0f;
+			Drop->SetColor(HLColor);
+		}
+	}
+
+	for (auto &Matter : FoundMatter)
+	{
+		MatterDrop* Drop = dynamic_cast<MatterDrop*>(Matter);
+		if (Drop != nullptr)
+		{
+			Vector4f HLColor;
+			HLColor << 1.0f, 1.0f, 0.0f, 1.0f;
+			Drop->SetColor(HLColor);
+		}
+	}
 }
 
 void Scene_BeanGarden::HandleInput(int Key, int x, int y, bool down)
@@ -65,7 +104,11 @@ void Scene_BeanGarden::HandleInput(int Key, int x, int y, bool down)
 			if (!UKeyDown)
 			{
 				UKeyDown = true;
-				Selector->SelectUp();
+				Matter* TopMost = pWater->Tree->GetTopMost(Selector->Input_Position, 0.3f);
+				if (TopMost != nullptr)
+				{
+					Selector->Select(*TopMost);
+				}
 			}
 		}
 		else
@@ -82,7 +125,11 @@ void Scene_BeanGarden::HandleInput(int Key, int x, int y, bool down)
 			if (!RKeyDown)
 			{
 				RKeyDown = true;
-				Selector->SelectRight();
+				Matter* RightMost = pWater->Tree->GetRightMost(Selector->Input_Position, 0.3f);
+				if (RightMost != nullptr)
+				{
+					Selector->Select(*RightMost);
+				}
 			}
 		}
 		else
@@ -99,7 +146,11 @@ void Scene_BeanGarden::HandleInput(int Key, int x, int y, bool down)
 			if (!DKeyDown)
 			{
 				DKeyDown = true;
-				Selector->SelectDown();
+				Matter* BottomMost = pWater->Tree->GetBottomMost(Selector->Input_Position, 0.3f);
+				if (BottomMost != nullptr)
+				{
+					Selector->Select(*BottomMost);
+				}
 			}
 		}
 		else
@@ -116,7 +167,11 @@ void Scene_BeanGarden::HandleInput(int Key, int x, int y, bool down)
 			if (!LKeyDown)
 			{
 				LKeyDown = true;
-				Selector->SelectLeft();
+				Matter* LeftMost = pWater->Tree->GetLeftMost(Selector->Input_Position, 0.3f);
+				if (LeftMost != nullptr)
+				{
+					Selector->Select(*LeftMost);
+				}
 			}
 		}
 		else

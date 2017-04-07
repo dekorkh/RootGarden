@@ -22,7 +22,7 @@ bool Animation_AccumulateVec3::Tick(const double DeltaSeconds)
 {
 	Animation::Tick(DeltaSeconds);
 
-	Output_XYZ += VecAdd * DeltaSeconds;
+	Output_XYZ += VecAdd * static_cast<float>(DeltaSeconds);
 	Output_X = Output_XYZ.x();
 	Output_Y = Output_XYZ.y();
 	Output_Z = Output_XYZ.z();

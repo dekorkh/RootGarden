@@ -5,11 +5,11 @@
 class CompSelector;
 class CompWater;
 
-class Scene_BeanGarden : public Scene
+class Scene_Fabric : public Scene
 {
 public:
-	Scene_BeanGarden();
-	~Scene_BeanGarden();
+	Scene_Fabric();
+	~Scene_Fabric();
 
 	void HandleInput(int Key, int x, int y, bool down) override;
 
@@ -22,14 +22,6 @@ public:
 	bool UKeyDown = false;
 	bool DKeyDown = false;
 	bool EscDown = false;
-
-	CompSelector *Selector;
-	MatterCircle* pRoot;
-	CompWater* pWater;
-
-	Vector3f IncrementVelocityUp;
-	Vector3f IncrementVelocityDown;
-	Vector3f IncrementVelocityLeft;
-	Vector3f IncrementVelocityRight;
 };
 
+#pragma once

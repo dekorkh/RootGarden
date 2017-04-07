@@ -19,6 +19,7 @@
 #include "Scene_TimeGarden.h"
 #include "Scene_RootGarden.h"
 #include "Scene_BeanGarden.h"
+#include "Scene_Fabric.h"
 #include "GlobalState.h"
 #include "GameStats.h"
 #include "ShaderManager.h"

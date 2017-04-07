@@ -6,7 +6,8 @@ Matter::Matter(const string& InName, const int InSerial)
 	: 
 	SceneComponent(InName, InSerial),
 	bIsStencil(false),
-	bIsOcclusion(false)
+	bIsOcclusion(false),
+	TextureUnit_Color(ETEXTURE_COLOR)
 {
 	Initialize();
 }
@@ -17,8 +18,8 @@ Matter::~Matter()
 
 void Matter::Initialize()
 {
-	ShaderProgram = ShaderManager::GetShaderManager()->GetShaderProgramByName("basic_prog");
-	ShaderProgram->SetUniform("ModelMatrix", Transform.GetModelMatrixDataPtr());
+	pShaderProgram = ShaderManager::GetShaderManager()->GetShaderProgramByName("basic_prog");
+	pShaderProgram->SetUniform("ModelMatrix", Transform.GetModelMatrixDataPtr());
 }
 
 void Matter::SetScale(const Vector3f& InScale)
@@ -62,29 +63,29 @@ void Matter::ProcessInputEffects(TInputEffects const *InputEffects)
 void Matter::Draw()
 {
 	// so I'll re-get the pointer but it'd be nice to know why the pData is null in the uniform at this point.
-	ShaderProgram->SetUniform("ModelMatrix", Transform.GetModelMatrixDataPtr());
-	
+	pShaderProgram->SetUniform("ModelMatrix", Transform.GetModelMatrixDataPtr());
+
 	clock_t Clock_SetUniforms = clock();
-	if (ShaderProgram->ProgAddr != ShaderProgram::LastProgAddr)
+	if (pShaderProgram->ProgAddr != ShaderProgram::LastProgAddr)
 	{
 		GameStats::GetGameStats()->pThisFrame->Ms_SetUniforms->Increment(TICKS_TO_MS(clock() - Clock_SetUniforms));
 		//Set the new shader program
-		ShaderProgram->Use();
+		pShaderProgram->Use();
 		
 		// Set global uniforms
-		ShaderProgram->PushGlobalUniforms();
+		pShaderProgram->PushGlobalUniforms();
 
 		// Push global uniforms only pushes the uniforms that were marked dirty.
 		Clock_SetUniforms = clock();
 	}
 	
-	ShaderProgram->PushUniforms();
+	pShaderProgram->PushUniforms();
 
 	
 	GameStats::GetGameStats()->pThisFrame->Ms_SetUniforms->Increment(TICKS_TO_MS(clock() - Clock_SetUniforms));
 	
 	clock_t Clock_Draw = clock();
-	Mesh->Draw(*ShaderProgram);
+	Mesh->Draw(*pShaderProgram);
 	GameStats::GetGameStats()->pThisFrame->Ms_Draw->Increment(TICKS_TO_MS(clock() - Clock_Draw));
 }
 

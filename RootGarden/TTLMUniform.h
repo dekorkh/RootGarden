@@ -9,6 +9,7 @@
 using namespace std;
 
 enum UniformType {
+	UNIFORM_I1,
 	UNIFORM_F1,
 	UNIFORM_F2,
 	UNIFORM_F3,
@@ -25,6 +26,7 @@ public:
 	/	Set the value on the object.
 	*/
 	void SetUniformData(GLfloat const * Data);
+	void SetUniformData(GLint const * Data);
 
 	/* SetUniform
 	/	Copy the uniform to the gpu.
@@ -42,6 +44,7 @@ private:
 	string UniformName;
 	GLint UniformLocation;
 	UniformType Type;
-	GLfloat const * pData;
+	GLfloat const * pData_f;
+	GLint const * pData_i;
 	bool bDirty;
 };

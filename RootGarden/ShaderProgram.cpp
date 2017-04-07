@@ -1,6 +1,8 @@
 #include "ShaderProgram.h"
 #include "time.h"
 #include "ShaderManager.h"
+#include "math.h"
+#include "TextureInfo.h"
 
 #define MAP_ERROR(x) {x, #x}
 
@@ -72,6 +74,11 @@ void ShaderProgram::AddUniform(string const UniformName, UniformType const Type)
 }
 
 void ShaderProgram::SetUniform(string const UniformName, GLfloat const * pData) const
+{
+	UniformMap.at(UniformName)->SetUniformData(pData);
+}
+
+void ShaderProgram::SetUniform(string const UniformName, GLint const * pData) const
 {
 	UniformMap.at(UniformName)->SetUniformData(pData);
 }
@@ -262,6 +269,136 @@ void ShaderProgram::glGenBuffers_checked(GLsizei Count, GLuint *Buffers)
 	}
 }
 
+void ShaderProgram::glGenTextures_checked(GLsizei Count, GLuint *Textures)
+{
+	GLenum err;
+	glGenTextures(Count, Textures);
+	while ((err = glGetError()) != GL_NO_ERROR)
+	{
+		cout << "Error at glGenTextures(): " << GLErrorMap[err];
+		throw err;
+	}
+}
+
+void ShaderProgram::glBindTexture_checked(GLenum Target, GLuint Texture)
+{
+	GLenum err;
+	glBindTexture(Target, Texture);
+	while ((err = glGetError()) != GL_NO_ERROR)
+	{
+		cout << "Error at glGenTextures(): " << GLErrorMap[err];
+		throw err;
+	}
+}
+
+void ShaderProgram::glActiveTexture_checked(GLenum Texture)
+{
+	GLenum err;
+	glActiveTexture(Texture);
+	while ((err = glGetError()) != GL_NO_ERROR)
+	{
+		cout << "Error at glActiveTexture(): " << GLErrorMap[err];
+		throw err;
+	}
+}
+
+void ShaderProgram::glTexStorage2D_checked(GLenum Target, GLsizei Levels, GLenum InternalFormat, GLsizei Width, GLsizei Height)
+{
+	GLenum err;
+	glTexStorage2D(Target, Levels, InternalFormat, Width, Height);
+	while ((err = glGetError()) != GL_NO_ERROR)
+	{
+		cout << "Error at glTexStorage2D(): " << GLErrorMap[err] << endl;
+		switch (err)// INVALID OPERATION
+		{
+			case 1280:
+				cout << "Either the specified internal format is not of valid formats in OpenGL specification or the specified target is not of GL_TEXTURE_2D, GL_TEXTURE_1D_ARRAY, GL_TEXTURE_RECTANGLE, GL_PROXY_TEXTURE_2D, GL_PROXY_TEXTURE_1D_ARRAY, GL_PROXY_TEXTURE_RECTANGLE, or GL_PROXY_TEXTURE_CUBE_MAP." << "\n";
+				break;
+
+			case 1282:
+				if (Target == GL_TEXTURE_2D || Target == GL_PROXY_TEXTURE_2D)
+				{
+					GLint boundTexture2D; 
+					glGetIntegerv(GL_TEXTURE_BINDING_2D, &boundTexture2D);
+					if (boundTexture2D == 0)
+					{
+						cout << "Current texture bound to target is 0 - no bound texture." << endl;
+					}
+				}
+				else if (Target == GL_TEXTURE_1D_ARRAY || Target == GL_PROXY_TEXTURE_1D_ARRAY)
+				{
+					double log2Width = rint(log2(Width));
+					if (Levels > log2Width + 1)
+					{
+						cout << "Levels is greater than log2(Width) + 1." << endl;
+					}
+				}
+				else
+				{
+					double log2Width = rint(log2(fmax(Width, Height)));
+					if (Levels > log2Width + 1)
+					{
+						cout << "Levels is greater than log2(max(Width, Height)) + 1." << endl;
+					}
+				}
+
+				break;
+
+			default:
+				break;
+		}
+
+		throw err;
+	}
+}
+
+void ShaderProgram::glTexSubImage2D_checked(GLenum Target, GLint Level, GLint XOffset, GLint YOffset, GLsizei Width, GLsizei Height, GLenum Format, GLenum Type, const GLvoid* Data)
+{
+	GLenum err;
+	glTexSubImage2D(Target, Level, XOffset, YOffset, Width, Height, Format, Type, Data);
+	while ((err = glGetError()) != GL_NO_ERROR)
+	{
+		cout << "Error at glTexSubImage2D(): " << GLErrorMap[err] << endl;
+		switch (err)
+		{
+		case 1282:
+			GLint pixelBuffer;
+			glGetIntegerv(GL_PIXEL_UNPACK_BUFFER_BINDING, &pixelBuffer);
+			if (pixelBuffer != 0)
+			{
+				cout << "Either the Pixel Unpack Buffer is larger than texture's specified storage or it doesn't divide evenly into bytes of Type.";
+			}
+			break;
+		default:
+			break;
+
+		}
+		throw err;
+	}
+}
+
+void ShaderProgram::glGenSamplers_checked(GLsizei Count, GLuint *Samplers)
+{
+	GLenum err;
+	glGenSamplers(Count, Samplers);
+	while ((err = glGetError()) != GL_NO_ERROR)
+	{
+		cout << "Error at glGenSamplers(): " << GLErrorMap[err];
+		throw err;
+	}
+}
+
+void ShaderProgram::glBindSampler_checked(GLuint Unit, GLuint Sampler)
+{
+	GLenum err;
+	glBindSampler(Unit, Sampler);
+	while ((err = glGetError()) != GL_NO_ERROR)
+	{
+		cout << "Error at glBindSampler(): " << GLErrorMap[err];
+		throw err;
+	}
+}
+
 void ShaderProgram::glGetActiveUniform_checked(GLuint ProgramAddress, GLint Loc, GLsizei MaxNameLength, GLsizei *ActualNameLength, GLint *Size, GLenum *Type, GLchar *Name)
 {
 	GLenum err;
@@ -280,6 +417,17 @@ void ShaderProgram::glGetActiveUniform_checked(GLuint ProgramAddress, GLint Loc,
 			}
 		}
 		throw;
+	}
+}
+
+void ShaderProgram::glUniform1i_checked(ShaderProgram const &InShaderProgram, string const &UniformName, GLint Loc, GLint Value)
+{
+	GLenum err;
+	glUniform1i(Loc, 0);
+	while ((err = glGetError()) != GL_NO_ERROR)
+	{
+		cout << "Error at glUniform1i(): " << GLErrorMap[err];
+		throw err;
 	}
 }
 
