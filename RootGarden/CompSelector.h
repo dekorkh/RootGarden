@@ -3,6 +3,7 @@
 #include "SceneComponent.h"
 
 class Animation_EaseInVec3;
+class Animation_AccumulateVec3;
 class MatterCircle;
 class Matter;
 
@@ -21,12 +22,16 @@ public:
 	void SelectUp();
 	void SelectDown();
 
+	void AddVelocity(Vector3f const Velocity);
+	void KillVelocity();
+
 	MatterCircle *Outline;
 
 	Vector3f Input_LookAt;
 	Vector3f Input_Position;
 
-	Animation_EaseInVec3 *VelocityAnim;
+	Animation_EaseInVec3 *GoToAnim;
+	Animation_AccumulateVec3 *VelocityAnim;
 
 	Matter const *Selected;
 };

@@ -16,7 +16,7 @@ public:
 
 	void AddShader(string InShaderName, char const * const InShaderPath, ESHADER_TYPE InShaderType);
 	
-	void AddShaderProgram(string InShaderProgramName, string VertexShaderName, string FragmentShaderName);
+	void AddShaderProgram(string InShaderProgramName, string VertexShaderName, string FragmentShaderName, bool InbSupportsNormals = false);
 
 	ShaderProgram* const GetShaderProgramByName(string const InShaderProgramName) const;
 

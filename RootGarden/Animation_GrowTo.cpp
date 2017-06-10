@@ -1,5 +1,5 @@
 #include "Animation_GrowTo.h"
-
+#include "MatterRectangle.h"
 #include "Matter.h"
 #include "Eigen/Dense"
 #include "MatterRootSegment.h"
@@ -30,6 +30,7 @@ bool Animation_GrowTo::Tick(const double DeltaSeconds)
 	//if the remainingMass is the lesser, the remainingMass should be set explicitely to 0.0f after
 
 	float MassAtRate = Rate * static_cast<float>(DeltaSeconds);
+
 	float MassToTarget = pRootSegment->MassCostToTarget(Target);
 	
 	float MassGrow = 0.0f;

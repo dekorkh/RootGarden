@@ -1,7 +1,15 @@
 #pragma once
 
 #include "Matter.h"
-#include "MeshTrapezoid.h"
+
+enum EGROWMODE
+{
+	TAPERED_TOWARD_EXPAND = 0,
+	TAPERED_TOWARD_GROWOUT,
+	POINTED_TOWARD_EXPAND,
+	POINTED_TOWARD_GROWOUT,
+	POINTED_INPLACE,
+};
 
 class MatterRootSegment : public Counter<MatterRootSegment>, public Matter
 {
@@ -50,5 +58,7 @@ private:
 	float _Length;
 	float _OutRadius;
 	float _Volume;
+
+	EGROWMODE GrowMode;
 };
 

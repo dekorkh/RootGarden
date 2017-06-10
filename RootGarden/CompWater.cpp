@@ -20,7 +20,7 @@ CompWater::CompWater(Matter &Root)
 	int InputIdx_bDoSpawn = RegisterInput_Bool(bDoSpawn);
 	pAnimTrigger->LinkOutput(pAnimTrigger->OutputIdx_Out, InputIdx_bDoSpawn, EOperationType::ACCUMULATE);
 	AddAnimation(pAnimTrigger);
-
+	
 	Tree = new QTree(0.0f, 0.0f, 3.2f, nullptr, this);
 	Tree->Add(Root);
 }
@@ -55,6 +55,7 @@ void CompWater::SetBounds(float half_width, float half_height)
 void CompWater::Tick(double DeltaSeconds)
 {
 	SceneComponent::Tick(DeltaSeconds);
+
 	if (bDoSpawn && NumDrops < MaxDrops)
 	{
 		NumDrops++;
@@ -80,4 +81,5 @@ void CompWater::Tick(double DeltaSeconds)
 	{
 		
 	}
+	
 }

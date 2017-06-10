@@ -29,9 +29,9 @@ bool Animation_EaseInVec3::Tick(const double DeltaSeconds)
 {
 	Animation::Tick(DeltaSeconds);
 
-	float AlphaFactor = (Output_XYZ - VecEnd).norm() / max(StartEndDistance, FLT_EPSILON);
+	float AlphaFactor = pow((Output_XYZ - VecEnd).norm() / max(StartEndDistance, FLT_EPSILON), 0.01);
 	AlphaFactor = max(AlphaFactor, 0.1f);
-	Alpha += static_cast<float>(AlphaPerSecond * AlphaFactor * DeltaSeconds);
+	Alpha += static_cast<float>(AlphaPerSecond * DeltaSeconds);
 	Alpha = Alpha > 1.0f ? 1.0f : Alpha;
 
 	Output_XYZ = VecStart * (1.0f - Alpha) + VecEnd * Alpha;
@@ -60,6 +60,7 @@ void Animation_EaseInVec3::SetAlphaPerSecond(float InAlphaPerSecond)
 
 void Animation_EaseInVec3::SetVecEnd(Vector3f InVecEnd)
 {
+	Reset();
 	VecStart = Output_XYZ;
 	VecEnd = InVecEnd;
 	StartEndDistance = (VecStart - VecEnd).norm();

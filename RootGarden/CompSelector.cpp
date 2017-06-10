@@ -1,5 +1,6 @@
 #include "CompSelector.h"
 #include "Animation_EaseInVec3.h"
+#include "Animation_AccumulateVec3.h"
 #include "MatterCircle.h"
 #include "MatterSolidCube.h"
 #include "MatterRing.h"
@@ -14,7 +15,7 @@ CompSelector::CompSelector()
 	Outline->SetColors(NewColor, NewColor);
 	
 	Vector3f NewScale;
-	NewScale << 0.3f, 0.3f, 0.3f;
+	NewScale << 0.3f, 0.3f, 1.0f;
 	Outline->SetScale(NewScale);
 
 	AddChild(Outline);
@@ -30,15 +31,21 @@ CompSelector::CompSelector()
 	VecInit = Vector3f::Constant(0.0f);
 	VecDest = Vector3f::Constant(0.0f);
 
-	VelocityAnim = new Animation_EaseInVec3(VecInit, VecDest, 0.5f);
+	GoToAnim = new Animation_EaseInVec3(VecInit, VecDest, 0.5f);
+	GoToAnim->LinkOutput(GoToAnim->OutputIdx_XYZ, InputIdx_Position, EOperationType::OVERRIDE);
+	AddAnimation(GoToAnim);
+	
+	VelocityAnim = new Animation_AccumulateVec3(Vector3f::Constant(0.0f), Vector3f::Constant(0.0f), AccumulateFunction::Cubic);
 	VelocityAnim->LinkOutput(VelocityAnim->OutputIdx_XYZ, InputIdx_Position, EOperationType::OVERRIDE);
 	AddAnimation(VelocityAnim);
-	
+
+	SelectAnimation(1);
 }
 
 CompSelector::~CompSelector()
 {
 	delete Outline;
+	delete GoToAnim;
 	delete VelocityAnim;
 }
 
@@ -50,7 +57,7 @@ void CompSelector::Build()
 
 void CompSelector::GoToPosition(Vector3f InPosition)
 {
-	VelocityAnim->SetVecEnd(InPosition);
+	GoToAnim->SetVecEnd(InPosition);
 }
 
 void CompSelector::Select(Matter const &Target)
@@ -76,4 +83,16 @@ void CompSelector::SelectUp()
 void CompSelector::SelectDown()
 {
 
+}
+
+void CompSelector::AddVelocity(Vector3f const Velocity)
+{
+	Vector3f NewVelocity = VelocityAnim->GetDelta() + Velocity;
+	VelocityAnim->SetDelta(NewVelocity);
+}
+
+void CompSelector::KillVelocity()
+{
+	Vector3f NewVelocity = Vector3f::Constant(0.0f);
+	VelocityAnim->SetDelta(NewVelocity);
 }

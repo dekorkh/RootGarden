@@ -16,9 +16,10 @@ map<GLenum, string> ShaderProgram::GLErrorMap = {
 };
 
 
-ShaderProgram::ShaderProgram(Shader *InVertexShader, Shader *InFragmentShader) :
+ShaderProgram::ShaderProgram(Shader *InVertexShader, Shader *InFragmentShader, bool InbSupportsNormals) :
 	VertexShader(InVertexShader),
-	FragmentShader(InFragmentShader)
+	FragmentShader(InFragmentShader),
+	bSupportsNormals(InbSupportsNormals)
 {
 	AddUniform("ModelMatrix", UNIFORM_M4);
 	Compile();
@@ -489,6 +490,11 @@ void ShaderProgram::glUniform3f_checked(ShaderProgram const &InShaderProgram, st
 void ShaderProgram::glUniformMatrix4fv_checked(ShaderProgram const &InShaderProgram, string const &UniformName, GLuint Loc, GLsizei Count, GLboolean Transpose, GLfloat const *ValueArray)
 {
 	GLenum err;
+	if (ValueArray == nullptr)
+	{
+		cout << "Error at glUniformMatrix4fv(): Tried to push a Uniform of Matrix4 but handed it a null pointer.  Uniform name: " << UniformName;
+		throw;
+	}
 	glUniformMatrix4fv(Loc, Count, Transpose, ValueArray);
 	while ((err = glGetError()) != GL_NO_ERROR)
 	{

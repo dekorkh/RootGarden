@@ -1,8 +1,13 @@
 #include "MatterRootSegment.h"
+#include "MatterRectangle.h"
+#include "MeshTaperedCylinder.h"
+#define Pi static_cast<float>(M_PI)
 
 MatterRootSegment::MatterRootSegment() : 
 	Matter("MatterRootSegment", Counter<MatterRootSegment>::Count())
 {
+
+	GrowMode = EGROWMODE::POINTED_TOWARD_GROWOUT;
 
 	Density = 3.0f;
 	Taper = 0.7f;
@@ -17,9 +22,9 @@ MatterRootSegment::MatterRootSegment() :
 	_OutRadius = 0.0f;
 	_Volume = 0.0f;
 	
-	Mesh = new MeshTrapezoid();
-	static_cast<MeshTrapezoid*>(Mesh)->SetBaseWidth(0.0f);
-	static_cast<MeshTrapezoid*>(Mesh)->SetTipWidth(0.0f);
+	Mesh = new MeshTaperedCylinder();
+	static_cast<MeshTaperedCylinder*>(Mesh)->SetBaseWidth(0.0f);
+	static_cast<MeshTaperedCylinder*>(Mesh)->SetTipWidth(0.0f);
 
 	bGrown = false;
 
@@ -60,51 +65,90 @@ void MatterRootSegment::Build()
 	// Vt = (1 / 3 * Lb * pi * Rb ^ 2) - (1 / 3 * Lb * T * pi * (Rb * T) ^ 2)
 	// Vt / Lb = (1 / 3 * pi * Rb ^ 2) - (1 / 3 * T * pi * (Rb * T) ^ 2)
 	// Lb = Vt / ((1 / 3 * pi * Rb ^ 2) - (1 / 3 * T * pi * (Rb * T) ^ 2))
-
-	_OutRadius = InRadius * Taper;
+	
 	_Volume = MassCapacity / Density;
-	float termA = (1.0f / 3.0f) * static_cast<float>(M_PI) * pow(InRadius, 2.0f);
-	float termB = (1.0f / 3.0f) * Taper * static_cast<float>(M_PI) * pow(InRadius * Taper, 2);
-	float Lb = _Volume / (termA - termB);
 
-	_Length = Lb * (1.0f - Taper);	// Length tapered cylinder
+	switch (GrowMode)
+	{
+		case EGROWMODE::TAPERED_TOWARD_EXPAND:
+		{
+			_OutRadius = InRadius * Taper;
+			float termA = (1.0f / 3.0f) * Pi * pow(InRadius, 2.0f);
+			float termB = (1.0f / 3.0f) * Taper * Pi * pow(InRadius * Taper, 2);
+			float Lb = _Volume / (termA - termB);
+			_Length = Lb * (1.0f - Taper);	// Length tapered cylinder
+			break;
+		}
+		case EGROWMODE::POINTED_TOWARD_GROWOUT:
+		{
+			// Given a volume and base radius, compute a cone length
+			_OutRadius = 0.0f;
+			// Volume = Pi * r^2 * (Length / 3);
+			// Length = (Volume / (Pi * r^2)) * 3;
+			_Length = (_Volume / (Pi * pow(InRadius, 2.0f))) * 3.0f;
+			break;
+		}
+		case EGROWMODE::POINTED_INPLACE:
+		{
+			// Given volume of a tapered cone, length, and radius of its larger base,
+			// Imagine the tapered height was height of a cone - the ratio of its volume to the volume of the tapered cone is the ratio of 
+			break;
+		}
+	}
 
-	static_cast<MeshTrapezoid*>(Mesh)->SetBaseWidth(InRadius);
-	static_cast<MeshTrapezoid*>(Mesh)->SetTipWidth(_OutRadius);
-	static_cast<MeshTrapezoid*>(Mesh)->SetLength(_Length);
+	static_cast<MeshTaperedCylinder*>(Mesh)->SetBaseWidth(InRadius);
+	static_cast<MeshTaperedCylinder*>(Mesh)->SetTipWidth(_OutRadius);
+	static_cast<MeshTaperedCylinder*>(Mesh)->SetLength(_Length);
 
-	SetLookAtTarget(Param_Target.normalized());
+	SetLookAtTarget(Param_Target.normalized() + Transform.GetPosition());
 }
 
 float MatterRootSegment::MassCostForLength(float InLength) const
 {
-	//v = 1/3 L pi r^2
-	//L = (v * 3) / (pi * r^2)
+	float MassCost = 0.0f;
+	switch (GrowMode)
+	{
+	case EGROWMODE::TAPERED_TOWARD_EXPAND:
+	{
+		//v = 1/3 L pi r^2
+		//L = (v * 3) / (pi * r^2)
 
-	float Rb_current = _Length > 0.0f ? InRadius * Taper : InRadius;
+		float Rb_current = _Length > 0.0f ? InRadius * Taper : InRadius;
 
-	// Current endpoint as percent of projected length
-	float percentProjectedLength = _Length / (_Length + InLength);
-	
-	// Mass big cone
-	float Rb = percentProjectedLength * (InRadius - _OutRadius) + InRadius;
-	float Rs = InRadius * Taper;
-	
-	float Lb = Rb / ((Rb -  Rs) / InLength);
-	float Mb = 1.0f / 3.0f * static_cast<float>(M_PI) * Lb * pow(Rb, 2.0f);
+		// Current endpoint as percent of projected length
+		float percentProjectedLength = _Length / (_Length + InLength);
 
-	// Mass small cone
-	
-	float Ls = Lb - InLength;
-	float Ms = 1.0f / 3.0f * static_cast<float>(M_PI) * Ls * pow(Rs, 2.0f);
+		// Mass big cone
+		float Rb = percentProjectedLength * (InRadius - _OutRadius) + InRadius;
+		float Rs = InRadius * Taper;
 
-	// Mass tapered cone (big cone - small cone)
-	return Mb - Ms;
+		float Lb = Rb / ((Rb - Rs) / InLength);
+		float Mb = 1.0f / 3.0f * static_cast<float>(M_PI) * Lb * pow(Rb, 2.0f);
+
+		// Mass small cone
+
+		float Ls = Lb - InLength;
+		float Ms = 1.0f / 3.0f * static_cast<float>(M_PI) * Ls * pow(Rs, 2.0f);
+
+		// Mass tapered cone (big cone - small cone)
+		MassCost = Mb - Ms;
+		break;
+	}
+	case EGROWMODE::POINTED_TOWARD_GROWOUT:
+	{
+		//Given a length, base radius, and density, compute amount of mass needed for a simple cone.
+		// Volume = Pi * r^2 * (Length / 3);
+		// Mass = Volume * Density;
+		MassCost = Pi * pow(InRadius, 2.0f) * (InLength / 3) * Density;
+		break;
+	}
+	}
+	return MassCost;
 }
 
 float MatterRootSegment::MassCostToTarget(const Vector3f& Target) const
 {
-	float DistanceToTarget = (Target - Transform.GetPosition()).norm() - _Length;
+	float DistanceToTarget = (Target - GetTipPosition()).norm();
 	if (DistanceToTarget > 0.0f)
 	{
 		return MassCostForLength(DistanceToTarget);

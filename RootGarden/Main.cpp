@@ -36,6 +36,7 @@ Game::Game() :
 
 	ShaderManager* pShaderManager = ShaderManager::GetShaderManager();
 	pShaderManager->AddShader("basic_vert", "basic.vert", ESHADER_TYPE::SHADER_TYPE_VERTEX);
+	pShaderManager->AddShader("basic_lit_vert", "basic_lit.vert", ESHADER_TYPE::SHADER_TYPE_VERTEX);
 	pShaderManager->AddShader("param_alpha_vert", "param_alpha.vert", ESHADER_TYPE::SHADER_TYPE_VERTEX);
 	pShaderManager->AddShader("basic_instanced_vert", "basic_instanced.vert", ESHADER_TYPE::SHADER_TYPE_VERTEX);
 	pShaderManager->AddShader("basic_frag", "basic.frag", ESHADER_TYPE::SHADER_TYPE_FRAGMENT);
@@ -45,6 +46,8 @@ Game::Game() :
 	pShaderManager->AddShader("textureColor_frag", "textureColor.frag", ESHADER_TYPE::SHADER_TYPE_FRAGMENT);
 
 	pShaderManager->AddShaderProgram("basic_prog", "basic_vert", "basic_frag");
+	pShaderManager->AddShaderProgram("basic_lit_prog", "basic_lit_vert", "basic_frag");
+	pShaderManager->AddShaderProgram("msaa_prog", "basic_vert", "msaa_frag");
 	pShaderManager->AddShaderProgram("param_alpha_prog", "param_alpha_vert", "basic_frag");
 	pShaderManager->AddShaderProgram("basic_instanced_prog", "basic_instanced_vert", "basic_frag");
 	pShaderManager->AddShaderProgram("msaa_instanced_prog", "basic_instanced_vert", "msaa_frag");
@@ -52,8 +55,9 @@ Game::Game() :
 	pShaderManager->GetShaderProgramByName("param_alpha_prog")->AddUniform("ParamAlpha", UNIFORM_F1);
 
 	ShaderProgram::AddGlobalUniform("AspectRatio", UNIFORM_F1);
+	ShaderProgram::AddGlobalUniform("ViewMatrix", UNIFORM_M4);
 
-	ActiveScene = new Scene_RootGarden();
+	ActiveScene = new Scene_Blocks();
 
 	ViewMode = EViewMode::E_MODE_OCCLUSION_DEPTH;
 
@@ -175,6 +179,8 @@ Game::Display(void)
 
 	vector<SceneComponent*>* AllPrims = SceneComponent::GetPrims();
 	SetupPrimitives(*AllPrims);
+	
+	SetupCamera(*ActiveScene->ActiveCamera);
 
 	/////////////// EARLY DEPTH PASS //////////////////////////////////////////////////
 	if (false)
@@ -201,7 +207,7 @@ Game::Display(void)
 
 			if (ActiveMatter != nullptr && ActiveMatter->bIsOcclusion)
 			{
-				ActiveMatter->Draw();
+				ActiveMatter->Draw(*ActiveScene);
 			}
 		}
 	}
@@ -235,7 +241,7 @@ Game::Display(void)
 				GLuint QueryIndex = it - AllPrims->begin();
 				GLuint Query = OcclusionQueries->at(QueryIndex);
 				ShaderProgram::glBeginQuery_checked(GL_SAMPLES_PASSED, Query);
-				ActiveMatter->Draw();
+				ActiveMatter->Draw(*ActiveScene);
 				ShaderProgram::glEndQuery_checked(GL_SAMPLES_PASSED);
 			}
 		}
@@ -291,7 +297,7 @@ Game::Display(void)
 			if (ActiveMatter != nullptr && ActiveMatter->bIsStencil)
 			{
 				//Issue the draw (stream the vert info if needed.)
-				ActiveMatter->Draw();
+				ActiveMatter->Draw(*ActiveScene);
 			}
 		}
 	}
@@ -331,7 +337,7 @@ Game::Display(void)
 			if (ActiveMatter != nullptr && !ActiveMatter->bIsStencil)
 			{	
 				//Issue the draw (stream the vert info if needed.)
-				ActiveMatter->Draw();
+				ActiveMatter->Draw(*ActiveScene);
 			}
 		}
 	}
@@ -407,29 +413,33 @@ void Game::SetupPrimitives(vector<SceneComponent*> const &InPrims) const
 	clock_t Clock_Total_Positions = 0;
 	clock_t Clock_Total_Colors = 0;
 	clock_t Clock_Total_Indices = 0;
+	clock_t Clock_Total_Normals = 0;
 	clock_t Clock_Total_ModelMatrix = 0;
 
 	// Harvest generate meshes - async
 	for (GLuint i = 0; i < GenerateMeshFutures.size(); ++i)
 	{
 		GenerateMeshFutures.at(i).get();
-		Clock_Total_Indices += GenerateMeshResults.at(i).Clock_GenerateMesh_Indices;
 		Clock_Total_Positions += GenerateMeshResults.at(i).Clock_GenerateMesh_Positions;
+		Clock_Total_Normals += GenerateMeshResults.at(i).Clock_GenerateMesh_Normals;
 		Clock_Total_Colors += GenerateMeshResults.at(i).Clock_GenerateMesh_Colors;
+		Clock_Total_Indices += GenerateMeshResults.at(i).Clock_GenerateMesh_Indices;		
 	}
 
 	Clock_Ms_GenerateMesh = clock() - Clock_Ms_GenerateMesh;
 
-	clock_t Clock_SumMeshThreads = Clock_Total_Positions + Clock_Total_Colors + Clock_Total_Indices;
+	clock_t Clock_SumMeshThreads = Clock_Total_Positions + Clock_Total_Colors + Clock_Total_Indices + Clock_Total_Normals;
  	double Pct_Positions = static_cast<double>(Clock_Total_Positions) / fmax(Clock_SumMeshThreads, 1);
+	double Pct_Normals = static_cast<double>(Clock_Total_Normals) / fmax(Clock_SumMeshThreads, 1);
 	double Pct_Colors = static_cast<double>(Clock_Total_Colors) / fmax(Clock_SumMeshThreads, 1);
 	double Pct_Indices = static_cast<double>(Clock_Total_Indices) / fmax(Clock_SumMeshThreads, 1);
-
+	
 	float Ms_Total_Mesh = TICKS_TO_MS(clock() - Clock_Ms_GenerateMesh);
 	pThisFrame->Ms_GenerateMesh->Set(static_cast<float>(Clock_Ms_GenerateMesh));
-	pThisFrame->Ms_GenerateMesh_Positions->Set(static_cast<float>(Clock_Ms_GenerateMesh * Pct_Positions));
-	pThisFrame->Ms_GenerateMesh_Colors->Set(static_cast<float>(Clock_Ms_GenerateMesh * Pct_Colors));
-	pThisFrame->Ms_GenerateMesh_Indices->Set(static_cast<float>(Clock_Ms_GenerateMesh * Pct_Indices));
+	pThisFrame->Ms_GenerateMesh_Positions->Set(static_cast<float>(Clock_Total_Positions));
+	pThisFrame->Ms_GenerateMesh_Normals->Set(static_cast<float>(Clock_Total_Normals));
+	pThisFrame->Ms_GenerateMesh_Colors->Set(static_cast<float>(Clock_Total_Colors));
+	pThisFrame->Ms_GenerateMesh_Indices->Set(static_cast<float>(Clock_Total_Indices));
 
 	clock_t Clock_ComputeModelMatrix = clock();
 	// Harvest compute model matrix - async
@@ -438,6 +448,11 @@ void Game::SetupPrimitives(vector<SceneComponent*> const &InPrims) const
 		UpdateModelMatrixFutures.at(i).get();
 	}
 	pThisFrame->Ms_ComputeModelMatrix->Set(TICKS_TO_MS(clock() - Clock_ComputeModelMatrix));
+}
+
+void Game::SetupCamera(Camera &InCamera) const
+{
+	InCamera.Transform.ComputeModelMatrix();
 }
 
 Game* GameInstancePtr; // Forward declare

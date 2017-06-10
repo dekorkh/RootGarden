@@ -36,6 +36,7 @@ struct GenerateMeshResult
 {
 	clock_t Clock_GenerateMesh;
 	clock_t Clock_GenerateMesh_Positions;
+	clock_t Clock_GenerateMesh_Normals;
 	clock_t Clock_GenerateMesh_TexCoords;
 	clock_t Clock_GenerateMesh_Colors;
 	clock_t Clock_GenerateMesh_Indices;
@@ -46,7 +47,7 @@ class Mesh
 public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-	Mesh(GLuint InNumBuffers = NUM_EBUFFERS, GLuint InNumTextures = 0);
+	Mesh(GLuint InNumBuffers = NUM_EBUFFERS, GLuint InNumTextures = 0, bool InbHasNormals = false);
 	virtual ~Mesh();
 
 	/* Draw
@@ -70,6 +71,7 @@ public:
 	bool bDirty_TexCoords;
 	bool bDirty_Colors;
 	bool bDirty_Indices;
+	bool bDirty_Normals;
 
 	GLenum MatterType;
 
@@ -78,6 +80,7 @@ protected:
 	size_t SizeOfColors();
 	size_t SizeOfTexCoords();
 	size_t SizeOfIndices();
+	size_t SizeOfNormals();
 	GLsizeiptr SizeOfTextureData();
 
 	/* InitializeVAO
@@ -98,6 +101,7 @@ protected:
 
 	vector<GLfloat> PositionsData;	// Positions formatted into a contiguous array for GPU
 	vector<GLfloat> ColorsData;		// Colors formatted into a contigous array for GPU
+	vector<GLfloat> NormalsData;	// Normals
 	vector<GLfloat> TexCoordsData;	// Texture coordinates
 	vector<GLuint> IndexData;
 	
@@ -110,6 +114,7 @@ protected:
 	virtual void GenerateMesh_Indices();
 	virtual void GenerateMesh_TexCoords();
 	virtual void Generate_TextureInfos();
+	virtual void GenerateMesh_Normals();
 
 	GLuint NumBuffers;
 	vector<GLuint> Buffers;
@@ -123,13 +128,17 @@ protected:
 	void Draw_UpdatePositions();
 	void Draw_UpdateTexCoords();
 	void Draw_UpdateIndices();
+	void Draw_UpdateNormals();
 
 	bool bInitializedVAO;	//Graphics eng. inits after scene&meshes are created so meshes init once during first draw using this check.
 
-private:
+	bool bHasNormals;
+
+protected:
 
 	size_t const NumComponentsVertPosition;
 	size_t const NumComponentsVertColor;
 	size_t const NumComponentsVertTexCoords;
+	size_t const NumComponentsVertNormal;
 };
 

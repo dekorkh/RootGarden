@@ -14,6 +14,10 @@
 #include "MatterBasicText.h"
 #include "MatterDrop.h"
 #include "MatterWireCube.h"
+#include "MatterSolidCube.h"
+#include "MatterSolidBeveledCube.h"
+#include "MatterPlot.h"
+#include "MatterLine.h"
 
 
 //Comps
@@ -22,3 +26,4 @@
 #include "CompOutlineCube.h"
 #include "CompTravelCube.h"
 #include "CompSelector.h"
+#include "CompGraph.h"

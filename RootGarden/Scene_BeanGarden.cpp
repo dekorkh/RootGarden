@@ -11,31 +11,29 @@
 #define _USE_MATH_DEFINES
 #include "math.h"
 
-Scene_BeanGarden::Scene_BeanGarden()
+Scene_BeanGarden::Scene_BeanGarden() :
+	InputType(1)
 {
+	rect = new MatterRectangle();
+	rect->SetScale(Vector3f::Constant(0.01f));
+
 	IncrementVelocityUp		<< 0.0f,  0.02f, 0.0f;
 	IncrementVelocityDown	<< 0.0f, -0.02f, 0.0f;
-	IncrementVelocityLeft	<<  0.02f, 0.0f, 0.0f;
-	IncrementVelocityRight	<< -0.02f, 0.0f, 0.0f;
+	IncrementVelocityLeft	<< -0.02f, 0.0f, 0.0f;
+	IncrementVelocityRight	<< 0.02f, 0.0f, 0.0f;
 
 	pRoot = new MatterCircle();
 	pRoot->SetScale(Vector3f::Constant(0.03f));
 	AddChild(pRoot);
 
-	/*
-	int numCubes = rand() % 50;
-	for (int i = 0; i < numCubes; i++)
-	{
-		CompOutlineCube* Cube = new CompOutlineCube();
-		
-		AddChild(Cube);
-	}
-	*/
-	
 	Selector = new CompSelector();
 	Selector->Select(*pRoot);
 	AddChild(Selector);
 	
+	LastRootTendril = new MatterRootTendril();
+	
+	AddChild(LastRootTendril);
+
 	/*
 	MatterRectangle* Rectangle = new MatterRectangle();
 	Rectangle->SetScale(Vector3f::Constant(0.1f));
@@ -104,11 +102,21 @@ void Scene_BeanGarden::HandleInput(int Key, int x, int y, bool down)
 			if (!UKeyDown)
 			{
 				UKeyDown = true;
+
 				Matter* TopMost = pWater->Tree->GetTopMost(Selector->Input_Position, 0.3f);
-				if (TopMost != nullptr)
+				switch (InputType)
 				{
-					Selector->Select(*TopMost);
-				}
+				case 0:
+					if (TopMost != nullptr)
+					{
+						Selector->Select(*TopMost);
+					}
+					break;
+				case 1:
+
+					Selector->AddVelocity(IncrementVelocityUp);
+					break;
+				}	
 			}
 		}
 		else
@@ -116,6 +124,15 @@ void Scene_BeanGarden::HandleInput(int Key, int x, int y, bool down)
 			if (UKeyDown)
 			{
 				UKeyDown = false;
+
+				switch (InputType)
+				{
+				case 0:
+					break;
+				case 1:
+					Selector->KillVelocity();
+					break;
+				}
 			}
 		}
 		break;
@@ -125,10 +142,21 @@ void Scene_BeanGarden::HandleInput(int Key, int x, int y, bool down)
 			if (!RKeyDown)
 			{
 				RKeyDown = true;
+				
 				Matter* RightMost = pWater->Tree->GetRightMost(Selector->Input_Position, 0.3f);
-				if (RightMost != nullptr)
+
+				switch (InputType)
 				{
-					Selector->Select(*RightMost);
+				case 0:
+					if (RightMost != nullptr)
+					{
+						Selector->Select(*RightMost);
+					}
+					break;
+				case 1:
+
+					Selector->AddVelocity(IncrementVelocityRight);
+					break;
 				}
 			}
 		}
@@ -137,6 +165,15 @@ void Scene_BeanGarden::HandleInput(int Key, int x, int y, bool down)
 			if (RKeyDown)
 			{
 				RKeyDown = false;
+
+				switch (InputType)
+				{
+				case 0:
+					break;
+				case 1:
+					Selector->KillVelocity();
+					break;
+				}
 			}
 		}
 		break;
@@ -146,10 +183,21 @@ void Scene_BeanGarden::HandleInput(int Key, int x, int y, bool down)
 			if (!DKeyDown)
 			{
 				DKeyDown = true;
+				
 				Matter* BottomMost = pWater->Tree->GetBottomMost(Selector->Input_Position, 0.3f);
-				if (BottomMost != nullptr)
+
+				switch (InputType)
 				{
-					Selector->Select(*BottomMost);
+				case 0:
+					if (BottomMost != nullptr)
+					{
+						Selector->Select(*BottomMost);
+					}
+					break;
+				case 1:
+
+					Selector->AddVelocity(IncrementVelocityDown);
+					break;
 				}
 			}
 		}
@@ -158,6 +206,15 @@ void Scene_BeanGarden::HandleInput(int Key, int x, int y, bool down)
 			if (DKeyDown)
 			{
 				DKeyDown = false;
+
+				switch (InputType)
+				{
+				case 0:
+					break;
+				case 1:
+					Selector->KillVelocity();
+					break;
+				}
 			}
 		}
 		break;
@@ -167,10 +224,21 @@ void Scene_BeanGarden::HandleInput(int Key, int x, int y, bool down)
 			if (!LKeyDown)
 			{
 				LKeyDown = true;
+
 				Matter* LeftMost = pWater->Tree->GetLeftMost(Selector->Input_Position, 0.3f);
-				if (LeftMost != nullptr)
+
+				switch (InputType)
 				{
-					Selector->Select(*LeftMost);
+				case 0:
+					if (LeftMost != nullptr)
+					{
+						Selector->Select(*LeftMost);
+					}
+					break;
+				case 1:
+
+					Selector->AddVelocity(IncrementVelocityLeft);
+					break;
 				}
 			}
 		}
@@ -179,6 +247,15 @@ void Scene_BeanGarden::HandleInput(int Key, int x, int y, bool down)
 			if (LKeyDown)
 			{
 				LKeyDown = false;
+
+				switch (InputType)
+				{
+				case 0:
+					break;
+				case 1:
+					Selector->KillVelocity();
+					break;
+				}
 			}
 		}
 		break;
@@ -192,6 +269,13 @@ void Scene_BeanGarden::HandleInput(int Key, int x, int y, bool down)
 		{
 			EscDown = false;
 		}
+		break;
+	case 13: // Enter
+		LastRootSegment = LastRootTendril->SpawnRoot(LastRootSegment, Selector->Input_Position);
+		
+		
+		rect->SetPosition(Selector->Input_Position);
+		AddChild(rect);
 		break;
 	default:
 		break;

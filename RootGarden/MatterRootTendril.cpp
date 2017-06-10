@@ -1,5 +1,6 @@
 #include "MatterRootTendril.h"
 #include "MatterRootSegment.h"
+#include "MatterRectangle.h"
 #include "Animation_GrowTo.h"
 #include "Animation_Trigger.h"
 #include "Animation_Aim.h"
@@ -38,50 +39,9 @@ MatterRootTendril::MatterRootTendril() :
 void MatterRootTendril::Tick(double DeltaSeconds)
 {
 	SceneComponent::Tick(DeltaSeconds); //Ticks children
-	
-	bool bSpawnRoot = false;
-	MatterRootSegment* LastSegment = nullptr;
-
-	if (Children.size() == 0)
-	{
-		bSpawnRoot = true;
-	}
-	else
-	{
-		LastSegment = static_cast<MatterRootSegment*>(Children.back());
-		if (LastSegment->bGrown && !bGrown)
-		{
-			if (NumSegments <= MaxSegments)
-				bSpawnRoot = true;
-			else
-			{
-				bGrown = true;
-				bTickEnabled = false;
-			}
-		}
-	}
-
-	if (bSpawnRoot)
-	{
-		Vector3f Target = Vector3f::Constant(0.0f);
-		
-		int TargetX = rand();
-		int TargetY = rand();
-		if (Children.size() < Targets.size())
-		{
-			Target(0) = Targets[Children.size()].x();
-			Target(1) = Targets[Children.size()].y();
-		}
-		else
-		{
-			Target(0) = (static_cast<float>(TargetX % 100) / 50.0f - 1.0f) * 0.4f;
-			Target(1) = (static_cast<float>(TargetY % 100) / 50.0f - 1.0f) * 0.4f;
-		}
-		SpawnRoot(LastSegment, Target);
-	}
 }
 
-void MatterRootTendril::SpawnRoot(const MatterRootSegment* SourceSegment, const Vector3f& Target)
+MatterRootSegment* MatterRootTendril::SpawnRoot(const MatterRootSegment* SourceSegment, const Vector3f& Target)
 {
 	NumSegments++;
 	MatterRootSegment* newRootSegment = new MatterRootSegment();
@@ -89,11 +49,11 @@ void MatterRootTendril::SpawnRoot(const MatterRootSegment* SourceSegment, const 
 	if (SourceSegment != nullptr)
 	{
 		newRootSegment->SetSourceRootSegment(*SourceSegment);
-	}
+	}	
 	
 	int InputIdx_LookAt = newRootSegment->RegisterInput_Vec3(newRootSegment->Param_Target);
 	newRootSegment->InputMap[InputIdx_LookAt]->InputEffects.bComponentParameters = true;
-	Animation_Aim* animAim = new Animation_Aim(Target);
+	Animation_Aim* animAim = new Animation_Aim(Target - newRootSegment->Transform.GetPosition());
 	animAim->LinkOutput(animAim->OutputIdx_AimVector, InputIdx_LookAt, EOperationType::OVERRIDE);
 	newRootSegment->AddAnimation(animAim);
 	
@@ -101,6 +61,7 @@ void MatterRootTendril::SpawnRoot(const MatterRootSegment* SourceSegment, const 
 	newRootSegment->InputMap[InputIdx_MassCapacity]->InputEffects.bVertPositions = true;
 	newRootSegment->InputMap[InputIdx_MassCapacity]->InputEffects.bComponentParameters = true;
 	Animation_GrowTo* newRootAnim = new Animation_GrowTo(newRootSegment, 0.5f, Target);
+
 	newRootAnim->SetRate(0.003f);
 	newRootAnim->LinkOutput(newRootAnim->OutputIdx_Out, InputIdx_MassCapacity, EOperationType::ACCUMULATE);
 	newRootSegment->AddAnimation(newRootAnim);
@@ -112,4 +73,5 @@ void MatterRootTendril::SpawnRoot(const MatterRootSegment* SourceSegment, const 
 	newRootSegment->AddAnimation(animTriggerGrown);
 
 	AddChild(newRootSegment);
+	return newRootSegment;
 }

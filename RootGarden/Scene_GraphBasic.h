@@ -6,11 +6,11 @@ class CompSelector;
 class CompWater;
 class MatterRootTendril;
 
-class Scene_BeanGarden : public Scene
+class Scene_GraphBasic : public Scene
 {
 public:
-	Scene_BeanGarden();
-	~Scene_BeanGarden();
+	Scene_GraphBasic();
+	~Scene_GraphBasic();
 
 	void HandleInput(int Key, int x, int y, bool down) override;
 

@@ -13,6 +13,8 @@
 #include <thread>
 
 #include "Scene.h"
+#include "Scene_GraphBasic.h"
+#include "Scene_Blocks.h"
 #include "Scene_ColorCircles.h"
 #include "Scene_UnderGarden.h"
 #include "Scene_PrimeGarden.h"
@@ -20,12 +22,15 @@
 #include "Scene_RootGarden.h"
 #include "Scene_BeanGarden.h"
 #include "Scene_Fabric.h"
+#include "Scene_Texcube.h"
 #include "GlobalState.h"
 #include "GameStats.h"
 #include "ShaderManager.h"
 
 using namespace std;
 using namespace Eigen;
+
+class Camera;
 
 enum EViewMode
 {
@@ -60,9 +65,14 @@ private:
 	PFNWGLGETSWAPINTERVALEXTPROC glGetSwapInterval = NULL;
 
 	/* SetupPrimitives
-	/ Traverse the primitives and generate any meshes as needed.
+	/ Traverse the primitives and update any dirty aspects s.a. async compute their modelmatrix, generate any meshes as needed, etc.
 	*/
 	void SetupPrimitives(vector<SceneComponent*> const &InPrims) const;
+
+	/* SetupCamera
+	/ Update any dirty data on the camera s.a. its model matrix.
+	*/
+	void SetupCamera(Camera &InCamera) const;
 
 	// Current aspect ratio
 	GLfloat AspectRatio;

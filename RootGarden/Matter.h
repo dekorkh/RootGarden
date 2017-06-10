@@ -15,6 +15,7 @@
 using namespace std;
 using namespace Eigen;
 
+class Scene;
 class Mesh;
 struct GenerateMeshResult;
 
@@ -37,7 +38,7 @@ public:
 	/* SceneComponent Interface END */
 
 	virtual void UpdateMesh(GenerateMeshResult *OutGenerateMeshResult);
-	virtual void Draw();
+	virtual void Draw(Scene const &InScene);
 
 	/* IsMeshDirty 
 	/ Return true if any mesh data is dirty.  Helps cull meshes that don't need update from being dispatched to threads in main.

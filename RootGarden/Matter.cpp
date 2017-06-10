@@ -1,13 +1,15 @@
 #include "Matter.h"
 #include "Mesh.h"
 #include "GameStats.h"
+#include "Scene.h"
 
 Matter::Matter(const string& InName, const int InSerial) 
 	: 
 	SceneComponent(InName, InSerial),
 	bIsStencil(false),
 	bIsOcclusion(false),
-	TextureUnit_Color(ETEXTURE_COLOR)
+	TextureUnit_Color(ETEXTURE_COLOR),
+	bDirtyModelMatrix(true)
 {
 	Initialize();
 }
@@ -60,20 +62,24 @@ void Matter::ProcessInputEffects(TInputEffects const *InputEffects)
 	Mesh->bDirty_Indices = InputEffects->bVertIndices ? true : Mesh->bDirty_Indices;
 }
 
-void Matter::Draw()
+void Matter::Draw(Scene const &InScene)
 {
 	// so I'll re-get the pointer but it'd be nice to know why the pData is null in the uniform at this point.
 	pShaderProgram->SetUniform("ModelMatrix", Transform.GetModelMatrixDataPtr());
 
 	clock_t Clock_SetUniforms = clock();
-	if (pShaderProgram->ProgAddr != ShaderProgram::LastProgAddr)
+	if (pShaderProgram->ProgAddr != ShaderProgram::LastProgAddr)	// Runs at least once per frame per shader prog. since LastProgAddr is set to null at end of frame.
 	{
 		GameStats::GetGameStats()->pThisFrame->Ms_SetUniforms->Increment(TICKS_TO_MS(clock() - Clock_SetUniforms));
 		//Set the new shader program
 		pShaderProgram->Use();
 		
+		// Update the camera uniform
+		pShaderProgram->SetGlobalUniform("ViewMatrix", InScene.ActiveCamera->Transform.GetModelMatrixDataPtr());
+		pShaderProgram->MarkGlobalUniformDirty("ViewMatrix", true);
+
 		// Set global uniforms
-		pShaderProgram->PushGlobalUniforms();
+		pShaderProgram->PushGlobalUniforms();		
 
 		// Push global uniforms only pushes the uniforms that were marked dirty.
 		Clock_SetUniforms = clock();

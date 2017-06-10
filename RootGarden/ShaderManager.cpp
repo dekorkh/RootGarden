@@ -16,11 +16,11 @@ void ShaderManager::AddShader(string InShaderName, char const * const InShaderPa
 	ShaderMap.insert(pair<string, Shader*>(InShaderName, NewShader));
 }
 
-void ShaderManager::AddShaderProgram(string InShaderProgramName, string VertexShaderName, string FragmentShaderName)
+void ShaderManager::AddShaderProgram(string InShaderProgramName, string VertexShaderName, string FragmentShaderName, bool bInSupportsNormals)
 {
 	Shader *VertexShader = ShaderMap.at(VertexShaderName);
 	Shader *FragmentShader = ShaderMap.at(FragmentShaderName);
-	ShaderProgram* NewShaderProgram = new ShaderProgram(VertexShader, FragmentShader);
+	ShaderProgram* NewShaderProgram = new ShaderProgram(VertexShader, FragmentShader, bInSupportsNormals);
 	ShaderProgramMap.insert(pair<string, ShaderProgram*>(InShaderProgramName, NewShaderProgram));
 }
 

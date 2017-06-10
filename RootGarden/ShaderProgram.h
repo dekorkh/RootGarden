@@ -49,7 +49,7 @@ public:
 	static void glGetQueryObjectuiv_checked(GLenum id, GLenum pname, GLuint *params);
 	static GLboolean glIsQuery_checked(GLenum id);
 
-	ShaderProgram(Shader *InVertexShader, Shader *InFragmentShader);
+	ShaderProgram(Shader *InVertexShader, Shader *InFragmentShader, bool InbSupportsNormals = false);
 	~ShaderProgram();
 
 	/* Use
@@ -92,6 +92,8 @@ public:
 	GLint ProgAddr;
 	static GLint LastProgAddr;
 	static ShaderProgram *LastProgPtr;
+
+	bool bSupportsNormals;
 
 private:
 	Shader *VertexShader;

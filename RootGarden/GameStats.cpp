@@ -55,6 +55,7 @@ void GameStats::WriteToFile(string FilePath)
 	Frames[0]->Ms_ComputeModelMatrix->WriteName(stream);
 	Frames[0]->Ms_GenerateMesh->WriteName(stream);
 	Frames[0]->Ms_GenerateMesh_Positions->WriteName(stream);
+	Frames[0]->Ms_GenerateMesh_Normals->WriteName(stream);
 	Frames[0]->Ms_GenerateMesh_Colors->WriteName(stream);
 	Frames[0]->Ms_GenerateMesh_Indices->WriteName(stream);
 	Frames[0]->Ms_Swap->WriteName(stream);
@@ -81,6 +82,7 @@ void GameStats::WriteToFile(string FilePath)
 		Frame->Ms_ComputeModelMatrix->WriteValue(stream);
 		Frame->Ms_GenerateMesh->WriteValue(stream);
 		Frame->Ms_GenerateMesh_Positions->WriteValue(stream);
+		Frame->Ms_GenerateMesh_Normals->WriteValue(stream);
 		Frame->Ms_GenerateMesh_Colors->WriteValue(stream);
 		Frame->Ms_GenerateMesh_Indices->WriteValue(stream);
 		Frame->Ms_Swap->WriteValue(stream);
@@ -112,9 +114,9 @@ GameStatsFrame::GameStatsFrame()
 	Ms_ComputeModelMatrix = new GameStatsStat<float>("Ms_ComputeModelMatrix", 0.0f);
 	Ms_GenerateMesh = new GameStatsStat<float>("Ms_GenerateMesh", 0.0f);
 	Ms_GenerateMesh_Positions = new GameStatsStat<float>("Ms_GenerateMesh_Positions", 0.0f);
+	Ms_GenerateMesh_Normals = new GameStatsStat<float>("Ms_GenerateMesh_Normals", 0.0f);
 	Ms_GenerateMesh_Colors = new GameStatsStat<float>("Ms_GenerateMesh_Colors", 0.0f);
 	Ms_GenerateMesh_Indices = new GameStatsStat<float>("Ms_GenerateMesh_Indices", 0.0f);
-	Ms_GenerateMesh_Indices = new GameStatsStat<float>("Ms_Swap", 0.0f);
 	Ms_Swap = new GameStatsStat<float>("Ms_Swap", 0.0f);
 
 	OcclusionQueries_Tested = new GameStatsStat<int>("Occ_Queries_Tested", 0);

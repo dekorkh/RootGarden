@@ -71,6 +71,7 @@ public:
 	GameStatsStat<float>* Ms_ComputeModelMatrix;
 	GameStatsStat<float>* Ms_GenerateMesh;
 	GameStatsStat<float>* Ms_GenerateMesh_Positions;
+	GameStatsStat<float>* Ms_GenerateMesh_Normals;
 	GameStatsStat<float>* Ms_GenerateMesh_Colors;
 	GameStatsStat<float>* Ms_GenerateMesh_Indices;
 	GameStatsStat<float>* Ms_Swap;

@@ -1,8 +1,11 @@
 #include "Scene.h"
-#include "GlobalState.h"
 
-Scene::Scene() : BackgroundColor(Vector4f::Constant(0.5f)), ElapsedSeconds(0.0f)
+Scene::Scene() : 
+	BackgroundColor(Vector4f::Constant(0.5f)), 
+	ElapsedSeconds(0.0f),
+	ActiveCamera(new Camera())
 {
+
 }
 
 void Scene::HandleInput(int Key, int x, int y, bool down)
@@ -17,4 +20,10 @@ void Scene::EndScene()
 {
 	GameStats::GetGameStats()->WriteToFile("GameStats.csv");
 	glutLeaveMainLoop();
+}
+
+void Scene::Tick(double deltaSeconds)
+{
+	SceneComponent::Tick(deltaSeconds);
+	ActiveCamera->Tick(deltaSeconds);
 }

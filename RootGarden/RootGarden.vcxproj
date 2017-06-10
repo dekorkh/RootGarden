@@ -126,6 +126,7 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
     </None>
     <None Include="basic_instanced.vert" />
+    <None Include="basic_lit.vert" />
     <None Include="msaa.frag" />
     <None Include="packages.config" />
     <None Include="param_alpha.vert" />
@@ -148,6 +149,7 @@
     <ClCompile Include="Animation_Orbit.cpp" />
     <ClCompile Include="Animation_Pulse.cpp" />
     <ClCompile Include="Animation_Trigger.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CompGaugeVertical.cpp" />
     <ClCompile Include="CompOutlineCube.cpp" />
     <ClCompile Include="CompSelector.cpp" />
@@ -160,8 +162,11 @@
     <ClCompile Include="MatterBasicText.cpp" />
     <ClCompile Include="MatterCircle.cpp" />
     <ClCompile Include="MatterDrop.cpp" />
+    <ClCompile Include="CompGraph.cpp" />
+    <ClCompile Include="MatterLine.cpp" />
     <ClCompile Include="MatterMeter.cpp" />
     <ClCompile Include="MatterMeterHead.cpp" />
+    <ClCompile Include="MatterPlot.cpp" />
     <ClCompile Include="MatterRectangle.cpp" />
     <ClCompile Include="MatterRectangleGradient.cpp" />
     <ClCompile Include="MatterRectangle_Instanced.cpp" />
@@ -169,18 +174,23 @@
     <ClCompile Include="MatterRootCluster.cpp" />
     <ClCompile Include="MatterRootSegment.cpp" />
     <ClCompile Include="MatterRootTendril.cpp" />
+    <ClCompile Include="MatterSolidBeveledCube.cpp" />
     <ClCompile Include="MatterSolidCube.cpp" />
     <ClCompile Include="MatterTileboard.cpp" />
     <ClCompile Include="MatterWireCube.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshCircle.cpp" />
     <ClCompile Include="MeshCircle_Instanced.cpp" />
+    <ClCompile Include="MeshLine.cpp" />
     <ClCompile Include="MeshMeter.cpp" />
+    <ClCompile Include="MeshPlot.cpp" />
     <ClCompile Include="MeshRectangle.cpp" />
     <ClCompile Include="MeshRectangleGradient.cpp" />
     <ClCompile Include="MeshRectangle_Instanced.cpp" />
     <ClCompile Include="MeshRing.cpp" />
+    <ClCompile Include="MeshSolidBeveledCube.cpp" />
     <ClCompile Include="MeshSolidCube.cpp" />
+    <ClCompile Include="MeshTaperedCylinder.cpp" />
     <ClCompile Include="MeshTrapezoid.cpp" />
     <ClCompile Include="MeshWireCube.cpp" />
     <ClCompile Include="Mesh_Instanced.cpp" />
@@ -188,10 +198,13 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneComponent.cpp" />
     <ClCompile Include="Scene_BeanGarden.cpp" />
+    <ClCompile Include="Scene_Blocks.cpp" />
     <ClCompile Include="Scene_ColorCircles.cpp" />
     <ClCompile Include="Scene_Fabric.cpp" />
+    <ClCompile Include="Scene_GraphBasic.cpp" />
     <ClCompile Include="Scene_PrimeGarden.cpp" />
     <ClCompile Include="Scene_RootGarden.cpp" />
+    <ClCompile Include="Scene_Texcube.cpp" />
     <ClCompile Include="Scene_TimeGarden.cpp" />
     <ClCompile Include="Scene_UnderGarden.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -217,6 +230,7 @@
     <ClInclude Include="Animation_Orbit.h" />
     <ClInclude Include="Animation_Pulse.h" />
     <ClInclude Include="Animation_Trigger.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="CompGaugeVertical.h" />
     <ClInclude Include="CompOutlineCube.h" />
     <ClInclude Include="CompSelector.h" />
@@ -226,6 +240,15 @@
     <ClInclude Include="GameStats.h" />
     <ClInclude Include="glext.h" />
     <ClInclude Include="GlobalState.h" />
+    <ClInclude Include="CompGraph.h" />
+    <ClInclude Include="MatterLine.h" />
+    <ClInclude Include="MatterPlot.h" />
+    <ClInclude Include="MatterSolidBeveledCube.h" />
+    <ClInclude Include="MeshLine.h" />
+    <ClInclude Include="MeshPlot.h" />
+    <ClInclude Include="MeshSolidBeveledCube.h" />
+    <ClInclude Include="Scene_Blocks.h" />
+    <ClInclude Include="Scene_GraphBasic.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="MatterBasicText.h" />
     <ClInclude Include="MatterDrop.h" />
@@ -253,6 +276,7 @@
     <ClInclude Include="MeshRectangle_Instanced.h" />
     <ClInclude Include="MeshRing.h" />
     <ClInclude Include="MeshSolidCube.h" />
+    <ClInclude Include="MeshTaperedCylinder.h" />
     <ClInclude Include="MeshTrapezoid.h" />
     <ClInclude Include="MeshWireCube.h" />
     <ClInclude Include="Mesh_Instanced.h" />
@@ -264,6 +288,7 @@
     <ClInclude Include="Scene_Fabric.h" />
     <ClInclude Include="Scene_PrimeGarden.h" />
     <ClInclude Include="Scene_RootGarden.h" />
+    <ClInclude Include="Scene_Texcube.h" />
     <ClInclude Include="Scene_TimeGarden.h" />
     <ClInclude Include="Scene_UnderGarden.h" />
     <ClInclude Include="Shader.h" />

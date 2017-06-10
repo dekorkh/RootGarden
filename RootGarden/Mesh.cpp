@@ -5,26 +5,41 @@
 #include "GameStats.h"
 #include "time.h"
 
-Mesh::Mesh(GLuint InNumBuffers, GLuint InNumTextures) :
+Mesh::Mesh(GLuint InNumBuffers, GLuint InNumTextures, bool InbHasNormals) :
 	NumVertices(0), 
 	NumVertIndices(0),
 	MatterType(GL_POINTS),
 	NumComponentsVertColor(4),
 	NumComponentsVertPosition(3),
 	NumComponentsVertTexCoords(2),
+	NumComponentsVertNormal(3),
 	bInitializedVAO(false),
 	bDirty_Positions(true),
 	bDirty_Colors(true),
 	bDirty_TexCoords(true),
 	bDirty_Indices(true),
+	bDirty_Normals(true),
 	NumBuffers(InNumBuffers),
-	NumTextures(InNumTextures)
+	NumTextures(InNumTextures),
+	bHasNormals(InbHasNormals)
 {
+	/* AutoBuffer?
+	Add one for each buffer activated through constructor parameters - 
+	this way the number of buffers can be determined by any subclass
+	which means subclasses which don't implement generate/update logic
+	for a particular buffer can be handled better.  AutoBuffer.
+	*/
+	GLuint NumAutoBuffers = 0;
+	if (bHasNormals)
+	{
+		NumAutoBuffers += 1;
+	}
+
 	/* 
 	Initial buffer addresses.  -1 for each in order to distinguish this value as 
 	a state different from that which would be returned by a call to generate them - 0.
 	*/
-	Buffers.assign(NumBuffers, -1);
+	Buffers.assign(NumBuffers + NumAutoBuffers, -1);
 }
 
 
@@ -50,6 +65,12 @@ void Mesh::Draw(ShaderProgram& InShaderProgram)
 		ShaderProgram::glBindBuffer_checked(GL_ARRAY_BUFFER, Buffers[0]);
 		Draw_UpdatePositions();
 		bDirty_Positions = false;
+	}
+	if (bHasNormals && InShaderProgram.bSupportsNormals && bDirty_Normals)
+	{
+		ShaderProgram::glBindBuffer_checked(GL_ARRAY_BUFFER, Buffers[0]);
+		Draw_UpdateNormals();
+		bDirty_Normals = false;
 	}
 	if (bDirty_Colors)
 	{
@@ -100,6 +121,11 @@ size_t Mesh::SizeOfIndices()
 	return NumVertIndices * sizeof(GLuint);
 }
 
+size_t Mesh::SizeOfNormals()
+{
+	return NumVertIndices * NumComponentsVertNormal  * sizeof(GLfloat);
+}
+
 GLsizeiptr Mesh::SizeOfTextureData()
 {
 	GLsizeiptr result = 0;
@@ -138,6 +164,12 @@ void Mesh::GenerateMesh(GenerateMeshResult *OutGenerateMeshResult)
 		GenerateMesh_TexCoords();
 		OutGenerateMeshResult->Clock_GenerateMesh_TexCoords = clock() - Clock_Ms_GenerateMesh_TexCoords;
 	}
+	if (bDirty_Normals)
+	{
+		clock_t Clock_Ms_GenerateMesh_Normals = clock();
+		GenerateMesh_Normals();
+		OutGenerateMeshResult->Clock_GenerateMesh_Normals = clock() - Clock_Ms_GenerateMesh_Normals;
+	}
 
 	OutGenerateMeshResult->Clock_GenerateMesh = clock() - Clock_Ms_GenerateMesh;
 }
@@ -168,7 +200,7 @@ void Mesh::InitializeVAO(ShaderProgram& InShaderProgram)
 
 	/* (With textures)
 	Along with generating the previous buffers, also generate a "pixel unpack buffer" - this buffer will
-	store our texture data until GL finds time to transfer it to the texture object.
+	push our texture data until GL finds time to transfer it to the texture object associated by SetTextureObjectActive.
 	Bind the pixel unpack buffer.
 	Initialize the pixel unpack buffer.
 	Generate texture objects
@@ -197,7 +229,12 @@ void Mesh::InitializeVAO(ShaderProgram& InShaderProgram)
 	First, buffers must be bound to change or, in this case, to	initialize their data.
 	*/
 	ShaderProgram::glBindBuffer_checked(GL_ARRAY_BUFFER, Buffers[EBUFFER_ARRAY]);
-	ShaderProgram::glBufferData_checked(GL_ARRAY_BUFFER, SizeOfPositions() + SizeOfColors() + SizeOfTexCoords(), NULL, GL_STATIC_DRAW);
+	size_t VertexAttributeBufferSize = SizeOfPositions() + SizeOfColors() + SizeOfTexCoords();
+	if (bHasNormals && InShaderProgram.bSupportsNormals)
+	{
+		VertexAttributeBufferSize += SizeOfNormals();
+	}
+	ShaderProgram::glBufferData_checked(GL_ARRAY_BUFFER, VertexAttributeBufferSize, NULL, GL_STATIC_DRAW);
 
 	ShaderProgram::glBindBuffer_checked(GL_ELEMENT_ARRAY_BUFFER, Buffers[EBUFFER_ELEMENT]);
 	ShaderProgram::glBufferData_checked(GL_ELEMENT_ARRAY_BUFFER, SizeOfIndices(), NULL, GL_STATIC_DRAW);
@@ -208,15 +245,27 @@ void Mesh::InitializeVAO(ShaderProgram& InShaderProgram)
 	*/
 	GLint vpos = ShaderProgram::glGetAttribLocation_checked(InShaderProgram.ProgAddr, ("vPosition"));
 	GLint vcol = ShaderProgram::glGetAttribLocation_checked(InShaderProgram.ProgAddr, ("vColor"));
+	GLint vnor = 0;
+	if (bHasNormals && InShaderProgram.bSupportsNormals)
+	{
+		vnor = ShaderProgram::glGetAttribLocation_checked(InShaderProgram.ProgAddr, ("vNormal"));
+	}
 	
 	// Point the programs vertex attributes to their data in the vertex attribute array.
 	ShaderProgram::glVertexAttribPointer_checked(vpos, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 	ShaderProgram::glVertexAttribPointer_checked(vcol, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(SizeOfPositions()));
+	if (bHasNormals && InShaderProgram.bSupportsNormals)
+	{
+		ShaderProgram::glVertexAttribPointer_checked(vnor, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(SizeOfPositions() + SizeOfColors()));
+	}
 	
 	// Enable fetching from pos and col streams.  (Is this considered part of vertex specification and so is it stored by the VAO?)
 	ShaderProgram::glEnableVertexAttribArray_checked(vpos);
 	ShaderProgram::glEnableVertexAttribArray_checked(vcol);
-	
+	if (bHasNormals && InShaderProgram.bSupportsNormals)
+	{
+		ShaderProgram::glEnableVertexAttribArray_checked(vnor);
+	}
 
 	if (NumTextures != 0)
 	{
@@ -266,6 +315,10 @@ void Mesh::GenerateMesh_Positions()
 {
 }
 
+void Mesh::GenerateMesh_Normals()
+{
+}
+
 void Mesh::GenerateMesh_Colors()
 {
 }
@@ -288,6 +341,11 @@ void Mesh::Generate_TextureInfos()
 void Mesh::Draw_UpdatePositions()
 {	
 	ShaderProgram::glBufferSubData_checked(GL_ARRAY_BUFFER, 0, SizeOfPositions(), PositionsData.data());	//Starting at begining of active buffer put data from vertices array
+}
+
+void Mesh::Draw_UpdateNormals()
+{
+	ShaderProgram::glBufferSubData_checked(GL_ARRAY_BUFFER, SizeOfPositions() + SizeOfColors() + SizeOfTexCoords(), SizeOfNormals(), NormalsData.data());
 }
 
 void Mesh::Draw_UpdateColors()

@@ -9,11 +9,11 @@ public:
 	MatterRootTendril();
 	
 	void Tick(double DeltaSeconds) override;
+	
+	MatterRootSegment* SpawnRoot(const MatterRootSegment* SourceSegment, const Vector3f& Target);
 
 private:
 	vector<Vector2f> Targets;
-
-	void SpawnRoot(const MatterRootSegment* SourceSegment, const Vector3f& Target);
 
 	int NumSegments;
 	const int MaxSegments;

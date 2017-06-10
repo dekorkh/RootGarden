@@ -49,6 +49,12 @@
     <Filter Include="Header Files\Shaders">
       <UniqueIdentifier>{6c7ad0c7-557a-4d64-b589-b069d51e3735}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Cameras">
+      <UniqueIdentifier>{6bf66a4d-c43b-4148-95c8-06c35eeaca28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Cameras">
+      <UniqueIdentifier>{4bf9fc85-c602-4110-b2ee-c0136cfcc4e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -71,6 +77,9 @@
       <Filter>Source Files\Shaders</Filter>
     </None>
     <None Include="textureColor.frag">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="basic_lit.vert">
       <Filter>Source Files\Shaders</Filter>
     </None>
   </ItemGroup>
@@ -275,6 +284,42 @@
     </ClCompile>
     <ClCompile Include="TextureInfo.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Texcube.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshTaperedCylinder.cpp">
+      <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_GraphBasic.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshPlot.cpp">
+      <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="MatterPlot.cpp">
+      <Filter>Source Files\Matter</Filter>
+    </ClCompile>
+    <ClCompile Include="CompGraph.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="MatterLine.cpp">
+      <Filter>Source Files\Matter</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshLine.cpp">
+      <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Blocks.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshSolidBeveledCube.cpp">
+      <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="MatterSolidBeveledCube.cpp">
+      <Filter>Source Files\Matter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -490,6 +535,42 @@
     </ClInclude>
     <ClInclude Include="TextureInfo.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Texcube.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshTaperedCylinder.h">
+      <Filter>Header Files\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_GraphBasic.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshPlot.h">
+      <Filter>Header Files\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="MatterPlot.h">
+      <Filter>Header Files\Matter</Filter>
+    </ClInclude>
+    <ClInclude Include="CompGraph.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="MatterLine.h">
+      <Filter>Header Files\Matter</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshLine.h">
+      <Filter>Header Files\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Blocks.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshSolidBeveledCube.h">
+      <Filter>Header Files\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="MatterSolidBeveledCube.h">
+      <Filter>Header Files\Matter</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
